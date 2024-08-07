@@ -1,0 +1,8 @@
+<TestPlan Type="TestPlan" MaxLoopID="0" BaseDirGUITP="C:/">
+  <TestCase Name="User:QA_Controller_101.py" TCData="" TCPath="STAT_EA4.0.2.9_AutoKO/STAT_GUI/Lib/Python/Python38/Lib/site-packages/controller/cuw/test_script/linux/basic_ethernet_functionality/" TCDataPath="./" Enable="True" TCScriptType="PYTHON" />
+  <TestCase Name="User:QA_Controller_100.py" TCData="" TCPath="STAT_EA4.0.2.9_AutoKO/STAT_GUI/Lib/Python/Python38/Lib/site-packages/controller/cuw/test_script/linux/basic_ethernet_functionality/" TCDataPath="./" Enable="True" TCScriptType="PYTHON" />
+  <TestCase Name="User:QA_Controller_56919.py" TCData="" TCPath="STAT_EA4.0.2.9_AutoKO/STAT_GUI/Lib/Python/Python38/Lib/site-packages/controller/cuw/test_script/linux/basic_ethernet_functionality/" TCDataPath="./" Enable="True" TCScriptType="PYTHON" />
+  <TestCase Name="User:QA_Controller_56916.py" TCData="" TCPath="STAT_EA4.0.2.9_AutoKO/STAT_GUI/Lib/Python/Python38/Lib/site-packages/controller/cuw/test_script/linux/basic_ethernet_functionality/" TCDataPath="./" Enable="True" TCScriptType="PYTHON" />
+  <TestCase Name="User:QA_Controller_56925.py" TCData="" TCPath="STAT_EA4.0.2.9_AutoKO/STAT_GUI/Lib/Python/Python38/Lib/site-packages/controller/cuw/test_script/linux/basic_ethernet_functionality/" TCDataPath="./" Enable="True" TCScriptType="PYTHON" />
+  <TestCase Name="User:QA_Controller_56938.py" TCData="" TCPath="STAT_EA4.0.2.9_AutoKO/STAT_GUI/Lib/Python/Python38/Lib/site-packages/controller/cuw/test_script/linux/basic_ethernet_functionality/" TCDataPath="./" Enable="True" TCScriptType="PYTHON" />
+</TestPlan>

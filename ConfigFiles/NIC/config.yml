@@ -1,0 +1,35 @@
+SITS:
+  SIT_1:
+    SIT_VERSIONS:
+      stream: '231.1'
+      old_version: 231.1.116.0543
+      current_version: 231.1.118.0
+STAT:
+  stat_cli_path: C:\STAT_EA4.0.2.9_AutoKO\STAT_CLI
+  xml_file_paths: C:\STAT_EA4.0.2.9_AutoKO\STAT_CLI\stat_gui_settings.xml
+TEST_SUITES:
+  test_suite_file_path:
+  - \Lib\Python\Python38\Lib\site-packages\controller\cuw\test_suite\core\mtc\firmware\thor\linux\adv_ethernet_functionality_stress_thor_fw_mtc.py
+  test_suite_file_name:
+  - linux_adv_ethernet_functionality_stress_thor_fw_mtc.xml
+SUT_CLIENT_CONFIG:
+  config_file_path:
+  - C:\STAT_EA4.0.2.9_AutoKO\STAT_CLI\Lib\Python\Python38\L2_Hammer\sut_client_config.yml
+  config_path: \Lib\Python\Python38\Lib\site-packages\controller\cuw\test_script\config\
+TEST_CONFIG:
+  test_config_file_path:
+  - C:\STAT_EA4.0.2.9_AutoKO\STAT_CLI\Lib\Python\Python38\L2_Hammer\__test_config__.yml
+  test_config_path: \Lib\Python\Python38\Lib\site-packages\controller\cuw\test_config\linux\
+CTRL:
+  ctrl_path: \Lib\Python\Python38\Lib\site-packages\controller\
+PYTHON_PATH:
+  stat_py_path: \Lib\Python\Python38\python_STAT.exe
+wait:
+  time: 240
+  days: 0
+  wait_on_failure: false
+  continue_on_test_suite_failure: true
+email_options:
+  user_email: amitabh.suman@broadcom.com
+  recepient_list:
+  - amitabh.suman@broadcom.com

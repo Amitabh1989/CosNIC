@@ -53,79 +53,12 @@ class STATSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 
-# class TestSuitePathSerializer(serializers.ModelSerializer):
-#     class Meta:
-#         model = TestSuiteFilePath
-#         fields = "__all__"
-
-# class TestSuiteNameSerializer(serializers.ModelSerializer):
-#     class Meta:
-#         model = TestSuiteFileName
-#         fields = "__all__"
-
-# class TestSuiteSerializer(serializers.ModelSerializer):
-#     test_suite_file_path = TestSuitePathSerializer(many=True)
-#     test_suite_file_name = TestSuiteNameSerializer(many=True)
-    
-#     class Meta:
-#         model = TestSuiteModel
-#         fields = "__all__"
-
-#     def create(self, validated_data):
-#         test_suite_path_data = validated_data.pop("test_suite_file_path")
-#         test_suite_name_data = validated_data.pop("test_suite_file_name")
-#         name = validated_data.pop("name")
-#         testsuite_obj = TestSuiteModel.objects.create(name)
-#         for path, name in zip(test_suite_path_data, test_suite_name_data):
-#             _path = TestSuiteFilePath.objects.create(path)
-#             _name = TestSuiteFileName.objects.create(name)
-#             testsuite_obj.test_suite_file_path.add(_path)
-#             testsuite_obj.test_suite_file_name.add(_name)
-        
-#         return testsuite_obj
-    
-#     def update(self, instance, validated_data):
-#         test_suite_file_data = validated_data.pop("test_suite_file_path")
-#         test_suite_file_name = validated_data.pop("test_suite_file_name")
-#         instance.test_suite_file_path.clear()
-#         instance.test_suite_file_name.clear()
-#         for path, name in zip(test_suite_file_data, test_suite_file_name):
-#             _path = TestSuiteFilePath.objects.get_or_create(path)
-#             _name = TestSuiteFileName.objects.get_or_create(name)
-#             instance.test_suite_file_path.add(_path)
-#             instance.test_suite_file_name.add(_name)
-        
-#         for attr, value in validated_data.items():
-#             setattr(instance, attr, value)
-        
-#         instance.save()
-#         return instance
-
-
 class TestSuiteSerializer(serializers.ModelSerializer):
     class Meta:
         model = TestSuiteModel
         fields = "__all__"
-    
-    def create(self, validated_data):
-        test_suite_path_data = validated_data.pop("test_suite_file_path")
-        test_suite_file_name = validated_data.pop("test_suite_file_name")
-        obj = TestSuiteModel.objects.create()
-        for path, name in zip(test_suite_path_data, test_suite_file_name):
-            obj.test_suite_file_path = path
-            obj.test_suite_file_name = name
-        
-        return obj
-    
-    def update(self, instance, validated_data):
-        test_suite_file_data = validated_data.pop("test_suite_file_path")
-        test_suite_file_name = validated_data.pop("test_suite_file_name")
-        instance.test_suite_file_path = test_suite_file_data
-        instance.test_suite_file_name = test_suite_file_name
-        instance.save()
-        return instance
-        
-        
+
+
 class SUTClientConfigSerializer(serializers.ModelSerializer):
     class Meta:
         model = SUTClientConfigModel
@@ -183,7 +116,6 @@ class ConfigurationSerializer(serializers.Serializer):
     sit = SITSerializer()
     stat = STATSerializer()
     test_suites = TestSuiteSerializer(many=True)
-    
     sut_client_config = SUTClientConfigSerializer()
     test_config = TestConfigSerializer()
     ctrl_pkg = CTRLSerializer()

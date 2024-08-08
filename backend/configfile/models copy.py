@@ -34,21 +34,10 @@ class STATModel(models.Model):
     xml_file_paths = models.CharField(max_length=550)
 
 
-# The above classes define models for a test suite with its name, file paths, and file names.
-# class TestSuiteModel(models.Model):
-#     name = models.CharField(max_length=100)
-
-# class TestSuiteFilePath(models.Model):
-#     test_suite = models.ForeignKey(TestSuiteModel, on_delete=models.CASCADE, related_name='test_suite_file_path')
-#     test_suite_file_path = models.CharField(max_length=550)
-    
-# class TestSuiteFileName(models.Model):
-#     test_suite = models.ForeignKey(TestSuiteModel, on_delete=models.CASCADE, related_name='test_suite_file_name')
-#     test_suite_file_name = models.CharField(max_length=550)
-
 class TestSuiteModel(models.Model):
     test_suite_file_path = models.CharField(max_length=550)
     test_suite_file_name = models.CharField(max_length=550)
+
 
 class SUTClientConfigModel(models.Model):
     config_file_path = models.CharField(max_length=500)

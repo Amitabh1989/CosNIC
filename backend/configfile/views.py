@@ -25,17 +25,12 @@ from .serializers import (
     ConfigurationSerializer,
 )
 
+from rest_framework import viewsets
 from rest_framework.views import APIView
 
 # Create your views here.
 
 
-class ConfigurationView(APIView):
-    model = ConfigurationModel
-    serializer = ConfigurationSerializer
-
-    def list(self, request):
-        configurations = ConfigurationModel.objects.all()
-        return render(
-            request, "configurations.html", {"configurations": configurations}
-        )
+class ConfigurationView(viewsets.ModelViewSet):
+    queryset = ConfigurationModel.objects.all()
+    serializer_class = ConfigurationSerializer

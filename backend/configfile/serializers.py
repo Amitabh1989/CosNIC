@@ -117,32 +117,62 @@ class EmailOptionsSerializer(serializers.ModelSerializer):
         instance.recipient_list = recipient_list
         return instance
     """
-class TestSuiteSerializer(serializers.ModelSerializer):
-    test_suite_file_path = serializers.ListField(child=serializers.CharField(max_length=550))
-    test_suite_file_path = serializers.ListField(child=serializers.CharField(max_length=550))
+# class TestSuiteSerializer(serializers.ModelSerializer):
+#     test_suite_file_path = serializers.ListField(child=serializers.CharField(max_length=550))
+#     test_suite_file_path = serializers.ListField(child=serializers.CharField(max_length=550))
+#     class Meta:
+#         model = TestSuiteModel
+#         fields = "__all__"
+    
+#     def create(self, validated_data):
+#         print(f"Test Suite validated_data : {validated_data}")
+#         test_suite_path_data = validated_data.get("test_suite_file_path")
+#         test_suite_file_name = validated_data.get("test_suite_file_name")
+#         obj = TestSuiteModel.objects.create()
+#         obj.test_suite_file_path = test_suite_path_data
+#         obj.test_suite_file_name = test_suite_file_name
+#         print(f"Object saved {str(obj)}" )
+#         return obj
+    
+#     def update(self, instance, validated_data):
+#         test_suite_file_data = validated_data.pop("test_suite_file_path")
+#         test_suite_file_name = validated_data.pop("test_suite_file_name")
+#         instance.test_suite_file_path = test_suite_file_data
+#         instance.test_suite_file_name = test_suite_file_name
+#         instance.save()
+#         return instance
+
+
+
+# class RecipientSerializer(serializers.ModelSerializer):
+#     class Meta:
+#         model = RecipientModel
+#         fields = "__all__"
+
+
+# New serialization for Many to Many relationship with File Path and name
+        
+class TestSuiteFilePathSerializer(serializers.ModelSerializer):
     class Meta:
-        model = TestSuiteModel
+        model = TestSuiteFilePath
         fields = "__all__"
     
-    def create(self, validated_data):
-        print(f"Test Suite validated_data : {validated_data}")
-        test_suite_path_data = validated_data.get("test_suite_file_path")
-        test_suite_file_name = validated_data.get("test_suite_file_name")
-        obj = TestSuiteModel.objects.create()
-        obj.test_suite_file_path = test_suite_path_data
-        obj.test_suite_file_name = test_suite_file_name
-        print(f"Object saved {str(obj)}" )
-        return obj
+class TestSuiteFileNameSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = TestSuiteFileName
+        fields = "__all__"
+
+
+class TestSuiteSerializer(serializers.ModelSerializer):
+    # test_suite_file_path = TestSuiteFilePathSerializer(many=True)
+    # test_suite_file_name = TestSuiteFileNameSerializer(many=True)
+    test_suite_file_path = serializers.ListField(child=serializers.CharField(max_length=550))
+    test_suite_file_name = serializers.ListField(child=serializers.CharField(max_length=550))
     
-    def update(self, instance, validated_data):
-        test_suite_file_data = validated_data.pop("test_suite_file_path")
-        test_suite_file_name = validated_data.pop("test_suite_file_name")
-        instance.test_suite_file_path = test_suite_file_data
-        instance.test_suite_file_name = test_suite_file_name
-        instance.save()
-        return instance
-        
-        
+    class Meta:
+        model = TestSuitesPathModel
+        fields = "__all__"
+
 class SUTClientConfigSerializer(serializers.ModelSerializer):
     class Meta:
         model = SUTClientConfigModel
@@ -175,6 +205,8 @@ class WaitConfigSerializer(serializers.ModelSerializer):
 
 class EmailOptionsSerializer(serializers.ModelSerializer):
     recipient_list = serializers.ListField(child=serializers.EmailField())
+    # recipient_list = serializers.ListField(child=serializers.EmailField())
+    # recipient_list = RecipientSerializer(many=True)
     class Meta:
         model = EmailOptionsModel
         fields = "__all__"
@@ -183,6 +215,7 @@ class EmailOptionsSerializer(serializers.ModelSerializer):
         user_email = validated_data.get("user_email")
         instance = EmailOptionsModel.objects.create(user_email=user_email)
         recipient_list = validated_data.get("recipient_list")
+        print(f"Email received : {recipient_list}")
         # for recipients in recipient_list:
         #     instance.recipient_list.add(recipients)
         instance.recipient_list = recipient_list
@@ -194,14 +227,16 @@ class EmailOptionsSerializer(serializers.ModelSerializer):
         recipient_list = validated_data.get("recipient_list", instance.recipient_list)
         instance.user_email = user_email
         instance.recipient_list.clear()
-        for recipients in recipient_list:
-            instance.recipient_list.add(recipients)
+        instance.recipient_list = recipient_list
+        # for recipients in recipient_list:
+        #     instance.recipient_list.add(recipients)
         instance.save()
 
 
 class ConfigurationSerializer(serializers.Serializer):
     sit = SITSerializer()
     stat = STATSerializer()
+    # test_suites = TestSuiteSerializer()
     test_suites = TestSuiteSerializer()
     sut_client_config = SUTClientConfigSerializer()
     test_config = TestConfigSerializer()
@@ -297,8 +332,9 @@ class ConfigurationSerializer(serializers.Serializer):
             #     TestSuiteModel.objects.get_or_create(**item)[0]
             #     for item in test_suites_data
             # ]
-            test_suites = TestSuiteModel.objects.get_or_create(test_suites_data)
+            # test_suites = TestSuiteModel.objects.get_or_create(test_suites_data)
             # instance.test_suites.set(test_suites)
+            test_suites = TestSuiteSerializer.update(TestSuiteSerializer(), instance.test_suites, validated_data=test_suites_data)
 
             sut_client_config_data = validated_data.pop("sut_client_config")
             TestSuiteSerializer.update(

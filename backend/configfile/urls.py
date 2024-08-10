@@ -1,10 +1,11 @@
 from django.urls import include, path
 from rest_framework import routers
-from .views import ConfigurationView
+from .views import ConfigurationView, EmailOptionsView
 # from tutorial.quickstart import views
 
 router = routers.DefaultRouter()
 router.register(r'configfile', ConfigurationView, 'configfile')
+router.register(r'emailoptions', EmailOptionsView, 'emailoptions')
 # router.register(r'users', views.UserViewSet)
 # router.register(r'groups', views.GroupViewSet)
 

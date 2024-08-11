@@ -92,8 +92,11 @@ class User(AbstractBaseUser, PermissionsMixin):
     REQUIRED_FIELDS = ["first_name", "last_name"]
 
     def __str__(self):
+        # return (
+        #     f"{self.email} with username {self.username} created on {self.date_joined}"
+        # )
         return (
-            f"{self.email} with username {self.username} created on {self.date_joined}"
+            f"{self.username}"
         )
 
 

@@ -1,0 +1,35 @@
+Here me out now. I want to code a django based app that does the below.
+
+Put togther : It runs test cases and informs users about its logs and results.
+
+
+
+From the web app, user inputs are as below:
+
+1. Select test cases, suites to run
+
+2. Input machine details, where to run test
+
+3. Populate a few other options related to testing.
+
+
+
+Now, web app takes over.
+
+1. If the files are not available in the remote machine : Copies files (around 1GB files to) destination machines given by the user.
+
+2. Copies the config files entered buy the user on the remote machine.
+
+3. Starts the test on those machines and then those machines update the results back to the djnago server. 
+
+4. User can then look at the logs, results, progress of the test. 
+
+
+
+Now remember, these destination machines will be windows from where the test will be triggered.
+
+The other 2 machines will be linux where these test will be actually executed.
+
+
+
+My intention is to replace the need of a seperate machine to trigger these tests. So when ever a user wants to start a test, I want to create something virtual in the machine managed by server and then just deal with running tests on the remote 2 linux servers. User should not need any 3rd machine to run those tests. How can i?

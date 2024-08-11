@@ -207,7 +207,9 @@ class ConfigurationModel(models.Model):
     sit = models.ForeignKey(SITModel, on_delete=models.CASCADE)
     stat = models.ForeignKey(STATModel, on_delete=models.CASCADE)
     test_suites = models.ForeignKey(TestSuitesPathModel, on_delete=models.CASCADE)
-    sut_client_config = models.ForeignKey(SUTClientConfigModel, on_delete=models.CASCADE)
+    sut_client_config = models.ForeignKey(
+        SUTClientConfigModel, on_delete=models.CASCADE
+    )
     test_config = models.ForeignKey(TestConfigModel, on_delete=models.CASCADE)
     ctrl_pkg = models.ForeignKey(CTRLModel, on_delete=models.CASCADE)
     python_path = models.ForeignKey(PythonPathModel, on_delete=models.CASCADE)

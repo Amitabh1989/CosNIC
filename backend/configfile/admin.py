@@ -25,7 +25,6 @@ class ConfigurationModelAdmin(admin.ModelAdmin):
 admin.site.register(SITVersionModel)
 admin.site.register(SITModel)
 admin.site.register(STATModel)
-# admin.site.register(TestSuiteModel)
 admin.site.register(TestSuitesPathModel)
 admin.site.register(SUTClientConfigModel)
 admin.site.register(TestConfigModel)
@@ -36,6 +35,5 @@ admin.site.register(ConfigurationModel, ConfigurationModelAdmin)
 admin.site.register(EmailOptionsModel)
 admin.site.register(TestSuiteFilePath)
 admin.site.register(TestSuiteFileName)
-# admin.site.register(RecipientModel)
 
 

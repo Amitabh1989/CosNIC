@@ -66,7 +66,9 @@ class WaitConfigModel(models.Model):
 
 class EmailOptionsModel(models.Model):
     user_email = models.EmailField()
-    recipient_list = models.EmailField() # You might want to handle this as a list of emails in a custom way
+    recipient_list = (
+        models.EmailField()
+    )  # You might want to handle this as a list of emails in a custom way
 
 
 class ConfigurationModel(models.Model):

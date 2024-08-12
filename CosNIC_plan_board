@@ -1,0 +1,110 @@
+Thanks for all your help. I now want to do the below. 
+
+I want to trigger test on remote machines. For which i intend to do the following.
+1. Take user input for machine IPs and credentials.
+2. Take test cases input in the config file. (This we have already coded as you are aware)
+3. Now, I want to keep a copy of the code somewhere in the django server. And once user inputs are done. I copy peer to peer, the files in a pre destained location on machines input provided by the user. 
+4. Start the test and then keep monitoring the test progress.
+5. Test runs and updates the user run results. 
+6. User can log back in anytime and understand what the test progerss, results are. 
+How can we?
+
+
+
+To achieve this workflow with Django, you'll need to combine several technologies and strategies. Here's a high-level approach to implement each step:
+
+### **1. Take User Input for Machine IPs and Credentials**
+   - **Forms & Models**: Create a form and corresponding model to capture the IPs and credentials of the remote machines.
+   - **Encryption**: Store the credentials securely by encrypting them in the database.
+
+   ```python
+   from django import forms
+   from django.db import models
+   from cryptography.fernet import Fernet
+
+   class RemoteMachine(models.Model):
+       ip_address = models.GenericIPAddressField()
+       username = models.CharField(max_length=100)
+       password = models.BinaryField()  # Store encrypted password
+
+       def set_password(self, raw_password):
+           cipher_suite = Fernet(settings.SECRET_KEY)
+           self.password = cipher_suite.encrypt(raw_password.encode())
+
+       def get_password(self):
+           cipher_suite = Fernet(settings.SECRET_KEY)
+           return cipher_suite.decrypt(self.password).decode()
+
+   class RemoteMachineForm(forms.ModelForm):
+       class Meta:
+           model = RemoteMachine
+           fields = ['ip_address', 'username', 'password']
+   ```
+
+### **2. Take Test Cases Input in the Config File**
+   - **Done already**: As you've mentioned, this step is already implemented.
+
+### **3. Copy Code to Remote Machines**
+   - **Fabric/Paramiko**: Use Fabric or Paramiko to handle SSH connections and file transfers to the remote machines.
+
+   ```python
+   from fabric import Connection
+
+   def copy_files_to_remote(ip, username, password, local_path, remote_path):
+       with Connection(host=ip, user=username, connect_kwargs={"password": password}) as c:
+           c.put(local_path, remote=remote_path)
+   ```
+
+### **4. Start the Test and Monitor Progress**
+   - **Background Tasks**: Use `Celery` for running the test asynchronously in the background.
+   - **Log Streaming**: Implement a WebSocket or long-polling solution to stream the test progress back to the frontend in real-time.
+
+   ```python
+   from celery import shared_task
+
+   @shared_task
+   def run_test_on_remote(ip, username, password, test_command):
+       with Connection(host=ip, user=username, connect_kwargs={"password": password}) as c:
+           result = c.run(test_command)
+           return result.stdout
+
+   # You can start the task like this:
+   task = run_test_on_remote.delay(ip, username, password, 'bash run_tests.sh')
+   ```
+
+### **5. Update and Store Test Results**
+   - **Database Storage**: Capture the output of the tests and store the results in the database for later retrieval.
+   - **Model Example**:
+   
+   ```python
+   class TestRun(models.Model):
+       remote_machine = models.ForeignKey(RemoteMachine, on_delete=models.CASCADE)
+       start_time = models.DateTimeField(auto_now_add=True)
+       end_time = models.DateTimeField(null=True, blank=True)
+       status = models.CharField(max_length=50)
+       result = models.TextField()
+
+       def update_status(self, new_status):
+           self.status = new_status
+           self.save()
+   ```
+
+### **6. User Interface for Monitoring and Results**
+   - **Frontend**: Develop views to display test progress and results. You could use Django views, DRF for APIs, and JavaScript (React) for real-time updates.
+   - **WebSocket**: For real-time updates, implement WebSocket with Django Channels or use Django SignalR.
+
+### **Flow Summary:**
+1. **User Input**: Capture IPs, credentials, and test cases.
+2. **File Transfer**: Copy the necessary code and config files to the remote machines.
+3. **Test Execution**: Run tests on remote machines asynchronously.
+4. **Monitoring**: Stream logs and progress in real-time.
+5. **Results Storage**: Store and display test results, accessible anytime.
+
+### **Tools & Libraries:**
+- **Fabric/Paramiko**: For SSH and file transfers.
+- **Celery**: For background task processing.
+- **Django Channels/SignalR**: For real-time updates.
+- **Redis/RabbitMQ**: As a message broker for Celery.
+- **PostgreSQL/MySQL**: As your Django database for storing test runs and results.
+
+This setup will provide you with a robust system for triggering, monitoring, and managing tests on remote machines directly from your Django application.

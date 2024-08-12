@@ -11,6 +11,7 @@ class SITVersionSerializer(serializers.ModelSerializer):
 
 class SITSerializer(serializers.ModelSerializer):
     sit_versions = SITVersionSerializer(many=True)
+
     class Meta:
         model = SITModel
         fields = "__all__"
@@ -194,9 +195,7 @@ class ConfigurationSerializer(serializers.Serializer):
     def update(self, instance, validated_data):
         with transaction.atomic():
             sit_data = validated_data.pop("sit")
-            SITSerializer.update(
-                SITSerializer(), instance.sit, validated_data=sit_data
-            )
+            SITSerializer.update(SITSerializer(), instance.sit, validated_data=sit_data)
 
             stat_data = validated_data.pop("stat")
             STATSerializer.update(

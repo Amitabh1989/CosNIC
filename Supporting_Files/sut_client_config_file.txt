@@ -1,0 +1,200 @@
+backup_restore_config_files: false
+validate_config_params: false
+os_platform: Linux
+rpyc_port: 2726
+topology: sut-client
+card_type: SR
+switch_config: &id001
+  switch_topology: false
+  switch_ip: 10.123.159.162
+  switch_username: admin
+  switch_password: ''
+  bond_modes:
+  - 1
+  - 2
+  - 4
+  portchannel_no:
+  - 1
+  - 2
+  - 3
+  switches:
+  - switch_ip: 10.123.159.162
+    switch_username: admin
+    switch_password: admin
+    bond_modes:
+    - 1
+    - 2
+    - 4
+    portchannel_no:
+    - 1
+    - 2
+    - 3
+  - switch_ip: 10.123.159.171
+    switch_username: admin
+    switch_password: admin
+    bond_modes:
+    - 1
+    - 2
+    - 4
+    portchannel_no:
+    - 1
+    - 2
+    - 3
+sut:
+  mgmt_ip_addr: 10.123.62.143
+  name: sut
+  ipmi:
+    ipmi_host: DELL
+    ip_addr: 10.123.63.8
+    username: root
+    password: calvin
+  iface_list:
+  - mac_addr: 14:23:f2:1c:c9:d0
+    mtu: 1500
+    switchport_num: 0/109
+    driver: bnxt_en
+    roce_driver: bnxt_re
+    switch_details: *id001
+    pci_slot_gen: 3
+    total_phy_ports_on_adapter: 2
+  - mac_addr: 14:23:f2:1c:c9:d1
+    mtu: 1500
+    switchport_num: 1/110
+    driver: bnxt_en
+    roce_driver: bnxt_re
+    switch_details: *id001
+    pci_slot_gen: 3
+    total_phy_ports_on_adapter: 2
+client:
+  mgmt_ip_addr: 10.123.62.61
+  name: client#1
+  iface_list:
+  - mac_addr: 14:23:f2:1c:a3:c0
+    mtu: 1500
+    switchport_num: 0/112
+    driver: bnxt_en
+    roce_driver: bnxt_re
+    switch_details: *id001
+    pci_slot_gen: 3
+    total_phy_ports_on_adapter: 2
+  - mac_addr: 14:23:f2:1c:a3:c1
+    mtu: 1500
+    switchport_num: 0/111
+    driver: bnxt_en
+    roce_driver: bnxt_re
+    switch_details: *id001
+    pci_slot_gen: 3
+    total_phy_ports_on_adapter: 2
+client_2:
+  mgmt_ip_addr: 10.123.65.129
+  name: client#2
+  iface_list:
+  - mac_addr: 00:0a:f7:cd:cb:30
+    mtu: 1500
+    switchport_num: 0/12
+    driver: bnxt_en
+    roce_driver: bnxt_re
+    switch_details: *id001
+    pci_slot_gen: 3
+    total_phy_ports_on_adapter: 2
+  - mac_addr: 00:0a:f7:cd:cb:41
+    mtu: 1500
+    switchport_num: 0/11
+    driver: bnxt_en
+    roce_driver: bnxt_re
+    switch_details: *id001
+    pci_slot_gen: 3
+    total_phy_ports_on_adapter: 2
+rmii:
+  rmii_interface: 00:0a:f7:b8:b5:75
+  instance_id: 1
+  auto_increment: "\x01"
+  bmc_interface: 00:62:0b:1a:28:31
+fw_version:
+- - '231.1'
+  - 231.1.118.0
+fw_upgrade_types:
+- repave
+- upgrade
+spl_pkg_file_path:
+- Board_Pkg_files/NVRAM_Config/binary/BCM957508-P2100T.PKG
+- Board_Pkg_files/NVRAM_Config/binary/BCM957508-P2100T.PKG
+- Board_Pkg_files/NVRAM_Config/binary/BCM957508-P2100T.PKG
+repave: true
+sit:
+  release_version: 231.1.118.0
+  release_stream: '231.1'
+  release_old_version: 231.1.116.0
+  release_old_stream: '231.1'
+  release_path: http://eca-ccxsw.lvn.broadcom.net/releases/nxe/SIT/
+  driver_dir: Linux_Driver/
+  restructured_driver_dir: drivers_linux/bnxt_en/
+  driver_format: bnxt_en-.*.tar.gz
+  restructured_sit_ver:
+  # - 230.1.45.0
+  - 231.1.4.0
+  # - 230.2.1.0
+  thor2_crid: CRID_0001
+load_roce_driver: false
+inbox_driver: false
+driver_name: bnxtnd
+client_sit:
+  release_version: 231.1.118.0
+  release_stream: '231.1'
+  release_path: http://eca-ccxsw.lvn.broadcom.net/releases/nxe/SIT/
+  thor2_crid: CRID_0001
+cd_checkout:
+  board_pkg_dir_old: /root/fw_dup_withcfg_old/NXE/lx/l64
+  board_pkg_file_name_old: /root/fw_dup_withcfg_old/NXE/lx/l64/Th57414_2x25.pkg
+  board_pkg_dir: /root/fw_dup_withcfg/NXE/lx/l64/
+  board_pkg_file_name: /root/fw_dup_withcfg/NXE/lx/l64/Th57414_2x25.pkg
+  bnxt_en_rpm_path: /root/kmod-bnxt_en-1.10.0-215.0.154.0.rhel7u6.x86_64.rpm
+  bnxt_en_rpm_path_old: /root/kmod-bnxt_en-1.10.0-215.0.131.0.rhel7u6.x86_64.rpm
+  bnxt_re_rpm_path: /root/libbnxt_re-215.0.153.0-rhel7u6.x86_64.rpm
+dup:
+  dup_prg_path: /home/nic/Network_Firmware_0MRR3_LN64_22.71.11.13_jho227x06.BIN
+  prg_path_prev: /home/nic/Network_Firmware_0MRR3_LN64_22.61.10.70_CavX11.BIN
+  prg_path_prev2: /home/nic/Network_Firmware_0MRR3_LN64_22.71.11.13_jho227x06.BIN
+  supported_macs:
+  - bc:97:e1:4d:9b:4e
+  - bc:97:e1:4d:9b:4f
+mtu_list:
+- 2048
+- 4096
+- 9000
+vlan_id_list:
+- 2
+- 100
+- 4050
+vm_os: rhel86_legacy
+vfs_per_pf: 8
+vnics_per_vm: 8
+number_of_vm_to_test: 3
+npar:
+  npar_functions:
+  - 8
+  - 8
+  num_vfs: 4
+errors_to_flag:
+- Call Trace
+- 'Error (timeout:'
+- Requesting MSI-X vectors failed
+- Received firmware debug notification
+- (Unknown speed)
+fw_reset_check: true
+error_recovery_check: true
+cleanup_on_failure: true
+pre_post_validations:
+  speed: false
+  dmesg: false
+  ping: false
+  stats: false
+  generate_coredump: false
+  decode_coredump: false
+  coredump_on_client: false
+  idle_check: false
+  health_status: false
+  racadm_attrs: false
+  kmemleaks: false
+  nvm_restore: false
+  generate_bcm_sosreport: true

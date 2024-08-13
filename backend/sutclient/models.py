@@ -7,20 +7,20 @@ from django.contrib.postgres.fields import ArrayField
 def default_bond_modes():
     return [1, 2, 4]
 
+
 def default_portchannel_no():
     return [1, 2, 3]
 
+
 class Switches(models.Model):
     switch_ip = models.GenericIPAddressField()
-    switch_username = models.CharField(max_length=100, default='admin')
-    switch_password = models.CharField(max_length=100, default='admin')
+    switch_username = models.CharField(max_length=100, default="admin")
+    switch_password = models.CharField(max_length=100, default="admin")
     bond_modes = ArrayField(models.IntegerField(), default=default_bond_modes)
     portchannel_no = ArrayField(models.IntegerField(), default=default_portchannel_no)
-    
+
     def __str__(self):
         return f"Switch {self.switch_ip}"
-
-
 
 
 class SwitchConfig(models.Model):
@@ -31,9 +31,10 @@ class SwitchConfig(models.Model):
     bond_modes = ArrayField(models.IntegerField(), default=default_bond_modes)
     portchannel_no = ArrayField(models.IntegerField(), default=default_portchannel_no)
     switches = models.ManyToManyField(Switches)
-    
+
     def __str__(self):
-        return f"Switch {self.switch_ip}"
+        return f"Switch Config {self.switch_ip}"
+
 
 class Interface(models.Model):
     mac_addr = models.CharField(max_length=25)
@@ -48,6 +49,7 @@ class Interface(models.Model):
     def __str__(self):
         return f"iFace {self.mac_addr}"
 
+
 class Ipmi(models.Model):
     nickname = models.CharField(max_length=100)
     ipmi_host = models.CharField(max_length=100)
@@ -57,8 +59,8 @@ class Ipmi(models.Model):
 
     def __str__(self):
         return f"iPMI {self.ipmi_host}"
-    
-    
+
+
 class Sut(models.Model):
     nickname = models.CharField(max_length=100)
     mgmt_ip_addr = models.GenericIPAddressField()
@@ -69,6 +71,7 @@ class Sut(models.Model):
     def __str__(self):
         return f"iPMI {self.name} @ {self.mgmt_ip_addr}"
 
+
 class Client(models.Model):
     mgmt_ip_addr = models.GenericIPAddressField()
     name = models.CharField(max_length=100, default="client#1")
@@ -76,6 +79,7 @@ class Client(models.Model):
 
     def __str__(self):
         return f"{self.name.capitalize()} @ {self.mgmt_ip_addr}"
+
 
 class Sit(models.Model):
     release_version = models.CharField(max_length=100)
@@ -93,7 +97,8 @@ class Sit(models.Model):
 
     def __str__(self):
         return f"SIT {self.release_version}"
-    
+
+
 class Dup(models.Model):
     dup_prg_path = models.CharField(
         max_length=100,
@@ -112,6 +117,7 @@ class Dup(models.Model):
     def __str__(self):
         return f"DUP"
 
+
 class ClientSit(models.Model):
     release_version = models.CharField(max_length=100)
     release_stream = models.CharField(max_length=100)
@@ -123,21 +129,26 @@ class ClientSit(models.Model):
     def __str__(self):
         return f"ClientSIT {self.release_version}"
 
+
 class FwVersion(models.Model):
     version = ArrayField(models.CharField(max_length=100))
 
     def __str__(self):
         return f"FW {self.version}"
 
+
 def default_fw_upgrade_types():
     return ["repave", "upgrade"]
 
+
 class FwUpgradeType(models.Model):
     upgrade_type = ArrayField(
-        models.CharField(max_length=100), default=default_fw_upgrade_types)
+        models.CharField(max_length=100), default=default_fw_upgrade_types
+    )
 
     def __str__(self):
         return f"FwUpgradeType {self.upgrade_type}"
+
 
 class Rmii(models.Model):
     rmii_interface = models.CharField(max_length=30, default="00:0a:f7:b8:b5:75")
@@ -147,6 +158,7 @@ class Rmii(models.Model):
 
     def __str__(self):
         return f"RMii {self.instance_id}"
+
 
 class CDCheckout(models.Model):
     board_pkg_dir_old = models.CharField(
@@ -176,16 +188,19 @@ class CDCheckout(models.Model):
     def __str__(self):
         return f"CD Checkout {self.board_pkg_dir_old})"
 
+
 def default_spl_pkg_file_path():
     return [
-        'Board_Pkg_files/NVRAM_Config/binary/BCM957508-P2100T.PKG',
-        'Board_Pkg_files/NVRAM_Config/binary/BCM957508-P2100T.PKG',
-        'Board_Pkg_files/NVRAM_Config/binary/BCM957508-P2100T.PKG'
+        "Board_Pkg_files/NVRAM_Config/binary/BCM957508-P2100T.PKG",
+        "Board_Pkg_files/NVRAM_Config/binary/BCM957508-P2100T.PKG",
+        "Board_Pkg_files/NVRAM_Config/binary/BCM957508-P2100T.PKG",
     ]
+
 
 class SPLPkgFilePath(models.Model):
     spl_pkg_file_path = ArrayField(
-        models.CharField(max_length=100), default=default_spl_pkg_file_path)  # Using list as the default factory to prevent shared lists
+        models.CharField(max_length=100), default=default_spl_pkg_file_path
+    )  # Using list as the default factory to prevent shared lists
 
     def __str__(self):
         return f"SPLPkg {self.spl_pkg_file_path[0]}"
@@ -193,12 +208,15 @@ class SPLPkgFilePath(models.Model):
 
 def default_npar_functions():
     return [8, 8]
+
+
 class Npar(models.Model):
     npar_functions = ArrayField(models.IntegerField(), default=default_npar_functions)
     num_vfs = models.IntegerField(default=4)
 
     def __str__(self):
         return f"NPAR {self.npar_functions}"
+
 
 class PrePostValidation(models.Model):
     speed = models.BooleanField(default=False)  # false
@@ -217,17 +235,20 @@ class PrePostValidation(models.Model):
 
     def __str__(self):
         return f"PrePostVal"
-    
+
+
 def default_config_errors():
     return [
-        'Call Trace',
-        'Error (timeout:',
-        'Requesting MSI-X vectors failed',
-        'Received firmware debug notification',
-        '(Unknown speed)'
+        "Call Trace",
+        "Error (timeout:",
+        "Requesting MSI-X vectors failed",
+        "Received firmware debug notification",
+        "(Unknown speed)",
     ]
 
+
 class Config(models.Model):
+
     nickname = models.CharField(max_length=100)
     backup_restore_config_files = models.BooleanField(default=False)
     validate_config_params = models.BooleanField(default=False)
@@ -261,7 +282,9 @@ class Config(models.Model):
     vfs_per_pf = models.IntegerField(default=8)
     vnic_per_vm = models.IntegerField(default=8)
     number_of_vms_to_test = models.IntegerField(default=3)
-    errors_to_flag = ArrayField(models.CharField(max_length=100), default=default_config_errors)
+    errors_to_flag = ArrayField(
+        models.CharField(max_length=100), default=default_config_errors
+    )
     fw_reset_check = models.BooleanField(default=True)
     error_recovery_check = models.BooleanField(default=True)
     cleanup_on_failure = models.BooleanField(default=True)

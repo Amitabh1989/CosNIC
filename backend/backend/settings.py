@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     "configfile.apps.ConfigfileConfig",
     "sutclient.apps.SutclientConfig",
     "users.apps.UsersConfig",
+    "test_runner.apps.TestRunnerConfig",
     "rest_framework",
     "django.contrib.admin",
     "django.contrib.auth",

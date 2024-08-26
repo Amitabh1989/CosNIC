@@ -1,6 +1,6 @@
 from django.urls import include, path
 from rest_framework import routers
-from .views import ConfigurationView, EmailOptionsView, DownloadConfigFile
+from .views import ConfigurationView, DownloadConfigFile
 
 # from tutorial.quickstart import views
 
@@ -15,5 +15,5 @@ router.register(r"record", ConfigurationView, "record")
 urlpatterns = [
     path("", include(router.urls)),
     # path("api-auth/", include("rest_framework.urls", namespace="rest_framework")),
-    path('download/<int:pk>/', DownloadConfigFile.as_view(), name='download'),
+    path("download/<int:pk>/", DownloadConfigFile.as_view(), name="download"),
 ]

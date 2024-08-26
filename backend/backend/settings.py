@@ -27,14 +27,18 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+# # settings.py
+# CSRF_TRUSTED_ORIGINS = ["http://localhost:8000", "http://127.0.0.1:8000"]
+# CSRF_COOKIE_SECURE = False  # Not recommended for production
+
 
 # Application definition
 
 INSTALLED_APPS = [
-    'configfile.apps.ConfigfileConfig',
-    'sutclient.apps.SutclientConfig',
-    'users.apps.UsersConfig',
-    'rest_framework',
+    "configfile.apps.ConfigfileConfig",
+    "sutclient.apps.SutclientConfig",
+    "users.apps.UsersConfig",
+    "rest_framework",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -85,13 +89,13 @@ WSGI_APPLICATION = "backend.wsgi.application"
 # }
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'mydatabase',
-        'USER': 'postgres',
-        'PASSWORD': 'root',
-        'HOST': 'localhost',
-        'PORT': '5432',
+    "default": {
+        "ENGINE": "django.db.backends.postgresql",
+        "NAME": "mydatabase",
+        "USER": "postgres",
+        "PASSWORD": "root",
+        "HOST": "localhost",
+        "PORT": "5432",
     }
 }
 
@@ -137,14 +141,33 @@ STATIC_URL = "static/"
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 
+# REST_FRAMEWORK = {
+#     # Use Django's standard `django.contrib.auth` permissions,
+#     # or allow read-only access for unauthenticated users.
+#     "DEFAULT_PERMISSION_CLASSES": [
+#         "rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly",
+#         "rest_framework.authentication.SessionAuthentication",
+#         "rest_framework.authentication.BasicAuthentication",
+#     ],
+#     "DEFAULT_RENDERER_CLASSES": [
+#         "rest_framework.renderers.JSONRenderer",
+#         "rest_framework.renderers.BrowsableAPIRenderer",
+#     ],
+# }
+
 REST_FRAMEWORK = {
-    # Use Django's standard `django.contrib.auth` permissions,
-    # or allow read-only access for unauthenticated users.
-    'DEFAULT_PERMISSION_CLASSES': [
-        'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
+    # Permission classes to control access
+    "DEFAULT_PERMISSION_CLASSES": [
+        "rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly",
     ],
-    'DEFAULT_RENDERER_CLASSES': [
-        'rest_framework.renderers.JSONRenderer',
-        'rest_framework.renderers.BrowsableAPIRenderer',
+    # Authentication classes to handle user authentication
+    "DEFAULT_AUTHENTICATION_CLASSES": [
+        "rest_framework.authentication.SessionAuthentication",
+        "rest_framework.authentication.BasicAuthentication",
+    ],
+    # Renderer classes to specify how the response data is rendered
+    "DEFAULT_RENDERER_CLASSES": [
+        "rest_framework.renderers.JSONRenderer",
+        "rest_framework.renderers.BrowsableAPIRenderer",
     ],
 }

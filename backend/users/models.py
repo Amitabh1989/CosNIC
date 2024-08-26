@@ -95,9 +95,7 @@ class User(AbstractBaseUser, PermissionsMixin):
         # return (
         #     f"{self.email} with username {self.username} created on {self.date_joined}"
         # )
-        return (
-            f"{self.username}"
-        )
+        return f"{self.username}"
 
 
 class UserProfile(models.Model):

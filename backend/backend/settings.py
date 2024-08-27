@@ -35,10 +35,10 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
-    "configfile.apps.ConfigfileConfig",
-    "sutclient.apps.SutclientConfig",
     "users.apps.UsersConfig",
     "test_runner.apps.TestRunnerConfig",
+    "configfile.apps.ConfigfileConfig",
+    "sutclient.apps.SutclientConfig",
     "rest_framework",
     "django.contrib.admin",
     "django.contrib.auth",

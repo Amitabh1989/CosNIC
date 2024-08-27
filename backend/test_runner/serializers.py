@@ -29,3 +29,19 @@ class TestRunSerializer(serializers.ModelSerializer):
     class Meta:
         model = TestRun
         fields = "__all__"
+
+    def create(self, validated_data):
+        test_cases = validated_data.pop("test_cases")
+        test_run = TestRun.objects.create(**validated_data)
+        for test_case in test_cases:
+            TestCaseResult.objects.create(test_run=test_run, test_case=test_case)
+        return test_run
+
+
+class CreateVenvSerializer(serializers.Serializer):
+    venv_name = serializers.CharField(max_length=100)
+
+
+class RunTestSerializer(serializers.Serializer):
+    venv_name = serializers.CharField(max_length=100)
+    script_path = serializers.CharField(max_length=255)

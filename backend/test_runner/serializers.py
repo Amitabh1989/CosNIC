@@ -1,4 +1,4 @@
-from .models import TestCase, TestRun, TestCaseResult
+from .models import TestCase, TestRun, TestCaseResult, VirtualEnvironment
 from rest_framework import serializers
 
 
@@ -45,3 +45,11 @@ class CreateVenvSerializer(serializers.Serializer):
 class RunTestSerializer(serializers.Serializer):
     venv_name = serializers.CharField(max_length=100)
     script_path = serializers.CharField(max_length=255)
+
+
+class VirtualEnvironmentSerializer(serializers.ModelSerializer):
+    print("VirtualEnvironmentSerializer called")
+
+    class Meta:
+        model = VirtualEnvironment
+        fields = "__all__"

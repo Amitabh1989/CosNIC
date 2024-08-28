@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import TestCase, TestRun, TestCaseResult
+from .models import TestCase, TestRun, TestCaseResult, VirtualEnvironment
 
 # Register your models here.
 
@@ -26,6 +26,12 @@ class TestRunAdmin(admin.ModelAdmin):
     inlines = [TestCaseResultInline]
 
 
+class VirtualEnvironmentAdmin(admin.ModelAdmin):
+    list_display = ("id", "name", "user", "created_at")
+    list_display_links = ("id", "name")
+
+
 admin.site.register(TestCase, TestCaseAdmin)
 admin.site.register(TestRun, TestRunAdmin)
 admin.site.register(TestCaseResult, TestCaseResultAdmin)
+admin.site.register(VirtualEnvironment, VirtualEnvironmentAdmin)

@@ -73,3 +73,26 @@ class TestCaseResult(models.Model):
 
     def __str__(self):
         return f"Test Case {self.test_case.tcid} in test_run {self.test_run.id}"
+
+
+class VirtualEnvironment(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    nickname = models.CharField(max_length=100, blank=True, null=True)
+    name = models.CharField(max_length=255, unique=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    status = models.CharField(
+        max_length=50,
+        default="created",
+        choices=[
+            ("created", "Created"),
+            ("in-use", "In Use"),
+            ("free", "Free"),
+            ("deleted", "Deleted"),
+            ("error", "Error"),
+        ],
+    )
+    path = models.CharField(max_length=255)
+    python_version = models.CharField(max_length=20, default="3.9")
+
+    def __str__(self):
+        return self.name

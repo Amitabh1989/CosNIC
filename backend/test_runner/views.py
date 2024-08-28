@@ -1,13 +1,23 @@
 # from django.shortcuts import render
 from rest_framework import viewsets
-from .serializers import TestCaseSerializer, TestCaseResultSerializer, TestRunSerializer
-from .models import TestCase, TestRun, TestCaseResult
+from .serializers import (
+    TestCaseSerializer,
+    TestCaseResultSerializer,
+    TestRunSerializer,
+    VirtualEnvironmentSerializer,
+)
+from .models import TestCase, TestRun, TestCaseResult, VirtualEnvironment
 from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.response import Response
 import subprocess
 import os
 from django.conf import settings
+from celery.result import AsyncResult
+
+# from tasks.venv_manager import create_venv
+from .tasks.venv_manager import create_venv
+from django.contrib.auth import get_user_model
 
 # Create your views here.
 
@@ -28,13 +38,47 @@ class TestCaseResultView(viewsets.ModelViewSet):
 
 
 class CreateVenvView(APIView):
+    queryset = VirtualEnvironment.objects.all()
+    serializer_class = VirtualEnvironmentSerializer
+
     def post(self, request):
         # Example: Create a new virtual environment
+        print("Request data: ", request.data)
+
         venv_name = request.data.get("venv_name")
-        venv_path = os.path.join(settings.BASE_DIR, "venvs", venv_name)
-        subprocess.run(["python", "-m", "venv", venv_path])
+        # Get the currently logged-in user (requires authentication)
+        user = get_user_model().objects.get(username=self.request.user.username)
+
+        print(f"User of the request: {user} {user.id} {user.email}")
+        # task = create_venv.delay(venv_name)
+        task = create_venv.apply_async(
+            args=("my_venv_name",),
+            kwargs={"version": "3.9", "user": user.id},
+            countdown=10,
+        )
         return Response(
-            {"message": "Virtual environment created"}, status=status.HTTP_201_CREATED
+            {"message": "Virtual environment created", "task_id": task.id},
+            status=status.HTTP_201_CREATED,
+        )
+
+
+class TaskStatusView(APIView):
+
+    queryset = VirtualEnvironment.objects.all()
+    serializer_class = VirtualEnvironmentSerializer
+
+    def get(self, request, task_id):
+        task = AsyncResult(task_id)
+        if task.ready():
+            _status = task.status
+            result = task.result
+        else:
+            _status = task.status
+            result = "Task is still processing"
+
+        return Response(
+            {"task_id": task_id, "status": _status, "result": result},
+            status=status.HTTP_200_OK,
         )
 
 

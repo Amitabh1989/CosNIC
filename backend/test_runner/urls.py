@@ -6,6 +6,7 @@ from .views import (
     TestCaseResultView,
     CreateVenvView,
     RunTestView,
+    TaskStatusView,
 )
 
 router = DefaultRouter()
@@ -17,4 +18,5 @@ urlpatterns = [
     path("", include(router.urls)),
     path("create-venv/", CreateVenvView.as_view(), name="create_venv"),
     path("run-test/", RunTestView.as_view(), name="run_test"),
+    path("task-status/<str:task_id>/", TaskStatusView.as_view(), name="task_status"),
 ]

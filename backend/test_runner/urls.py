@@ -1,0 +1,24 @@
+from django.urls import include, path
+from rest_framework.routers import DefaultRouter
+from .views import (
+    TestCaseView,
+    TestRunView,
+    TestCaseResultView,
+    CreateVenvView,
+    RunTestView,
+    TaskStatusView,
+    StartVenvCopyInstallPackages,
+)
+
+router = DefaultRouter()
+router.register(r"testcase", TestCaseView, "testcase")
+router.register(r"testrun", TestRunView, "testrun")
+router.register(r"testcaseresult", TestCaseResultView, "testcaseresult")
+
+urlpatterns = [
+    path("", include(router.urls)),
+    path("venv/create", CreateVenvView.as_view(), name="venv_create"),
+    path("run-test/", RunTestView.as_view(), name="run_test"),
+    path("task-status/<str:task_id>/", TaskStatusView.as_view(), name="task_status"),
+    path("venv/install", StartVenvCopyInstallPackages.as_view(), name="venv_install"),
+]

@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import TestCase, TestRun, TestCaseResult, VirtualEnvironment
+from .models import TestCase, TestRun, TestCaseResult, VirtualEnvironment, TestJob
 
 # Register your models here.
 
@@ -31,6 +31,16 @@ class VirtualEnvironmentAdmin(admin.ModelAdmin):
     list_display_links = ("id", "name")
 
 
+# class VirtualEnvironmentAdminInline(admin.TabularInline):
+#     model = VirtualEnvironment
+#     extra = 1  # Number of empty forms to display
+
+
+class TestJobAdmin(admin.ModelAdmin):
+    list_display = ("id", "script_name", "status", "log_file_path")
+
+
+admin.site.register(TestJob, TestJobAdmin)
 admin.site.register(TestCase, TestCaseAdmin)
 admin.site.register(TestRun, TestRunAdmin)
 admin.site.register(TestCaseResult, TestCaseResultAdmin)

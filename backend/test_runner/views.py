@@ -5,8 +5,9 @@ from .serializers import (
     TestCaseResultSerializer,
     TestRunSerializer,
     VirtualEnvironmentSerializer,
+    VirtualEnvironmentTestJobSerializer,
 )
-from .models import TestCase, TestRun, TestCaseResult, VirtualEnvironment
+from .models import TestCase, TestRun, TestCaseResult, VirtualEnvironment, TestJob
 from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -44,20 +45,39 @@ class CreateVenvView(APIView):
     def post(self, request):
         # Example: Create a new virtual environment
         print("Request data: ", request.data)
-
-        venv_name = request.data.get("venv_name")
-        # Get the currently logged-in user (requires authentication)
         user = get_user_model().objects.get(username=self.request.user.username)
+
+        venv_name = request.data.get("venv_name", None)
+        # Check if name is unique
+        # if self.get_queryset().filter(name=venv_name, user=user).exists():
+        print(
+            f"Venv name : {VirtualEnvironment.objects.filter(user=user, name=venv_name)}"
+        )
+        if VirtualEnvironment.objects.filter(user=user, name=venv_name).exists():
+            return Response(
+                {"message": "Venv name already exists, use a unique name"},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        if not venv_name:
+            return Response(
+                {"message": "Venv name cannot be empty"},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+        # Get the currently logged-in user (requires authentication)
 
         print(f"User of the request: {user} {user.id} {user.email}")
         # task = create_venv.delay(venv_name)
         task = create_venv.apply_async(
-            args=("my_venv_name",),
-            kwargs={"version": "3.9", "user": user.id},
+            # args=("my_venv_name",),
+            kwargs={"version": "3.9", "user": user.id, "venv_name": venv_name},
             countdown=10,
         )
         return Response(
-            {"message": "Virtual environment created", "task_id": task.id},
+            {
+                "message": "Virtual environment creation request submitted",
+                "task_id": task.id,
+            },
             status=status.HTTP_201_CREATED,
         )
 
@@ -104,7 +124,8 @@ class StartVenvCopyInstallPackages(APIView):
     def post(self, request):
         # Example: Run a test script
         user = get_user_model().objects.get(username=self.request.user.username)
-        venv_name = request.data.get("venv_name", "my_venv_name")
+        venv_name = request.data.get("venv_name")
+        print(f"Venv name received in the request : {venv_name}")
         # script_path = request.data.get("script_path")
         ctrl_package_version = request.data.get("ctrl_package_version", "latest")
         data_for_task = {
@@ -123,3 +144,67 @@ class StartVenvCopyInstallPackages(APIView):
             },
             status=status.HTTP_201_CREATED,
         )
+
+
+# class RunTestsView(APIView):
+#     queryset = VirtualEnvironment.objects.all()
+#     serializer_class = VirtualEnvironmentSerializer
+
+#     def post(self, request):
+#         # test_case_list = request.data.get("test_cases")  # List of test case ids
+#         # venv_name = request.data.get("venv_name")
+#         # user = get_user_model().objects.get(username=self.request.user.username)
+
+#         # try:
+#         #     self.serializer_class.is_valid(raise_exception=True)
+#         # except serializers.ValidationError as e:
+#         #     return Response({"message": e}, status=status.HTTP_400_BAD_REQUEST)
+
+#         # # Create or retrieve the VirtualEnvironment instance
+#         # virtual_environment, created = VirtualEnvironment.object.get_or_create(
+#         #     name="venv_name", user=user
+#         # )
+
+#         # serializer = self.serializer_class(virtual_environment, data=request.data)
+#         serializer = self.serializer_class(data=request.data)
+
+#         if serializer.is_valid():
+#             serializer.save()  # This will use the create method in VirtualEnvironmentSerializer
+#             return Response(
+#                 {"message": "Virtual Environment and Test Jobs created successfully"},
+#                 status=status.HTTP_201_CREATED,
+#             )
+#         else:
+#             return Response(
+#                 {"errors": serializer.errors}, status=status.HTTP_400_BAD_REQUEST
+#             )
+
+
+class RunTestsView(APIView):
+    queryset = VirtualEnvironment.objects.all()
+    serializer_class = VirtualEnvironmentTestJobSerializer
+
+    def post(self, request):
+        venv_name = self.request.data.get("venv_name")
+        test_jobs = self.request.data.get("test_jobs")
+        user = get_user_model().objects.get(username=self.request.user.username)
+        user_id = user.is_authenticated
+        data = {
+            "venv_name": venv_name,
+            "user_id": user_id,
+            "test_jobs": test_jobs,
+        }
+        serializer = self.serializer_class(data=data)
+        if serializer.is_valid():
+            serializer.save()  # This will use the create method in VirtualEnvironmentSerializer
+
+            return Response(
+                {
+                    "message": f"All test jobs have been created on Venv {venv_name} successfully"
+                },
+                status=status.HTTP_201_CREATED,
+            )
+        else:
+            return Response(
+                {"errors": serializer.errors}, status=status.HTTP_400_BAD_REQUEST
+            )

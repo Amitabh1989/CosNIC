@@ -1,0 +1,106 @@
+Prompt :
+=====================
+i want a service that I run inside the venv that takes in list of scripts to run and runs it. Some server kind of service.
+
+Meaning, say we have a venv created. I want to run 10 scripts. So i send those script list to this service and this service then run the scripts one after the other.
+
+Later on when i want to add more script in the queue, it can be added / removed etc.
+
+This service should also have apis that can be used to communicate to know various details of tests pass - fail status. Like i will have a rest api to query status of the venv, reset it, check test run status, etc to show it to user under his task info
+======================
+
+======================
+You are forgetiing this requiremrnt. As below :
+
+i want a service that I run inside the venv that takes in list of scripts to run and runs it. Some server kind of service.
+
+Meaning, say we have a venv created. I want to run 10 scripts. So i send those script list to this service and this service then run the scripts one after the other.
+
+Later on when i want to add more script in the queue, it can be added / removed etc.
+
+This service should also have apis that can be used to communicate to know various details of tests pass - fail status. Like i will have a rest api to query status of the venv, reset it, check test run status, etc to show it to user under his task info
+
+
+I am fine to use fastAPI. as this would just run within the venv which expects a light weight framework.
+
+But you need to tell me if fastAPI and Rest API, both can be exposed as part of this web portal.
+
+Second, my requiremtn needs to be fulfilled. The serive must allow me all what i have asked for. PLus also talk to celery if that what is required
+
+=======================
+
+To create a service inside the virtual environment (venv) that manages and runs scripts while also providing APIs for communication, here’s a step-by-step approach:
+
+### 1. **Service Design**
+   - **Queue Management:** Use a queue (like a simple Python list or `queue.Queue`) to manage the scripts that need to be run.
+   - **Script Execution:** Scripts will be executed one after the other. The service will need to manage this execution and log the results.
+   - **APIs:** Create REST APIs using something lightweight like Flask or FastAPI. These APIs will allow adding/removing scripts from the queue, checking the status of the service, and querying the results of the scripts.
+
+### 2. **Implementation**
+   - **Service Script**: The service will be a Python script that continuously listens for new scripts to execute and manages the queue.
+
+   Example:
+   ```python
+   from flask import Flask, request, jsonify
+   import subprocess
+   import threading
+   import queue
+
+   app = Flask(__name__)
+   script_queue = queue.Queue()
+   results = {}
+   venv_path = "/path/to/venv"  # Path to the virtual environment
+
+   def run_script(script_name, log_file):
+       result = subprocess.run([f"{venv_path}/bin/pytest", script_name, "--log-file", log_file], capture_output=True)
+       return result.returncode
+
+   def worker():
+       while True:
+           script_name, log_file = script_queue.get()
+           result_code = run_script(script_name, log_file)
+           results[script_name] = "Passed" if result_code == 0 else "Failed"
+           script_queue.task_done()
+
+   threading.Thread(target=worker, daemon=True).start()
+
+   @app.route('/add_script', methods=['POST'])
+   def add_script():
+       script_name = request.json.get('script_name')
+       log_file = request.json.get('log_file')
+       script_queue.put((script_name, log_file))
+       return jsonify({"status": "Script added to queue"})
+
+   @app.route('/status', methods=['GET'])
+   def status():
+       return jsonify(results)
+
+   @app.route('/reset', methods=['POST'])
+   def reset():
+       global results
+       results = {}
+       return jsonify({"status": "Service reset"})
+
+   if __name__ == '__main__':
+       app.run(host='0.0.0.0', port=5000)
+   ```
+
+### 3. **Running the Service**
+   - Activate the virtual environment and run the service script inside it.
+   - Start the Flask API service, and it will listen for incoming API requests to manage the script queue.
+
+### 4. **Interaction**
+   - **Add Script:** You can use a REST client (like Postman) or `curl` to send a script to be added to the queue:
+     ```bash
+     curl -X POST -H "Content-Type: application/json" -d '{"script_name": "test_script.py", "log_file": "log.txt"}' http://localhost:5000/add_script
+     ```
+   - **Check Status:** Query the status of all scripts:
+     ```bash
+     curl http://localhost:5000/status
+     ```
+
+### 5. **Queue Management**
+   - **Add/Remove:** Extend the APIs to allow removing scripts from the queue or managing the order.
+   - **Resetting:** If required, resetting the queue or clearing the results can be done via API calls.
+
+This setup will allow you to manage script execution inside the venv, add/remove scripts dynamically, and monitor test results through REST APIs.

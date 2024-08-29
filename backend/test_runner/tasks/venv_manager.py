@@ -28,10 +28,10 @@ def sanitize_venv_name(name):
 
 @shared_task
 def create_venv(venv_name="heya", version="3.9", nickname="", **kwargs):
-    venv_name = sanitize_venv_name(venv_name)  # Sanitize the venv_name
-    venv_path = os.path.join(settings.BASE_DIR, "venvs", venv_name)
-    logger.info(f"Inside celery task : Venv path is : {venv_path}")
     user = User.objects.get(id=kwargs.get("user"))
+    venv_name = sanitize_venv_name(venv_name)  # Sanitize the venv_name
+    venv_path = os.path.join(settings.BASE_DIR, "venvs", str(user.id), venv_name)
+    logger.info(f"Inside celery task : Venv path is : {venv_path}")
 
     # Ensure the directory exists
     os.makedirs(venv_path, exist_ok=True)
@@ -146,7 +146,7 @@ def copy_files(ctrl_pkg_version, venv_path, requirements_file=None, script_file=
             shutil.copy(file, dest)
 
 
-def install_packages(venv_path, requirements_file_name, ctrl_lib, ctrl_test):
+def install_packages(venv_path, requirements_file_name, ctrl_lib=None, ctrl_test=None):
     # Install from the user_files folder
     logger.info(f"Venv path is : {venv_path}")
     logger.info(f"Requirements file name is : {requirements_file_name}")
@@ -214,12 +214,14 @@ def copy_install_packages_to_venv(**kwargs):
         requirements_file_path = os.path.join(venv_obj.requirements.path)
     else:
         requirements_file_path = None  # or handle it as needed
+    logger.info(f"Requirements file is : {requirements_file_path}")
 
     # Check if the script file exists
     if venv_obj.script:
         script_file_path = os.path.join(venv_obj.script.path)
     else:
         script_file_path = None  # or handle it as needed
+    logger.info(f"Scripts file is : {script_file_path}")
 
     copy_files(
         venv_obj.ctrl_package_version,

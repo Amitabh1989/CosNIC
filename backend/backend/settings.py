@@ -14,7 +14,9 @@ from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-# print(f"BASE DIR : {BASE_DIR}")
+REPO_PATH = Path(__file__).resolve().parent.parent.parent / "ctrl_repo"
+print(f"BASE DIR : {BASE_DIR}")
+print(f"REPO_PATH : {REPO_PATH}")
 
 
 # Quick-start development settings - unsuitable for production

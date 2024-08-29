@@ -16,7 +16,7 @@ from django.conf import settings
 from celery.result import AsyncResult
 
 # from tasks.venv_manager import create_venv
-from .tasks.venv_manager import create_venv
+from .tasks.venv_manager import create_venv, copy_install_packages_to_venv
 from django.contrib.auth import get_user_model
 
 # Create your views here.
@@ -94,4 +94,32 @@ class RunTestView(APIView):
         return Response(
             {"stdout": result.stdout, "stderr": result.stderr},
             status=status.HTTP_200_OK,
+        )
+
+
+class StartVenvCopyInstallPackages(APIView):
+    queryset = VirtualEnvironment.objects.all()
+    serializer_class = VirtualEnvironmentSerializer
+
+    def post(self, request):
+        # Example: Run a test script
+        user = get_user_model().objects.get(username=self.request.user.username)
+        venv_name = request.data.get("venv_name", "my_venv_name")
+        # script_path = request.data.get("script_path")
+        ctrl_package_version = request.data.get("ctrl_package_version", "latest")
+        data_for_task = {
+            "venv_name": venv_name,
+            "user": user.id,
+            "ctrl_package_version": ctrl_package_version,
+        }
+        task = copy_install_packages_to_venv.apply_async(
+            kwargs=data_for_task, countdown=10
+        )
+
+        return Response(
+            {
+                "message": "VENV copy, install, activation in progress",
+                "task_id": task.id,
+            },
+            status=status.HTTP_201_CREATED,
         )

@@ -3,10 +3,13 @@ import os
 import re
 import subprocess
 import sys
-
+from django.shortcuts import get_object_or_404
 from celery import shared_task
 from django.conf import settings
 from django.contrib.auth.models import User
+from django.utils import timezone
+import shutil
+from stat import S_IRWXU
 
 from ..models import VirtualEnvironment
 
@@ -98,16 +101,142 @@ def list_all_venvs():
     )
 
 
-def start_venv(venv_name):
-    venv_path = os.path.join(settings.BASE_DIR, "venvs", venv_name, "bin", "python")
-    return venv_path
+def activate_venv(venv_name, venv_path):
+    logger.info(f"Ven path is {venv_path}")
+    os.chmod(venv_path, S_IRWXU)
+    # executable_path = os.path.join(venv_path, "bin", "python")
+    executable_path = os.path.join(venv_path)
+    # logger.info(f"Executable path : {executable_path}")
+    try:
+        activate_script = os.path.join(executable_path, "Scripts", "activate.bat")
+        result = subprocess.run([activate_script], shell=False, check=True, text=True)
+    except FileNotFoundError:
+        activate_script = os.path.join(venv_path, "bin", "activate")
+        result = subprocess.run([activate_script], shell=False, check=True, text=True)
+    return result.stdout
 
 
-def copy_packages_to_venv(venv_name):
-    venv_path = os.path.join(settings.BASE_DIR, "venvs", venv_name, "bin", "python")
+def copy_files(ctrl_pkg_version, venv_path, requirements_file=None, script_file=None):
+    if ctrl_pkg_version is None:
+        ctrl_pkg_version = "latest.zip"
+
+    logger.info(f"Venv path is : {venv_path}")
+    # Check or create user_files folder inside the venv
+    os.makedirs(os.path.join(venv_path, "user_files"), exist_ok=True)
+
+    user_files_path = os.path.join(venv_path, "user_files")
+    logger.info(f"User_files path is : {user_files_path}")
+    os.chmod(user_files_path, 0o755)
+
+    # ctrl and lib package
+    src = os.path.join(settings.REPO_PATH, ctrl_pkg_version)
+    dest = os.path.join(user_files_path)
+    shutil.copy2(src, dest)
+
+    # Copy requirement.txt and scripts
+    custom_files = []
+    if requirements_file:
+        custom_files.append(requirements_file)
+    if script_file:
+        custom_files.append(script_file)
+
+    if custom_files:
+        for file in custom_files:
+            dest = os.path.join(user_files_path)
+            shutil.copy(file, dest)
+
+
+def install_packages(venv_path, requirements_file_name, ctrl_lib, ctrl_test):
+    # Install from the user_files folder
+    logger.info(f"Venv path is : {venv_path}")
+    logger.info(f"Requirements file name is : {requirements_file_name}")
+    pip_executable = os.path.join(venv_path, "Scripts", "python")
+    logger.info(f"Pip executable is : {pip_executable}")
+    # find requirements file
+    requirements_file = os.path.join(venv_path, "user_files", requirements_file_name)
+    logger.info(f"Requirements file path is : {requirements_file}")
     result = subprocess.run(
-        [venv_path, "-m", "pip", "install", "-r", "requirements.txt"],
-        capture_output=True,
+        [
+            venv_path + "\\Scripts\\python",
+            "-m",
+            "pip",
+            "install",
+            "-r",
+            requirements_file,
+        ],
+        check=True,
         text=True,
+        shell=False,
     )
-    return result
+
+    # install ctrl, lib repositories
+
+    return result.stdout
+
+
+@shared_task
+def copy_install_packages_to_venv(**kwargs):
+    """
+    Here, we copy and install the packages from the requirements.txt file to the virtual environment.
+    We also copy the package version from server to the venv and install it.
+    Install all the packages needed for the virtual environment.
+
+    This must receive the user object so that these details can be fetched from foreign relationship.
+
+    Args:
+        venv_name (_type_): _description_
+
+    Returns:
+        _type_: _description_
+    """
+    user = User.objects.get(id=kwargs.get("user"))
+    venv_name = kwargs.get("venv_name")
+    venv_obj = get_object_or_404(VirtualEnvironment, name=venv_name, user=user)
+    logger.info(f"Venv object is {venv_obj}")
+
+    # In case we have multiple names. But since venv_name is unique, we can use it directly.
+    # venvs = VirtualEnvironment.objects.filter(user=user, name=venv_name)
+    # Using reverse relationship : user.venv.filter(name=venv_name)
+
+    # Start the VENV
+    venv_path = activate_venv(venv_name, venv_obj.path)
+    logger.info(f"Venv activated : {venv_path}")
+
+    # Change Virtual Env status to in-use
+    venv_obj.status = "in-use"
+    venv_obj.assigned_at = timezone.now()
+    venv_obj.last_used_at = timezone.now()
+    venv_obj.save()
+
+    # Copy the requirements file, controller package
+    # Check if the requirements file exists
+    if venv_obj.requirements:
+        requirements_file_path = os.path.join(venv_obj.requirements.path)
+    else:
+        requirements_file_path = None  # or handle it as needed
+
+    # Check if the script file exists
+    if venv_obj.script:
+        script_file_path = os.path.join(venv_obj.script.path)
+    else:
+        script_file_path = None  # or handle it as needed
+
+    copy_files(
+        venv_obj.ctrl_package_version,
+        venv_obj.path,
+        requirements_file_path,
+        script_file_path,
+    )
+    logger.info("All files copied successfully, installing packages now")
+    # Install the requirements
+    requirements_file_name = os.path.basename(venv_obj.requirements.name)
+    result = install_packages(venv_obj.path, requirements_file_name)
+    logger.info(f"Requirements installed : {result}")
+    # Install the controller package
+    # venv_path = os.path.join(settings.BASE_DIR, "venvs", venv_name, "bin", "python")
+    # result = subprocess.run(
+    #     [venv_path, "-m", "pip", "install", "-r", "requirements.txt"],
+    #     capture_output=True,
+    #     text=True,
+    # )
+    # return result

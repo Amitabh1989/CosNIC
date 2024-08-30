@@ -20,10 +20,10 @@ class TestCaseResultInline(admin.TabularInline):
 
 
 class TestRunAdmin(admin.ModelAdmin):
-    list_display = ("id", "user", "created_at", "status")
+    list_display = ("id", "user", "test_case", "created_at", "status")
     list_display_links = ("id", "user")
     readonly_fields = ("created_at", "modified_at")
-    inlines = [TestCaseResultInline]
+    # inlines = [TestCaseResultInline]
 
 
 class VirtualEnvironmentAdmin(admin.ModelAdmin):
@@ -37,7 +37,7 @@ class VirtualEnvironmentAdmin(admin.ModelAdmin):
 
 
 class TestJobAdmin(admin.ModelAdmin):
-    list_display = ("id", "script_name", "status", "log_file_path")
+    list_display = ("id", "test_run", "celery_result")
 
 
 admin.site.register(TestJob, TestJobAdmin)

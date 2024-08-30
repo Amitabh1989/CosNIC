@@ -25,40 +25,25 @@ class TestCaseResultSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 
-# class TestRunSerializer(serializers.ModelSerializer):
-#     test_cases = serializers.PrimaryKeyRelatedField(
-#         queryset=TestCase.objects.all(), many=True
-#     )
-#     # Reverse relationship here
-#     test_case_results = TestCaseResultSerializer(
-#         source="testcaseresult_set", many=True, read_only=True
-#     )
-
-#     class Meta:
-#         model = TestRun
-#         fields = "__all__"
-
-#     def create(self, validated_data):
-#         test_cases = validated_data.pop("test_cases")
-#         test_run = TestRun.objects.create(**validated_data)
-#         for test_case in test_cases:
-#             TestCaseResult.objects.create(test_run=test_run, test_case=test_case)
-#         return test_run
-
-
-class TestJobSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = TestJob
-        fields = "__all__"
-
-
 class TestRunSerializer(serializers.ModelSerializer):
-    test_job = TestJobSerializer()
+    test_cases = serializers.PrimaryKeyRelatedField(
+        queryset=TestCase.objects.all(), many=True
+    )
+    # Reverse relationship here
+    test_case_results = TestCaseResultSerializer(
+        source="testcaseresult_set", many=True, read_only=True
+    )
 
     class Meta:
         model = TestRun
         fields = "__all__"
-        read_only_fields = ["log_file"]
+
+    def create(self, validated_data):
+        test_cases = validated_data.pop("test_cases")
+        test_run = TestRun.objects.create(**validated_data)
+        for test_case in test_cases:
+            TestCaseResult.objects.create(test_run=test_run, test_case=test_case)
+        return test_run
 
 
 class CreateVenvSerializer(serializers.Serializer):
@@ -68,6 +53,12 @@ class CreateVenvSerializer(serializers.Serializer):
 class RunTestSerializer(serializers.Serializer):
     venv_name = serializers.CharField(max_length=100)
     script_path = serializers.CharField(max_length=255)
+
+
+class TestJobSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = TestJob
+        fields = "__all__"
 
 
 class VirtualEnvironmentSerializer(serializers.ModelSerializer):

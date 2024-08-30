@@ -59,17 +59,11 @@ class TestCase(models.Model):
 #         return f"Test Run {self.id} by {self.user.username}"
 
 
-def logs_upload_path(instance, filename):
-    # args here is automatically passed by django once file is uploaded
-    # This function will generate the path dynamically
-    return f"logs/{instance.user.id}/{instance.name}/{filename}"
-
-
 class TestRun(models.Model):
     STATUS_CHOICES = [
         ("pending", "Pending"),
         ("running", "Running"),
-        ("passed", "Passed"),
+        ("completed", "Completed"),
         ("failed", "Failed"),
         ("aborted", "Aborted"),
     ]
@@ -86,26 +80,17 @@ class TestRun(models.Model):
     )
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="test_runs")
     test_case = models.ForeignKey(
-        TestCase,
-        on_delete=models.CASCADE,
-        related_name="test_runs",
-        blank=True,
-        null=True,
+        TestCase, on_delete=models.CASCADE, related_name="test_runs"
     )
     test_job = models.ForeignKey(
-        "TestJob",
-        on_delete=models.CASCADE,
-        related_name="test_runs",
-        blank=True,
-        null=True,
+        "TestJob", on_delete=models.CASCADE, related_name="test_runs"
     )
     created_at = models.DateTimeField(auto_now_add=True)
     modified_at = models.DateTimeField(auto_now=True)
     subtests_to_run = ArrayField(
         models.CharField(), default=list
     )  # Meaning run all subtests
-    error = models.TextField(blank=True)
-    log_file = models.FileField(upload_to=logs_upload_path, blank=True, null=True)
+    log = models.TextField(blank=True)
     status = models.CharField(
         max_length=20,
         choices=STATUS_CHOICES,
@@ -192,16 +177,11 @@ class TestJob(models.Model):
         ("failed", "Failed"),
         ("aborted", "Aborted"),
     ]
-    test_run = models.OneToOneField(
-        TestRun, on_delete=models.CASCADE, blank=True, null=True
-    )
-    celery_job_id = models.CharField(max_length=100, blank=True, null=True)
-    retries = models.IntegerField(default=1)
-    retry_delay = models.IntegerField(default=60)
+    script_name = models.CharField(max_length=255)
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default="pending")
     start_time = models.DateTimeField(null=True, blank=True)
     end_time = models.DateTimeField(null=True, blank=True)
-    celery_result = models.TextField(blank=True, null=True)
+    log_file_path = models.TextField(null=True, blank=True)  # Path to the log file
 
     def __str__(self):
         return f"A job for {self.script_name} has been created successfully : status : {self.status}"

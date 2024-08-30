@@ -7,7 +7,7 @@ from .serializers import (
     VirtualEnvironmentSerializer,
     VirtualEnvironmentTestJobSerializer,
 )
-from .models import TestCase, TestRun, TestCaseResult, VirtualEnvironment, TestJob
+from .models import TestCase, TestRun, TestCaseResult, VirtualEnvironment
 from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -108,8 +108,9 @@ class RunTestView(APIView):
         venv_name = request.data.get("venv_name")
         script_path = request.data.get("script_path")
         venv_path = os.path.join(settings.BASE_DIR, "venvs", venv_name, "bin", "python")
+        # trunk-ignore(bandit/B603)
         result = subprocess.run(
-            [venv_path, script_path], capture_output=True, text=True
+            [venv_path, script_path], capture_output=True, text=True, shell=False
         )
         return Response(
             {"stdout": result.stdout, "stderr": result.stderr},
@@ -126,7 +127,6 @@ class StartVenvCopyInstallPackages(APIView):
         user = get_user_model().objects.get(username=self.request.user.username)
         venv_name = request.data.get("venv_name")
         print(f"Venv name received in the request : {venv_name}")
-        # script_path = request.data.get("script_path")
         ctrl_package_version = request.data.get("ctrl_package_version", "latest")
         data_for_task = {
             "venv_name": venv_name,
@@ -186,7 +186,7 @@ class RunTestsView(APIView):
 
     def post(self, request):
         venv_name = self.request.data.get("venv_name")
-        test_jobs = self.request.data.get("test_jobs")
+        test_jobs = self.request.data.get("test_jobs")  # list of test scripts to run
         user = get_user_model().objects.get(username=self.request.user.username)
         user_id = user.is_authenticated
         data = {

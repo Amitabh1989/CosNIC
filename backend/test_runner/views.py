@@ -7,7 +7,13 @@ from .serializers import (
     VirtualEnvironmentSerializer,
     VirtualEnvironmentTestJobSerializer,
 )
-from .models import TestCase, TestRun, TestCaseResult, VirtualEnvironment
+from .models import (
+    TestCase,
+    TestRun,
+    TestCaseResult,
+    VirtualEnvironment,
+    CtrlPackageRepo,
+)
 from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -15,10 +21,12 @@ import subprocess
 import os
 from django.conf import settings
 from celery.result import AsyncResult
+from rest_framework.permissions import IsAuthenticated
 
 # from tasks.venv_manager import create_venv
-from .tasks.venv_manager import create_venv, copy_install_packages_to_venv
+from .tasks.venv_jobs import create_venv, copy_install_packages_to_venv
 from django.contrib.auth import get_user_model
+from .tasks.repo_jobs import scan_folder_and_update_cache
 
 # Create your views here.
 
@@ -125,16 +133,28 @@ class StartVenvCopyInstallPackages(APIView):
     def post(self, request):
         # Example: Run a test script
         user = get_user_model().objects.get(username=self.request.user.username)
-        venv_name = request.data.get("venv_name")
+        venv_name = request.data.get("name")
         print(f"Venv name received in the request : {venv_name}")
-        ctrl_package_version = request.data.get("ctrl_package_version", "latest")
+        ctrl_package_version = request.data.get("ctrl_package_version", False)
+        if not ctrl_package_version:
+            ctrl_package_version = "latest"
+        print(f"Venv ctrl_package_version in the request : {ctrl_package_version}")
+
+        if not VirtualEnvironment.objects.filter(user=user, name=venv_name).exists():
+            return Response(
+                {
+                    "message": f"No VENV named {venv_name} found associated with user {user.username}"
+                },
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
         data_for_task = {
             "venv_name": venv_name,
             "user": user.id,
             "ctrl_package_version": ctrl_package_version,
         }
         task = copy_install_packages_to_venv.apply_async(
-            kwargs=data_for_task, countdown=10
+            kwargs=data_for_task, countdown=5
         )
 
         return Response(
@@ -208,3 +228,21 @@ class RunTestsView(APIView):
             return Response(
                 {"errors": serializer.errors}, status=status.HTTP_400_BAD_REQUEST
             )
+
+
+class ManualScanCtrlRepoView(APIView):
+    permission_classes = [IsAuthenticated]  # Adjust based on your needs
+
+    def post(self, request):
+        scan_folder_and_update_cache.delay()  # Use delay() to run it asynchronously
+        return Response({"status": "Scan started"})
+
+
+class FolderListView(APIView):
+    queryset = CtrlPackageRepo.objects.all()
+
+    def get(self, request):
+        cache = CtrlPackageRepo.objects.get(id=1)
+        return Response(
+            {"repo_versions": cache.repo_versions, "last_scanned": cache.last_scanned}
+        )

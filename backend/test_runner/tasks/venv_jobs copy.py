@@ -11,7 +11,7 @@ from django.utils import timezone
 import shutil
 from stat import S_IRWXU
 
-from ..models import VirtualEnvironment
+from ..models import VirtualEnvironment, CtrlPackageRepo
 
 logger = logging.getLogger(__name__)
 python_executable = sys.executable
@@ -60,6 +60,7 @@ def create_venv(venv_name="heya", version="3.9", nickname="", **kwargs):
             path=venv_path,
             python_version=version,
             nickname=nickname,
+            status="created",
         )
         logger.info(f"Venv object created : {obj}")
         return "Virtual environment created successfully."
@@ -85,9 +86,10 @@ def get_venv_status(venv_name):
         return None
 
 
-def update_venv_status(venv_name, status):
+def update_venv_status(venv_name, status, user_id):
     try:
-        venv = VirtualEnvironment.objects.get(name=venv_name)
+        user = User.objects.get(id=user_id)
+        venv = VirtualEnvironment.objects.get(name=venv_name, user=user)
         venv.status = status
         venv.save()
         return True
@@ -101,12 +103,17 @@ def list_all_venvs():
     )
 
 
+def list_user_venvs(user):
+    return VirtualEnvironment.objects.filter(user=user).values(
+        "name", "created_at", "status", "nickname", "python_version"
+    )
+
+
 def activate_venv(venv_name, venv_path):
     logger.info(f"Ven path is {venv_path}")
     os.chmod(venv_path, S_IRWXU)
-    # executable_path = os.path.join(venv_path, "bin", "python")
     executable_path = os.path.join(venv_path)
-    # logger.info(f"Executable path : {executable_path}")
+    logger.info(f"Executable path : {executable_path}")
     try:
         activate_script = os.path.join(executable_path, "Scripts", "activate.bat")
         result = subprocess.run([activate_script], shell=False, check=True, text=True)
@@ -116,34 +123,88 @@ def activate_venv(venv_name, venv_path):
     return result.stdout
 
 
-def copy_files(ctrl_pkg_version, venv_path, requirements_file=None, script_file=None):
-    if ctrl_pkg_version is None:
-        ctrl_pkg_version = "latest.zip"
+# def copy_files(ctrl_pkg_version, venv_path, requirements_file=None, script_file=None):
+#     if ctrl_pkg_version is None:
+#         ctrl_pkg_version = "latest.zip"
 
-    logger.info(f"Venv path is : {venv_path}")
-    # Check or create user_files folder inside the venv
-    os.makedirs(os.path.join(venv_path, "user_files"), exist_ok=True)
+#     logger.info(f"Venv path is : {venv_path}")
+#     # Check or create user_files folder inside the venv
+#     os.makedirs(os.path.join(venv_path, "user_files"), exist_ok=True)
 
+#     user_files_path = os.path.join(venv_path, "user_files")
+#     logger.info(f"User_files path is : {user_files_path}")
+#     os.chmod(user_files_path, 0o755)
+
+#     # ctrl and lib package
+#     src = os.path.join(settings.REPO_PATH, ctrl_pkg_version)
+#     dest = os.path.join(user_files_path)
+#     shutil.copy2(src, dest)
+
+#     # Copy requirement.txt and scripts
+#     custom_files = []
+#     if requirements_file:
+#         custom_files.append(requirements_file)
+#     if script_file:
+#         custom_files.append(script_file)
+
+#     if custom_files:
+#         for file in custom_files:
+#             dest = os.path.join(user_files_path)
+#             shutil.copy(file, dest)
+
+
+def copy_files(
+    ctrl_pkg_version="latest",
+    venv_path=None,
+    requirements_file=None,
+    script_file=None,
+):
+    """
+    Copies the control package, requirements file, and script file to the specified virtual environment path.
+
+    Args:
+        ctrl_pkg_version (str): Version of the control package to copy. Defaults to "latest.zip".
+        venv_path (str): Path to the virtual environment where files will be copied.
+        requirements_file (str, optional): Path to the requirements.txt file to copy.
+        script_file (str, optional): Path to a user-provided script file to copy.
+
+    Raises:
+        ValueError: If `venv_path` is not provided.
+    """
+    if not venv_path:
+        raise ValueError("The virtual environment path (`venv_path`) must be provided.")
+
+    logger.info(f"Using virtual environment path: {venv_path}")
+
+    # Define the user files directory and create it if necessary
     user_files_path = os.path.join(venv_path, "user_files")
-    logger.info(f"User_files path is : {user_files_path}")
+    os.makedirs(user_files_path, exist_ok=True)
+    logger.info(f"User files directory created at: {user_files_path}")
+
+    # Set appropriate permissions
     os.chmod(user_files_path, 0o755)
 
-    # ctrl and lib package
-    src = os.path.join(settings.REPO_PATH, ctrl_pkg_version)
-    dest = os.path.join(user_files_path)
-    shutil.copy2(src, dest)
+    logger.info(f"Latest Package : {ctrl_pkg_version}")
 
-    # Copy requirement.txt and scripts
-    custom_files = []
-    if requirements_file:
-        custom_files.append(requirements_file)
-    if script_file:
-        custom_files.append(script_file)
+    ctrl_pkg_src = os.path.join(settings.REPO_PATH, ctrl_pkg_version)
+    logger.info(f"Controller package found at : {ctrl_pkg_src}")
 
-    if custom_files:
-        for file in custom_files:
-            dest = os.path.join(user_files_path)
-            shutil.copy(file, dest)
+    os.chmod(ctrl_pkg_src, 0o755)
+
+    # shutil.copy2(ctrl_pkg_src, user_files_path)
+    if os.path.isdir(ctrl_pkg_src):
+        shutil.copytree(
+            ctrl_pkg_src, os.path.join(user_files_path, os.path.basename(ctrl_pkg_src))
+        )
+    else:
+        shutil.copy2(ctrl_pkg_src, user_files_path)
+    logger.info(f"Control package '{ctrl_pkg_version}' copied to: {user_files_path}")
+
+    # Copy additional files if provided
+    for custom_file in (requirements_file, script_file):
+        if custom_file:
+            shutil.copy(custom_file, user_files_path)
+            logger.info(f"Copied custom file '{custom_file}' to: {user_files_path}")
 
 
 def install_packages(venv_path, requirements_file_name, ctrl_lib=None, ctrl_test=None):
@@ -174,6 +235,14 @@ def install_packages(venv_path, requirements_file_name, ctrl_lib=None, ctrl_test
     return result.stdout
 
 
+def check_valid_venv(venv_name, user):
+    try:
+        venv = VirtualEnvironment.objects.get(name=venv_name, user=user)
+        return venv
+    except VirtualEnvironment.DoesNotExist:
+        return False
+
+
 @shared_task
 def copy_install_packages_to_venv(**kwargs):
     """
@@ -191,8 +260,15 @@ def copy_install_packages_to_venv(**kwargs):
     """
     user = User.objects.get(id=kwargs.get("user"))
     venv_name = kwargs.get("venv_name")
+    ctrl_pkg_version = kwargs.get("ctrl_package_version")
+    # venv_obj = get_object_or_404(VirtualEnvironment, name=venv_name, user=user)
     venv_obj = get_object_or_404(VirtualEnvironment, name=venv_name, user=user)
     logger.info(f"Venv object is {venv_obj}")
+
+    # Copy the control package to the user files directory
+    if ctrl_pkg_version == "latest":
+        versions = CtrlPackageRepo.objects.get(id=1)
+        ctrl_pkg_version = versions.repo_versions[0]  # get the first item
 
     # In case we have multiple names. But since venv_name is unique, we can use it directly.
     # venvs = VirtualEnvironment.objects.filter(user=user, name=venv_name)
@@ -206,6 +282,7 @@ def copy_install_packages_to_venv(**kwargs):
     venv_obj.status = "in-use"
     venv_obj.assigned_at = timezone.now()
     venv_obj.last_used_at = timezone.now()
+    venv_obj.ctrl_package_version = ctrl_pkg_version
     venv_obj.save()
 
     # Copy the requirements file, controller package

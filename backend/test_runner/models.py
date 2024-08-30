@@ -10,7 +10,7 @@ from django.contrib.postgres.fields import ArrayField
 
 class TestCase(models.Model):
     tcid = models.CharField(max_length=100, unique=True)
-    title = models.CharField(max_length=100)
+    title = models.CharField(max_length=250)
     path = models.CharField(max_length=500)
     category = models.CharField(
         max_length=20,
@@ -25,6 +25,17 @@ class TestCase(models.Model):
 
     def __str__(self):
         return f"{self.tcid} : {self.title}"
+
+
+class SubTests(models.Model):
+    test_case = models.ForeignKey(
+        TestCase, related_name="subtests", on_delete=models.CASCADE
+    )
+    name = models.CharField(max_length=250)
+    path = models.CharField(max_length=500)
+
+    def __str__(self):
+        return f"{self.test_case.tcid} : {self.name}"
 
 
 # class TestRun(models.Model):
@@ -252,4 +263,13 @@ class VirtualEnvironment(models.Model):
         ]
 
     def __str__(self):
-        return self.name
+        return f"{self.name} at path {self.path}"
+
+
+class CtrlPackageRepo(models.Model):
+    repo_versions = models.JSONField(default=list)
+    last_scanned = models.DateTimeField(auto_now=True)
+    # url = models.URLField()  # incase i need to read from ftp
+
+    def __str__(self):
+        return self.folder_names

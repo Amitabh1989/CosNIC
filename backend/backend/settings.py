@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     "test_runner.apps.TestRunnerConfig",
     "configfile.apps.ConfigfileConfig",
     "sutclient.apps.SutclientConfig",
+    "django_celery_beat",
     "rest_framework",
     "django.contrib.admin",
     "django.contrib.auth",

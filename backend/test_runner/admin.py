@@ -4,9 +4,9 @@ from .models import TestCase, TestRun, TestCaseResult, VirtualEnvironment, TestJ
 # Register your models here.
 
 
-class TestCaseAdmin(admin.ModelAdmin):
-    list_display = ("tcid", "title", "category", "path")
-    list_display_links = ("tcid", "title")
+# class TestCaseAdmin(admin.ModelAdmin):
+#     list_display = ("tcid", "title", "category", "path")
+#     list_display_links = ("tcid", "title")
 
 
 class TestCaseResultAdmin(admin.ModelAdmin):
@@ -24,6 +24,19 @@ class TestRunAdmin(admin.ModelAdmin):
     list_display_links = ("id", "user")
     readonly_fields = ("created_at", "modified_at")
     # inlines = [TestCaseResultInline]
+
+
+class TestRunResultInline(admin.TabularInline):
+    model = TestRun
+    fields = ("id", "status", "user", "log_file")
+    readonly_fields = ("id",)  # Make fields read-only if needed
+    extra = 0  # Number of empty forms to display
+
+
+class TestCaseAdmin(admin.ModelAdmin):
+    list_display = ("tcid", "title", "category", "path")
+    list_display_links = ("tcid", "title")
+    inlines = [TestRunResultInline]
 
 
 class VirtualEnvironmentAdmin(admin.ModelAdmin):

@@ -1,4 +1,4 @@
-from .models import *
+from .models import Switches, SwitchConfig
 from rest_framework import serializers
 
 

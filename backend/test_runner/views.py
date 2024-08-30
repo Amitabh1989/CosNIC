@@ -186,13 +186,13 @@ class RunTestsView(APIView):
 
     def post(self, request):
         venv_name = self.request.data.get("venv_name")
-        test_jobs = self.request.data.get("test_jobs")  # list of test scripts to run
+        test_cases = self.request.data.get("test_cases")  # list of test scripts to run
         user = get_user_model().objects.get(username=self.request.user.username)
         user_id = user.is_authenticated
         data = {
             "venv_name": venv_name,
             "user_id": user_id,
-            "test_jobs": test_jobs,
+            "test_cases": test_cases,
         }
         serializer = self.serializer_class(data=data)
         if serializer.is_valid():

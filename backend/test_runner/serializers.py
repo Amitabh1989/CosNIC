@@ -8,6 +8,7 @@ from .models import (
 )
 from rest_framework import serializers
 from django.contrib.auth.models import User
+from django.db import transaction
 
 
 class TestCaseSerializer(serializers.ModelSerializer):
@@ -84,19 +85,38 @@ class ServerSerializer(serializers.ModelSerializer):
 
 
 class VirtualEnvironmentTestJobSerializer(serializers.ModelSerializer):
-    test_jobs = TestJobSerializer(many=True)
+    test_cases = serializers.ListField(child=serializers.CharField())
 
     class Meta:
         model = VirtualEnvironment
-        fields = ["test_jobs", "name"]
+        fields = ["venv_name", "test_cases", "user_id"]
 
     def create(self, validated_data):
-        test_jobs = validated_data.pop("test_jobs")
+        test_cases = validated_data.pop("test_cases")
         user_id = validated_data.pop("user_id")
         venv_name = validated_data.pop("venv_name")
         user = User.objects.get(id=user_id)
 
         venv = VirtualEnvironment.objects.get(name=venv_name, user=user)
-        for test_job in test_jobs:
-            TestJob.objects.create(venv=venv, **test_job)
+
+        # Use a list to collect errors for invalid test case IDs
+        invalid_test_cases = []
+
+        with transaction.atomic():
+            for test_case_id in test_cases:
+                try:
+                    tc_obj = TestCase.objects.get(tcid=test_case_id)
+                    tr_obj = TestRun.objects.create(test_case=tc_obj, user=user)
+                    tr_job = TestJob.objects.create(test_run=tr_obj)
+                    venv.test_jobs.add(tr_job)
+                except TestCase.DoesNotExist:
+                    invalid_test_cases.append(test_case_id)
+
+        venv.save()
+
+        if invalid_test_cases:
+            raise serializers.ValidationError(
+                f"TestCase(s) with ID(s) {', '.join(invalid_test_cases)} do not exist."
+            )
+
         return venv

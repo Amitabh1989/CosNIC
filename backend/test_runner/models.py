@@ -9,7 +9,7 @@ from django.contrib.postgres.fields import ArrayField
 
 
 class TestCase(models.Model):
-    tcid = models.CharField(max_length=100)
+    tcid = models.CharField(max_length=100, unique=True)
     title = models.CharField(max_length=100)
     path = models.CharField(max_length=500)
     category = models.CharField(
@@ -109,6 +109,7 @@ class TestRun(models.Model):
     status = models.CharField(
         max_length=20,
         choices=STATUS_CHOICES,
+        default="pending",
     )
 
     def __str__(self):
@@ -217,7 +218,7 @@ class VirtualEnvironment(models.Model):
     )
     nickname = models.CharField(max_length=100, blank=True, null=True)
     name = models.CharField(max_length=255)
-    test_jobs = models.ManyToManyField(TestJob, related_name="venv")
+    test_jobs = models.ManyToManyField(TestJob, related_name="venv", blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     ctrl_package_version = models.CharField(max_length=255, blank=True, null=True)
     status = models.CharField(

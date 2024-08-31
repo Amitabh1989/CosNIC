@@ -17,6 +17,8 @@ Including another URLconf
 
 from django.contrib import admin
 from django.urls import include, path
+from django.conf import settings
+from django.conf.urls.static import static
 
 urlpatterns = [
     path("admin/", admin.site.urls),
@@ -24,3 +26,31 @@ urlpatterns = [
     path("configuration/", include("configfile.urls")),
     path("test_runs/", include("test_runner.urls")),
 ]
+
+
+"""
+Important Notes
+For Development Only: The media serving configuration provided above
+(static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)) is intended
+for development purposes.
+
+In production, you should use a proper web server (e.g., Nginx, Apache) to serve media files.
+
+Check File Permissions: Ensure that the directory where media files are stored
+has the correct permissions for the web server or Django development server to access.
+"""
+
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+    urlpatterns += static(settings.LOG_URL, document_root=settings.LOGS_ROOT)
+    urlpatterns += static(settings.REPO_URL, document_root=settings.REPO_ROOT)
+
+
+"""
+BASE_DIR = Path(__file__).resolve().parent.parent
+REPO_PATH = Path(__file__).resolve().parent.parent.parent / "ctrl_repo"
+LOGS_PATH = Path(__file__).resolve().parent.parent / "test_logs"
+# settings.py
+MEDIA_URL = "/media/"
+MEDIA_ROOT = os.path.join(BASE_DIR, "media")
+"""

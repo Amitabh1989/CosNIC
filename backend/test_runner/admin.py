@@ -40,8 +40,8 @@ class TestCaseAdmin(admin.ModelAdmin):
 
 
 class VirtualEnvironmentAdmin(admin.ModelAdmin):
-    list_display = ("id", "name", "user", "created_at")
-    list_display_links = ("id", "name")
+    list_display = ("id", "venv_name", "user", "created_at")
+    list_display_links = ("id", "venv_name")
 
 
 # class VirtualEnvironmentAdminInline(admin.TabularInline):

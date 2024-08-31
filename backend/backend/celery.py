@@ -25,17 +25,6 @@ CELERY_BEAT_SCHEDULE = {
     },
 }
 
-# app.conf.beat_schedule = {
-#     "scan-folder-every-night": {
-#         "task": "test_runner.tasks.repo_jobs.scan_folder_and_update_cache",
-#         "schedule": crontab(hour=0, minute=0),  # Runs every night at midnight
-#     },
-# }
-
-# Below has been mentioned in the settings.py file. So commented here
-# CELERY_BROKER_URL = 'redis://localhost:6379/0'  # Assuming you're using Redis
-# CELERY_RESULT_BACKEND = 'redis://localhost:6379/0'
-
 
 # Load tasks from all registered Django app configs.
 # app.autodiscover_tasks(lambda: settings.INSTALLED_APPS)
@@ -46,4 +35,16 @@ app.autodiscover_tasks()
 #  4. Set Up Celery Beat for Periodic Tasks
 @app.task(bind=True)
 def debug_task(self):
-    print(f"Request: {self.request!r}")
+    print(f"Celery Request : {self.request!r}")
+
+
+# app.conf.beat_schedule = {
+#     "scan-folder-every-night": {
+#         "task": "test_runner.tasks.repo_jobs.scan_folder_and_update_cache",
+#         "schedule": crontab(hour=0, minute=0),  # Runs every night at midnight
+#     },
+# }
+
+# Below has been mentioned in the settings.py file. So commented here
+# CELERY_BROKER_URL = 'redis://localhost:6379/0'  # Assuming you're using Redis
+# CELERY_RESULT_BACKEND = 'redis://localhost:6379/0'

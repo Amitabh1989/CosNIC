@@ -2,6 +2,9 @@ from django.db import models
 from django.contrib.auth.models import User
 from sutclient.models import Config
 from django.contrib.postgres.fields import ArrayField
+import os
+from datetime import datetime
+from django.conf import settings
 
 # from django.db.postgresql.fields import ArrayField
 
@@ -70,10 +73,41 @@ class SubTests(models.Model):
 #         return f"Test Run {self.id} by {self.user.username}"
 
 
+# def create_path(user_id, test_case_name, test_run_number, result_status):
+# def create_path(instance, filename):
+#     base_dir = (
+#         f"user_{instance.user.id}/test_case_{instance.test_case.tcid}/run_{instance.id}"
+#     )
+#     date_dir = datetime.now().strftime("date_%Y-%m-%d")
+#     result_dir = f"result_{instance.status}"
+
+#     # Create directory structure
+#     path = os.path.join(base_dir, date_dir, result_dir)
+#     os.makedirs(path, exist_ok=True)
+
+#     return path
+
+
+def create_path(instance, filename):
+    base_dir = f"user_{instance.user.id}/{instance.test_case.tcid}/run_{instance.id}"
+    date_dir = datetime.now().strftime("%Y-%m-%d")
+    result_dir = f"result_{instance.status}"
+    path = os.path.join(settings.LOGS_PATH, base_dir, date_dir, result_dir)
+    print(f"Log and uploads path is : {path}")
+    os.makedirs(path, exist_ok=True)
+    return os.path.join(path, filename)
+
+
 def logs_upload_path(instance, filename):
     # args here is automatically passed by django once file is uploaded
     # This function will generate the path dynamically
     return f"logs/{instance.user.id}/{instance.name}/{filename}"
+
+
+def reports_upload_path(instance, filename):
+    # args here is automatically passed by django once file is uploaded
+    # This function will generate the path dynamically
+    return f"pytest_reports/{instance.user.id}/{instance.name}/{filename}"
 
 
 class TestRun(models.Model):
@@ -116,7 +150,12 @@ class TestRun(models.Model):
         models.CharField(), default=list
     )  # Meaning run all subtests
     error = models.TextField(blank=True)
-    log_file = models.FileField(upload_to=logs_upload_path, blank=True, null=True)
+    log_file = models.FileField(
+        upload_to=create_path, blank=True, null=True, max_length=500
+    )
+    report_file = models.FileField(
+        upload_to=create_path, blank=True, null=True, max_length=500
+    )
     status = models.CharField(
         max_length=20,
         choices=STATUS_CHOICES,
@@ -169,13 +208,13 @@ class Server(models.Model):
 def requirements_upload_path(instance, filename):
     # args here is automatically passed by django once file is uploaded
     # This function will generate the path dynamically
-    return f"requirements/{instance.user.id}/{instance.name}/{filename}"
+    return f"requirements/{instance.user.id}/{instance.venv_name}/{filename}"
 
 
 def scripts_upload_path(instance, filename):
     # args here is automatically passed by django once file is uploaded
     # This function will generate the path dynamically
-    return f"scripts/{instance.user.id}/{instance.name}/{filename}"
+    return f"scripts/{instance.user.id}/{instance.venv_name}/{filename}"
 
 
 # class TestJob(models.Model):
@@ -214,9 +253,16 @@ class TestJob(models.Model):
     start_time = models.DateTimeField(null=True, blank=True)
     end_time = models.DateTimeField(null=True, blank=True)
     celery_result = models.TextField(blank=True, null=True)
+    venv = models.ForeignKey(
+        "VirtualEnvironment",
+        on_delete=models.CASCADE,
+        related_name="test_jobs",
+        blank=True,
+        null=True,
+    )
 
     def __str__(self):
-        return f"A job for {self.script_name} has been created successfully : status : {self.status}"
+        return f"A job for {self.test_run} has been created successfully : status : {self.status}"
 
 
 class VirtualEnvironment(models.Model):
@@ -228,8 +274,8 @@ class VirtualEnvironment(models.Model):
         Config, on_delete=models.CASCADE, blank=True, null=True
     )
     nickname = models.CharField(max_length=100, blank=True, null=True)
-    name = models.CharField(max_length=255)
-    test_jobs = models.ManyToManyField(TestJob, related_name="venv", blank=True)
+    venv_name = models.CharField(max_length=255)
+    # test_jobs = models.ManyToManyField(TestJob, related_name="venv", blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     ctrl_package_version = models.CharField(max_length=255, blank=True, null=True)
     status = models.CharField(
@@ -258,12 +304,12 @@ class VirtualEnvironment(models.Model):
     class Meta:
         constraints = [
             models.UniqueConstraint(
-                fields=["user", "name"], name="unique_venv_name_per_user"
+                fields=["user", "venv_name"], name="unique_venv_name_per_user"
             )
         ]
 
     def __str__(self):
-        return f"{self.name} at path {self.path}"
+        return f"{self.venv_name} at path {self.path}"
 
 
 class CtrlPackageRepo(models.Model):
@@ -272,4 +318,4 @@ class CtrlPackageRepo(models.Model):
     # url = models.URLField()  # incase i need to read from ftp
 
     def __str__(self):
-        return self.folder_names
+        return self.repo_versions

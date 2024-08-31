@@ -1,0 +1,10 @@
+INFO     test_logging:test_logging.py:62 Logging gibberish: baz
+INFO     test_logging:test_logging.py:62 Logging gibberish: foo
+INFO     test_logging:test_logging.py:62 Logging gibberish: bar
+INFO     test_logging:test_logging.py:62 Logging gibberish: foo
+- INFO - Logging gibberish: bar
+2024-08-31 20:30:25,501 - INFO - Logging gibberish: bar
+2024-08-31 20:30:26,504 - INFO - Logging gibberish: foo
+2024-08-31 20:30:26,504 - INFO - Logging gibberish: foo
+2024-08-31 20:30:26,504 - INFO - Logging gibberish: foo
+2024-08-31 20:30:26,504 - INFO - Logging gibberish: foo

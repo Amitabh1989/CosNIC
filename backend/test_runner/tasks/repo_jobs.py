@@ -24,7 +24,7 @@ def sort_versions(versions):
 def scan_folder_and_update_cache(start_name=None):
     if start_name is None:
         start_name = "Controller-"
-    folder_path = os.path.join(settings.REPO_PATH)
+    folder_path = os.path.join(settings.REPO_REPO)
     repo_versions = [
         name
         for name in os.listdir(folder_path)

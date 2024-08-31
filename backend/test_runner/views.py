@@ -17,9 +17,6 @@ from .models import (
 from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.response import Response
-import subprocess
-import os
-from django.conf import settings
 from celery.result import AsyncResult
 from rest_framework.permissions import IsAuthenticated
 
@@ -27,6 +24,7 @@ from rest_framework.permissions import IsAuthenticated
 from .tasks.venv_jobs import create_venv, copy_install_packages_to_venv
 from django.contrib.auth import get_user_model
 from .tasks.repo_jobs import scan_folder_and_update_cache
+from .tasks.test_jobs import run_test_job
 
 # Create your views here.
 
@@ -59,9 +57,9 @@ class CreateVenvView(APIView):
         # Check if name is unique
         # if self.get_queryset().filter(name=venv_name, user=user).exists():
         print(
-            f"Venv name : {VirtualEnvironment.objects.filter(user=user, name=venv_name)}"
+            f"Venv name : {VirtualEnvironment.objects.filter(user=user, venv_name=venv_name)}"
         )
-        if VirtualEnvironment.objects.filter(user=user, name=venv_name).exists():
+        if VirtualEnvironment.objects.filter(user=user, venv_name=venv_name).exists():
             return Response(
                 {"message": "Venv name already exists, use a unique name"},
                 status=status.HTTP_400_BAD_REQUEST,
@@ -110,20 +108,20 @@ class TaskStatusView(APIView):
         )
 
 
-class RunTestView(APIView):
-    def post(self, request):
-        # Example: Run a test script
-        venv_name = request.data.get("venv_name")
-        script_path = request.data.get("script_path")
-        venv_path = os.path.join(settings.BASE_DIR, "venvs", venv_name, "bin", "python")
-        # trunk-ignore(bandit/B603)
-        result = subprocess.run(
-            [venv_path, script_path], capture_output=True, text=True, shell=False
-        )
-        return Response(
-            {"stdout": result.stdout, "stderr": result.stderr},
-            status=status.HTTP_200_OK,
-        )
+# class RunTestView(APIView):
+#     def post(self, request):
+#         # Example: Run a test script
+#         venv_name = request.data.get("venv_name")
+#         script_path = request.data.get("script_path")
+#         venv_path = os.path.join(settings.BASE_DIR, "venvs", venv_name, "bin", "python")
+#         # trunk-ignore(bandit/B603)
+#         result = subprocess.run(
+#             [venv_path, script_path], capture_output=True, text=True, shell=False
+#         )
+#         return Response(
+#             {"stdout": result.stdout, "stderr": result.stderr},
+#             status=status.HTTP_200_OK,
+#         )
 
 
 class StartVenvCopyInstallPackages(APIView):
@@ -133,14 +131,16 @@ class StartVenvCopyInstallPackages(APIView):
     def post(self, request):
         # Example: Run a test script
         user = get_user_model().objects.get(username=self.request.user.username)
-        venv_name = request.data.get("name")
+        venv_name = request.data.get("venv_name")
         print(f"Venv name received in the request : {venv_name}")
         ctrl_package_version = request.data.get("ctrl_package_version", False)
         if not ctrl_package_version:
             ctrl_package_version = "latest"
         print(f"Venv ctrl_package_version in the request : {ctrl_package_version}")
 
-        if not VirtualEnvironment.objects.filter(user=user, name=venv_name).exists():
+        if not VirtualEnvironment.objects.filter(
+            user=user, venv_name=venv_name
+        ).exists():
             return Response(
                 {
                     "message": f"No VENV named {venv_name} found associated with user {user.username}"
@@ -205,19 +205,34 @@ class RunTestsView(APIView):
     serializer_class = VirtualEnvironmentTestJobSerializer
 
     def post(self, request):
+        print(f"Got the request : {request.data}")
         venv_name = self.request.data.get("venv_name")
         test_cases = self.request.data.get("test_cases")  # list of test scripts to run
+
+        # Check user authentication (assuming it's required)
+        if not request.user.is_authenticated:
+            return Response(
+                {"error": "Authentication required"},
+                status=status.HTTP_401_UNAUTHORIZED,
+            )
+
         user = get_user_model().objects.get(username=self.request.user.username)
-        user_id = user.is_authenticated
+        # user_id = user.is_authenticated
         data = {
             "venv_name": venv_name,
-            "user_id": user_id,
+            # "user": user,
             "test_cases": test_cases,
         }
-        serializer = self.serializer_class(data=data)
+        print(f"User data : {data}")
+        serializer = self.serializer_class(data=data, context={"user": user})
         if serializer.is_valid():
             serializer.save()  # This will use the create method in VirtualEnvironmentSerializer
 
+            # Here is where, we wil call the celery task and ask it to run all the JOBs.
+            # Send the venv_name and user to the job.
+            # Extract the venv and user objects, fetch all the test jobs and run them one by one
+            task = run_test_job.apply_async(args=[venv_name, user.id])
+            print(f"Task ID : {task.id}")
             return Response(
                 {
                     "message": f"All test jobs have been created on Venv {venv_name} successfully"

@@ -56,7 +56,7 @@ def create_venv(venv_name="heya", version="3.9", nickname="", **kwargs):
         logger.info(f"User is {kwargs.get('user')}")
         obj = VirtualEnvironment.objects.create(
             user=user,
-            name=venv_name,
+            venv_name=venv_name,
             path=venv_path,
             python_version=version,
             nickname=nickname,
@@ -75,7 +75,7 @@ def get_venv_status(venv_name):
     try:
         venv = VirtualEnvironment.objects.get(name=venv_name)
         return {
-            "name": venv.name,
+            "name": venv.venv_name,
             "created_at": venv.created_at,
             "status": venv.status,
             "path": venv.path,
@@ -109,18 +109,66 @@ def list_user_venvs(user):
     )
 
 
-def activate_venv(venv_name, venv_path):
+def activate_venv(venv_path):
     logger.info(f"Ven path is {venv_path}")
     os.chmod(venv_path, S_IRWXU)
     executable_path = os.path.join(venv_path)
     logger.info(f"Executable path : {executable_path}")
     try:
         activate_script = os.path.join(executable_path, "Scripts", "activate.bat")
+        logger.info(f"activate_script path : {activate_script}")
         result = subprocess.run([activate_script], shell=False, check=True, text=True)
     except FileNotFoundError:
         activate_script = os.path.join(venv_path, "bin", "activate")
         result = subprocess.run([activate_script], shell=False, check=True, text=True)
-    return result.stdout
+
+    op = result.stdout
+    er = result.stderr
+    logger.info(f"Virtual environment activated at {op}  -- error : {er}")
+    return op
+
+
+# def activate_venv(venv_path):
+#     logger.info(f"Ven path is {venv_path}")
+#     if sys.platform == "win32":
+#         venv_bin = os.path.join(venv_path, "Scripts")
+#     else:
+#         venv_bin = os.path.join(venv_path, "bin")
+
+#     # Adjust the PATH to include the venv's bin directory
+#     # os.environ["PATH"] = venv_bin + os.pathsep + os.environ.get("PATH", "")
+#     # os.environ["VIRTUAL_ENV"] = venv_path
+
+#     # Ensure the correct Python executable is used
+#     sys.executable = os.path.join(venv_bin, "python")
+
+#     logger.info(f"Virtual environment activated at {venv_path}")
+
+
+def deactivate_venv(venv_path):
+    try:
+        logger.info(f"Deactivating venv at path: {venv_path}")
+        deactivate_script = os.path.join(venv_path, "Scripts", "deactivate.bat")
+
+        # For Windows environments
+        if os.name == "nt" and os.path.exists(deactivate_script):
+            result = subprocess.run(
+                [deactivate_script], shell=True, check=True, text=True
+            )
+        else:
+            # For Unix-based environments
+            deactivate_script = os.path.join(venv_path, "bin", "deactivate")
+            result = subprocess.run(
+                ["sh", "-c", f"source {deactivate_script}"],
+                shell=False,
+                check=True,
+                text=True,
+            )
+
+        logger.info("Venv deactivated successfully.")
+    except Exception as e:
+        logger.error(f"Error deactivating venv: {e}")
+    return result.stdout if result else None
 
 
 # def copy_files(ctrl_pkg_version, venv_path, requirements_file=None, script_file=None):
@@ -235,7 +283,7 @@ def copy_controller_package(ctrl_pkg_version, user_files_path):
         ctrl_pkg_version (str): The control package version to copy.
         user_files_path (str): The path to the 'user_files' directory.
     """
-    ctrl_pkg_src = os.path.join(settings.REPO_PATH, ctrl_pkg_version)
+    ctrl_pkg_src = os.path.join(settings.REPO_ROOT, ctrl_pkg_version)
     logger.info(
         f"Copying controller package to user files directory : {ctrl_pkg_version} and {user_files_path}"
     )
@@ -408,7 +456,7 @@ def copy_install_packages_to_venv(**kwargs):
     venv_name = kwargs.get("venv_name")
     ctrl_pkg_version = kwargs.get("ctrl_package_version")
     # venv_obj = get_object_or_404(VirtualEnvironment, name=venv_name, user=user)
-    venv_obj = get_object_or_404(VirtualEnvironment, name=venv_name, user=user)
+    venv_obj = get_object_or_404(VirtualEnvironment, venv_name=venv_name, user=user)
     logger.info(f"Venv object is {venv_obj}")
 
     # Copy the control package to the user files directory
@@ -418,7 +466,8 @@ def copy_install_packages_to_venv(**kwargs):
     logger.info(f"Control package version is : {ctrl_pkg_version}")
 
     # Start the VENV
-    venv_path = activate_venv(venv_name, venv_obj.path)
+    # venv_path = activate_venv(venv_name, venv_obj.path)
+    venv_path = activate_venv(venv_obj.path)
     logger.info(f"Venv activated : {venv_path}")
 
     # Change Virtual Env status to in-use

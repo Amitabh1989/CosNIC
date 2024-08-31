@@ -86,33 +86,62 @@ class ServerSerializer(serializers.ModelSerializer):
 
 class VirtualEnvironmentTestJobSerializer(serializers.ModelSerializer):
     test_cases = serializers.ListField(child=serializers.CharField())
+    # user = serializers.SerializerMethodField()
 
     class Meta:
         model = VirtualEnvironment
-        fields = ["venv_name", "test_cases", "user_id"]
+        fields = ["venv_name", "test_cases"]
 
-    def create(self, validated_data):
-        test_cases = validated_data.pop("test_cases")
-        user_id = validated_data.pop("user_id")
+        """
+        The serializers.SerializerMethodField tells the serializer to look for a method
+        named get_user on the serializer class itself. This is a convention in Django REST Framework.
+
+        When the serializer is serializing an instance of the VirtualEnvironment model,
+        it will automatically look for a method named get_user on the serializer class.
+        If it finds the method, it will call it with the instance as an argument and
+        use the return value as the value for the user field.
+        """
+
+    # def get_user(self, instance):
+    #     return UserSerializer(instance.user).data
+
+    def create(self, validated_data, **kwargs):
+        print(f"Validated data: {validated_data}")
+        # user_id = kwargs.pop("user_id")
+        user = self.context.get("user")  # Get user from context
+        # user = validated_data.pop("user")
         venv_name = validated_data.pop("venv_name")
-        user = User.objects.get(id=user_id)
+        test_cases = validated_data.pop("test_cases")
+        print(f"User in serialiazer is {user}")
+        # user = User.objects.get(id=user_id)
 
-        venv = VirtualEnvironment.objects.get(name=venv_name, user=user)
+        venv = VirtualEnvironment.objects.get(venv_name=venv_name, user=user)
 
         # Use a list to collect errors for invalid test case IDs
         invalid_test_cases = []
+
+        """
+        1. Create a test case object and add test run details to it
+        2. Then create a Test Run object from the test case
+        3. Then create a Test Job object from the test run which is what the
+        celery manages._
+        """
 
         with transaction.atomic():
             for test_case_id in test_cases:
                 try:
                     tc_obj = TestCase.objects.get(tcid=test_case_id)
+                    print(f"Test case object: {tc_obj}")
                     tr_obj = TestRun.objects.create(test_case=tc_obj, user=user)
+                    print(f"Test run object: {tr_obj}")
                     tr_job = TestJob.objects.create(test_run=tr_obj)
+                    print(f"Test run job object: {tr_job}\n\n")
                     venv.test_jobs.add(tr_job)
                 except TestCase.DoesNotExist:
                     invalid_test_cases.append(test_case_id)
+            venv.save()
 
-        venv.save()
+        print("Wowizee...it was fast. All of it worked.")
 
         if invalid_test_cases:
             raise serializers.ValidationError(

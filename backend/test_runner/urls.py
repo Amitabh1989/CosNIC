@@ -22,8 +22,8 @@ urlpatterns = [
     path("task-status/<str:task_id>/", TaskStatusView.as_view(), name="task_status"),
     path("venv/create", CreateVenvView.as_view(), name="venv_create"),
     path("venv/install", StartVenvCopyInstallPackages.as_view(), name="venv_install"),
-    path("test/run", RunTestsView.as_view(), name="test_run"),
-    path("test/status", RunTestsView.as_view(), name="test_status"),
+    path("run", RunTestsView.as_view(), name="test_run"),
+    # path("test/status", RunTestsView.as_view(), name="test_status"),
     path("repo/scan", ManualScanCtrlRepoView.as_view(), name="repo_scan"),
     path("repo/list", FolderListView.as_view(), name="repo_list"),
 ]

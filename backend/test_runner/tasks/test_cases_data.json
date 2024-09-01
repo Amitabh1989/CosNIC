@@ -1,0 +1,1726 @@
+{
+    "100": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\pytest_testsuites\\advanced_ethernet_thor_fw_mtc.py",
+        "subtests": []
+    },
+    "101": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\pytest_testsuites\\advanced_ethernet_thor_fw_mtc.py",
+        "subtests": []
+    },
+    "58397": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\ai_ml_pytest\\mtc\\fw\\th\\linux\\perf_l2_rdma_th_fw_mtc.py",
+        "subtests": []
+    },
+    "57053": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\ai_ml_pytest\\mtc\\sporadic\\fw\\whp\\linux\\rdma_perf_profile_whp_fw_spo.py",
+        "subtests": []
+    },
+    "57074": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\ai_ml_pytest\\mtc\\sporadic\\fw\\whp\\linux\\rdma_perf_profile_whp_fw_spo.py",
+        "subtests": []
+    },
+    "57365": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\ai_ml_pytest\\mtc\\sporadic\\fw\\whp\\linux\\rdma_mr_whp_fw_spo.py",
+        "subtests": []
+    },
+    "58642": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\ai_ml_pytest\\mtc\\drv\\linux\\th2\\rdma_th2_drv_mtc.py",
+        "subtests": []
+    },
+    "58231": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\ai_ml_pytest\\mtc\\drv\\linux\\th2\\rdma_th2_drv_mtc.py",
+        "subtests": []
+    },
+    "58349": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\ai_ml_pytest\\mtc\\drv\\linux\\th2\\ktls_th2_drv_mtc.py",
+        "subtests": []
+    },
+    "58350": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\ai_ml_pytest\\mtc\\drv\\linux\\th2\\ktls_th2_drv_mtc.py",
+        "subtests": []
+    },
+    "58351": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\ai_ml_pytest\\mtc\\drv\\linux\\th2\\ktls_th2_drv_mtc.py",
+        "subtests": []
+    },
+    "58352": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\ai_ml_pytest\\mtc\\drv\\linux\\th2\\ktls_th2_drv_mtc.py",
+        "subtests": []
+    },
+    "58353": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\ai_ml_pytest\\mtc\\drv\\linux\\th2\\ktls_th2_drv_mtc.py",
+        "subtests": []
+    },
+    "58524": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\ai_ml_pytest\\mtc\\drv\\linux\\th2\\ktls_th2_drv_mtc.py",
+        "subtests": []
+    },
+    "58573": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\ai_ml_pytest\\mtc\\drv\\linux\\th2\\rdma_th2_drv_mtc.py",
+        "subtests": []
+    },
+    "58574": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\ai_ml_pytest\\mtc\\fw\\th2\\linux\\rdma_stress_th2_fw_mtc.py",
+        "subtests": []
+    },
+    "200": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\Pytest\\core\\mtc\\firmware\\linux\\npar_fw_mtc.py",
+        "subtests": []
+    },
+    "201": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\Pytest\\core\\mtc\\firmware\\linux\\npar_fw_mtc.py",
+        "subtests": []
+    },
+    "57084": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\ai_ml_pytest\\mtc\\fw\\th\\linux\\npar_nw_virt_rdma_th_fw_mtc.py",
+        "subtests": []
+    },
+    "56683": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\ai_ml_pytest\\mtc\\fw\\th\\linux\\npar_nw_virt_rdma_th_fw_mtc.py",
+        "subtests": []
+    },
+    "56707": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\ai_ml_pytest\\mtc\\fw\\th2\\linux\\npar_rdma_th2_fw_mtc.py",
+        "subtests": []
+    },
+    "58536": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\ai_ml_pytest\\mtc\\fw\\th2\\linux\\nw_virt_rdma_hammer_th2_fw_mtc.py",
+        "subtests": []
+    },
+    "56681": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\ai_ml_pytest\\mtc\\fw\\th2\\linux\\nw_virt_rdma_th2_fw_mtc.py",
+        "subtests": []
+    },
+    "56656": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\ai_ml_pytest\\mtc\\fw\\th2\\linux\\nw_virt_rdma_th2_fw_mtc.py",
+        "subtests": []
+    },
+    "57380": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\Pytest\\core\\mtc\\firmware\\linux\\network_virtualization_fw_mtc.py",
+        "subtests": []
+    },
+    "56676": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\Pytest\\core\\mtc\\firmware\\linux\\network_virtualization_fw_mtc.py",
+        "subtests": []
+    },
+    "56658": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\ai_ml_pytest\\mtc\\fw\\th2\\linux\\nw_virt_rdma_th2_fw_mtc.py",
+        "subtests": []
+    },
+    "56696": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\ai_ml_pytest\\mtc\\sporadic\\fw\\th\\linux\\nw_virt_rdma_th_fw_spo.py",
+        "subtests": []
+    },
+    "57368": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\Pytest\\core\\mtc\\firmware\\linux\\network_virtualization_fw_mtc.py",
+        "subtests": []
+    },
+    "57373": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\Pytest\\core\\mtc\\firmware\\linux\\network_virtualization_fw_mtc.py",
+        "subtests": []
+    },
+    "58398": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\ai_ml_pytest\\mtc\\fw\\th\\linux\\perf_l2_rdma_th_fw_mtc.py",
+        "subtests": []
+    },
+    "57029": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\ai_ml_pytest\\mtc\\fw\\th2\\linux\\qos_mnode_th2_fw_mtc.py",
+        "subtests": []
+    },
+    "57030": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\ai_ml_pytest\\mtc\\fw\\th2\\linux\\qos_mnode_th2_fw_mtc.py",
+        "subtests": []
+    },
+    "57033": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\ai_ml_pytest\\mtc\\fw\\th2\\linux\\qos_mnode_th2_fw_mtc.py",
+        "subtests": []
+    },
+    "58018": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\ai_ml_pytest\\mtc\\fw\\th2\\linux\\qos_mnode_th2_fw_mtc.py",
+        "subtests": []
+    },
+    "57366": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\ai_ml_pytest\\mtc\\fw\\th2\\linux\\qos_mr_mnode_th2_fw_mtc.py",
+        "subtests": []
+    },
+    "57028": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\ai_ml_pytest\\mtc\\fw\\th2\\linux\\qos_mr_th2_fw_mtc.py",
+        "subtests": []
+    },
+    "57361": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\ai_ml_pytest\\mtc\\fw\\th2\\linux\\qos_mr_th2_fw_mtc.py",
+        "subtests": []
+    },
+    "57027": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\ai_ml_pytest\\mtc\\fw\\th2\\linux\\qos_th2_fw_mtc.py",
+        "subtests": []
+    },
+    "57038": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\ai_ml_pytest\\mtc\\fw\\th2\\linux\\qos_th2_fw_mtc.py",
+        "subtests": []
+    },
+    "57039": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\ai_ml_pytest\\mtc\\fw\\th2\\linux\\qos_th2_fw_mtc.py",
+        "subtests": []
+    },
+    "57034": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\ai_ml_pytest\\mtc\\fw\\th2\\linux\\qos_th2_fw_mtc.py",
+        "subtests": []
+    },
+    "58539": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\ai_ml_pytest\\mtc\\fw\\th2\\linux\\qos_th2_fw_mtc.py",
+        "subtests": []
+    },
+    "58017": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\ai_ml_pytest\\mtc\\fw\\th2\\linux\\qos_th2_fw_mtc.py",
+        "subtests": []
+    },
+    "58019": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\ai_ml_pytest\\mtc\\fw\\th2\\linux\\qos_th2_fw_mtc.py",
+        "subtests": []
+    },
+    "57040": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\ai_ml_pytest\\mtc\\sporadic\\fw\\th\\linux\\qos_th_fw_spo.py",
+        "subtests": []
+    },
+    "57042": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\ai_ml_pytest\\mtc\\fw\\th2\\linux\\qos_th2_fw_mtc.py",
+        "subtests": []
+    },
+    "58234": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\ai_ml_pytest\\mtc\\fw\\whp\\linux\\rdma_aer_hammer_whp_mtc.py",
+        "subtests": []
+    },
+    "58697": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\ai_ml_pytest\\mtc\\fw\\th2\\linux\\rdma_gpu_hammer_th2_fw_mtc.py",
+        "subtests": []
+    },
+    "58698": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\ai_ml_pytest\\mtc\\fw\\th2\\linux\\rdma_gpu_hammer_th2_fw_mtc.py",
+        "subtests": []
+    },
+    "57925": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\ai_ml_pytest\\mtc\\fw\\th2\\linux\\rdma_gpu_redirect_th2_fw_mtc.py",
+        "subtests": []
+    },
+    "57926": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\ai_ml_pytest\\mtc\\fw\\th2\\linux\\rdma_gpu_redirect_th2_fw_mtc.py",
+        "subtests": []
+    },
+    "58233": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\ai_ml_pytest\\mtc\\fw\\whp\\linux\\rdma_hammer_whp_fw_mtc.py",
+        "subtests": []
+    },
+    "57079": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\ai_ml_pytest\\mtc\\fw\\whp\\linux\\rdma_mnode_whp_fw_mtc.py",
+        "subtests": []
+    },
+    "57996": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\ai_ml_pytest\\mtc\\fw\\th2\\linux\\rdma_mpi_th2_fw_mtc.py",
+        "subtests": []
+    },
+    "57044": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\ai_ml_pytest\\mtc\\sporadic\\fw\\whp\\linux\\rdma_perf_profile_whp_fw_spo.py",
+        "subtests": []
+    },
+    "57048": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\ai_ml_pytest\\mtc\\sporadic\\fw\\whp\\linux\\rdma_perf_profile_whp_fw_spo.py",
+        "subtests": []
+    },
+    "57049": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\ai_ml_pytest\\mtc\\sporadic\\fw\\whp\\linux\\rdma_perf_profile_whp_fw_spo.py",
+        "subtests": []
+    },
+    "57050": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\ai_ml_pytest\\mtc\\sporadic\\fw\\th\\linux\\rdma_stress_th_fw_spo.py",
+        "subtests": []
+    },
+    "57051": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\ai_ml_pytest\\mtc\\sporadic\\fw\\whp\\linux\\rdma_perf_profile_whp_fw_spo.py",
+        "subtests": []
+    },
+    "57052": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\ai_ml_pytest\\mtc\\sporadic\\fw\\whp\\linux\\rdma_perf_profile_whp_fw_spo.py",
+        "subtests": []
+    },
+    "57056": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\ai_ml_pytest\\mtc\\sporadic\\fw\\whp\\linux\\rdma_perf_profile_whp_fw_spo.py",
+        "subtests": []
+    },
+    "57058": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\ai_ml_pytest\\mtc\\sporadic\\fw\\whp\\linux\\rdma_perf_profile_whp_fw_spo.py",
+        "subtests": []
+    },
+    "57069": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\ai_ml_pytest\\mtc\\sporadic\\fw\\whp\\linux\\rdma_perf_profile_whp_fw_spo.py",
+        "subtests": []
+    },
+    "56944": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\ai_ml_pytest\\mtc\\sporadic\\fw\\whp\\linux\\rdma_perf_profile_whp_fw_spo.py",
+        "subtests": []
+    },
+    "57362": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\ai_ml_pytest\\mtc\\sporadic\\fw\\whp\\linux\\rdma_whp_fw_spo.py",
+        "subtests": []
+    },
+    "57360": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\ai_ml_pytest\\mtc\\sporadic\\fw\\whp\\linux\\rdma_whp_fw_spo.py",
+        "subtests": []
+    },
+    "57047": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\ai_ml_pytest\\mtc\\sporadic\\fw\\whp\\linux\\rdma_mr_whp_fw_spo.py",
+        "subtests": []
+    },
+    "57045": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\ai_ml_pytest\\mtc\\sporadic\\fw\\whp\\linux\\rdma_perf_profile_whp_fw_spo.py",
+        "subtests": []
+    },
+    "58863": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\ai_ml_pytest\\mtc\\fw\\th2\\linux\\rdma_non_gpu_mnode_hammer_th2_fw_mtc.py",
+        "subtests": []
+    },
+    "58919": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\ai_ml_pytest\\mtc\\fw\\th2\\linux\\rdma_non_gpu_mnode_hammer_th2_fw_mtc.py",
+        "subtests": []
+    },
+    "57046": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\ai_ml_pytest\\mtc\\fw\\whp\\linux\\rdma_stress_whp_fw_mtc.py",
+        "subtests": []
+    },
+    "57059": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\ai_ml_pytest\\mtc\\fw\\whp\\linux\\rdma_stress_whp_fw_mtc.py",
+        "subtests": []
+    },
+    "57078": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\ai_ml_pytest\\mtc\\fw\\whp\\linux\\rdma_stress_whp_fw_mtc.py",
+        "subtests": []
+    },
+    "58102": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\ai_ml_pytest\\mtc\\fw\\whp\\linux\\rdma_stress_whp_fw_mtc.py",
+        "subtests": []
+    },
+    "50826": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\ai_ml_pytest\\mtc\\fw\\th2\\linux\\rdma_th2_fw_mtc.py",
+        "subtests": []
+    },
+    "57072": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\ai_ml_pytest\\mtc\\fw\\th2\\linux\\rdma_th2_fw_mtc.py",
+        "subtests": []
+    },
+    "57761": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\ai_ml_pytest\\mtc\\sporadic\\fw\\th\\linux\\rdma_th_fw_spo.py",
+        "subtests": []
+    },
+    "57057": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\ai_ml_pytest\\mtc\\sporadic\\fw\\whp\\linux\\rdma_perf_profile_whp_fw_spo.py",
+        "subtests": []
+    },
+    "58713": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\ai_ml_pytest\\mtc\\fw\\th2\\linux\\nw_virt_rdma_hw_lag_vf_hammer_th2_fw_mtc.py",
+        "subtests": []
+    },
+    "58895": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\ai_ml_pytest\\mtc\\fw\\th2\\linux\\rdma_gpu_mnic_mnode_hammer_th2_fw_mtc.py",
+        "subtests": []
+    },
+    "58954": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\ai_ml_pytest\\mtc\\fw\\th2\\linux\\rdma_gpu_rccl_scale_hammer_th2_fw_mtc.py",
+        "subtests": []
+    },
+    "58894": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\ai_ml_pytest\\mtc\\fw\\th2\\linux\\rdma_gpu_rccl_sweep_th2_fw_mtc.py",
+        "subtests": []
+    },
+    "58891": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\ai_ml_pytest\\mtc\\fw\\th2\\linux\\rdma_gpu_redirect_pcie_stress_th2_fw_mtc.py",
+        "subtests": []
+    },
+    "58892": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\ai_ml_pytest\\mtc\\fw\\th2\\linux\\rdma_gpu_redirect_pcie_stress_th2_fw_mtc.py",
+        "subtests": []
+    },
+    "58703": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\ai_ml_pytest\\mtc\\fw\\th2\\linux\\rdma_gpu_redirect_th2_fw_mtc.py",
+        "subtests": []
+    },
+    "58741": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\ai_ml_pytest\\mtc\\fw\\th2\\linux\\rdma_hw_lag_hammer_th2_fw_mtc.py",
+        "subtests": []
+    },
+    "58473": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\ai_ml_pytest\\mtc\\fw\\th2\\linux\\rdma_stress_th2_fw_mtc.py",
+        "subtests": []
+    },
+    "58484": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\ai_ml_pytest\\mtc\\fw\\th2\\linux\\rdma_stress_th2_fw_mtc.py",
+        "subtests": []
+    },
+    "58485": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\ai_ml_pytest\\mtc\\fw\\th2\\linux\\rdma_stress_th2_fw_mtc.py",
+        "subtests": []
+    },
+    "58486": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\ai_ml_pytest\\mtc\\fw\\th2\\linux\\rdma_stress_th2_fw_mtc.py",
+        "subtests": []
+    },
+    "57698": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\ai_ml_pytest\\mtc\\sporadic\\fw\\th2\\linux\\rdma_th2_fw_spo.py",
+        "subtests": []
+    },
+    "57699": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\ai_ml_pytest\\mtc\\sporadic\\fw\\th2\\linux\\rdma_th2_fw_spo.py",
+        "subtests": []
+    },
+    "57700": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\ai_ml_pytest\\mtc\\sporadic\\fw\\th2\\linux\\rdma_th2_fw_spo.py",
+        "subtests": []
+    },
+    "57701": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\ai_ml_pytest\\mtc\\sporadic\\fw\\th2\\linux\\rdma_th2_fw_spo.py",
+        "subtests": []
+    },
+    "58472": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\ai_ml_pytest\\mtc\\fw\\th2\\linux\\rdma_th2_fw_mtc.py",
+        "subtests": []
+    },
+    "58483": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\ai_ml_pytest\\mtc\\fw\\th2\\linux\\rdma_th2_fw_mtc.py",
+        "subtests": []
+    },
+    "58571": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\ai_ml_pytest\\mtc\\fw\\th2\\linux\\tunneling_th2_fw_mtc.py",
+        "subtests": []
+    },
+    "56722": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\ai_ml_pytest\\mtc\\sporadic\\fw\\th\\linux\\npar_rdma_th_fw_spo.py",
+        "subtests": []
+    },
+    "56728": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\ai_ml_pytest\\mtc\\sporadic\\fw\\whp\\linux\\tunneling_whp_fw_spo.py",
+        "subtests": []
+    },
+    "58050": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\ai_ml_pytest\\mtc\\sporadic\\fw\\th2\\linux\\rdma_stress_th2_fw_spo.py",
+        "subtests": []
+    },
+    "58285": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\ai_ml_pytest\\mtc\\sporadic\\fw\\th2\\linux\\rdma_th2_fw_spo.py",
+        "subtests": []
+    },
+    "58286": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\ai_ml_pytest\\mtc\\sporadic\\fw\\th2\\linux\\rdma_th2_fw_spo.py",
+        "subtests": []
+    },
+    "58287": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\ai_ml_pytest\\mtc\\sporadic\\fw\\th2\\linux\\rdma_th2_fw_spo.py",
+        "subtests": []
+    },
+    "58288": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\ai_ml_pytest\\mtc\\sporadic\\fw\\th2\\linux\\rdma_th2_fw_spo.py",
+        "subtests": []
+    },
+    "56943": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\Pytest\\core\\mtc\\driver\\linux\\basic_ethernet_functionality_driver_mtc.py",
+        "subtests": []
+    },
+    "56969": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\Pytest\\core\\mtc\\driver\\linux\\basic_ethernet_functionality_driver_mtc.py",
+        "subtests": []
+    },
+    "58208": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\Pytest\\core\\mtc\\driver\\linux\\basic_ethernet_functionality_driver_mtc.py",
+        "subtests": []
+    },
+    "58212": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\Pytest\\core\\mtc\\driver\\linux\\basic_ethernet_functionality_driver_mtc.py",
+        "subtests": []
+    },
+    "58227": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\Pytest\\core\\mtc\\driver\\linux\\basic_ethernet_functionality_driver_mtc.py",
+        "subtests": []
+    },
+    "58262": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\Pytest\\core\\sporadic\\driver\\linux\\basic_ethernet_functionality_driver_sporadic.py",
+        "subtests": []
+    },
+    "58493": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\Pytest\\core\\mtc\\driver\\linux\\basic_ethernet_functionality_driver_mtc.py",
+        "subtests": []
+    },
+    "58525": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\Pytest\\core\\mtc\\driver\\linux\\basic_ethernet_functionality_driver_mtc.py",
+        "subtests": []
+    },
+    "56960": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\Pytest\\core\\mtc\\driver\\linux\\basic_ethernet_functionality_driver_mtc.py",
+        "subtests": []
+    },
+    "58145": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\Pytest\\core\\mtc\\driver\\linux\\basic_ethernet_functionality_driver_mtc.py",
+        "subtests": []
+    },
+    "58146": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\Pytest\\core\\mtc\\driver\\linux\\generic_os_qual_sanity_mtc.py",
+        "subtests": []
+    },
+    "58209": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\Pytest\\core\\mtc\\driver\\linux\\basic_ethernet_functionality_driver_mtc.py",
+        "subtests": []
+    },
+    "56486": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\Pytest\\core\\mtc\\driver\\linux\\dpdk_driver_mtc.py",
+        "subtests": []
+    },
+    "56489": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\Pytest\\core\\mtc\\driver\\linux\\dpdk_driver_mtc.py",
+        "subtests": []
+    },
+    "58975": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\Pytest\\core\\mtc\\driver\\linux\\generic_os_qual_sanity_mtc.py",
+        "subtests": []
+    },
+    "56925": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\Pytest\\core\\sporadic\\driver\\linux\\basic_ethernet_functionality_driver_sporadic.py",
+        "subtests": []
+    },
+    "57200": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\Pytest\\core\\mtc\\driver\\linux\\generic_os_qual_sanity_mtc.py",
+        "subtests": []
+    },
+    "58401": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\Pytest\\core\\mtc\\firmware\\linux\\fw_upgrade_any_to_any_fw_mtc.py",
+        "subtests": []
+    },
+    "56824": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\pytest_testsuites\\advanced_ethernet_thor_fw_mtc.py",
+        "subtests": []
+    },
+    "56825": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\pytest_testsuites\\advanced_ethernet_thor_fw_mtc.py",
+        "subtests": []
+    },
+    "56827": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\pytest_testsuites\\advanced_ethernet_thor_fw_mtc.py",
+        "subtests": []
+    },
+    "56828": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\pytest_testsuites\\advanced_ethernet_thor_fw_mtc.py",
+        "subtests": []
+    },
+    "56826": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\pytest_testsuites\\advanced_ethernet_thor_fw_mtc.py",
+        "subtests": []
+    },
+    "56829": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\pytest_testsuites\\advanced_ethernet_thor_fw_mtc.py",
+        "subtests": []
+    },
+    "56830": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\pytest_testsuites\\advanced_ethernet_thor_fw_mtc.py",
+        "subtests": []
+    },
+    "56834": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\pytest_testsuites\\advanced_ethernet_thor_fw_mtc.py",
+        "subtests": []
+    },
+    "56822": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\Pytest\\core\\mtc\\firmware\\linux\\adv_ethernet_functionality_fw_mtc.py",
+        "subtests": []
+    },
+    "56823": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\Pytest\\core\\mtc\\firmware\\linux\\adv_ethernet_functionality_fw_mtc.py",
+        "subtests": []
+    },
+    "56835": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\Pytest\\core\\mtc\\firmware\\linux\\adv_ethernet_functionality_fw_mtc.py",
+        "subtests": []
+    },
+    "56839": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\Pytest\\core\\mtc\\firmware\\linux\\adv_ethernet_functionality_fw_mtc.py",
+        "subtests": []
+    },
+    "56848": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\Pytest\\core\\mtc\\firmware\\linux\\adv_ethernet_functionality_fw_mtc.py",
+        "subtests": []
+    },
+    "56849": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\Pytest\\core\\mtc\\firmware\\linux\\adv_ethernet_functionality_fw_mtc.py",
+        "subtests": []
+    },
+    "56850": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\Pytest\\core\\mtc\\firmware\\linux\\adv_ethernet_functionality_fw_mtc.py",
+        "subtests": []
+    },
+    "56851": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\Pytest\\core\\mtc\\firmware\\linux\\adv_ethernet_functionality_fw_mtc.py",
+        "subtests": []
+    },
+    "56852": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\Pytest\\core\\mtc\\firmware\\linux\\adv_ethernet_functionality_fw_mtc.py",
+        "subtests": []
+    },
+    "56853": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\Pytest\\core\\mtc\\firmware\\linux\\adv_ethernet_functionality_fw_mtc.py",
+        "subtests": []
+    },
+    "56857": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\Pytest\\core\\mtc\\firmware\\linux\\adv_ethernet_functionality_fw_mtc.py",
+        "subtests": []
+    },
+    "56861": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\Pytest\\core\\mtc\\firmware\\linux\\adv_ethernet_functionality_fw_mtc.py",
+        "subtests": []
+    },
+    "56862": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\Pytest\\core\\mtc\\firmware\\linux\\adv_ethernet_functionality_fw_mtc.py",
+        "subtests": []
+    },
+    "56863": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\Pytest\\core\\mtc\\firmware\\linux\\adv_ethernet_functionality_fw_mtc.py",
+        "subtests": []
+    },
+    "56864": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\Pytest\\core\\mtc\\firmware\\linux\\adv_ethernet_functionality_fw_mtc.py",
+        "subtests": []
+    },
+    "56865": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\Pytest\\core\\mtc\\firmware\\linux\\adv_ethernet_functionality_fw_mtc.py",
+        "subtests": []
+    },
+    "57475": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\Pytest\\core\\mtc\\firmware\\linux\\adv_ethernet_functionality_fw_mtc.py",
+        "subtests": []
+    },
+    "57476": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\Pytest\\core\\mtc\\firmware\\linux\\adv_ethernet_functionality_fw_mtc.py",
+        "subtests": []
+    },
+    "57483": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\Pytest\\core\\mtc\\firmware\\linux\\adv_ethernet_functionality_fw_mtc.py",
+        "subtests": []
+    },
+    "57484": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\Pytest\\core\\mtc\\firmware\\linux\\adv_ethernet_functionality_fw_mtc.py",
+        "subtests": []
+    },
+    "58037": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\Pytest\\core\\mtc\\firmware\\linux\\adv_ethernet_functionality_fw_mtc.py",
+        "subtests": []
+    },
+    "58038": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\Pytest\\core\\mtc\\firmware\\linux\\adv_ethernet_functionality_fw_mtc.py",
+        "subtests": []
+    },
+    "58039": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\Pytest\\core\\mtc\\firmware\\linux\\adv_ethernet_functionality_fw_mtc.py",
+        "subtests": []
+    },
+    "58040": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\Pytest\\core\\mtc\\firmware\\linux\\adv_ethernet_functionality_fw_mtc.py",
+        "subtests": []
+    },
+    "57696": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\Pytest\\core\\mtc\\firmware\\linux\\adv_ethernet_functionality_fw_mtc.py",
+        "subtests": []
+    },
+    "57697": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\Pytest\\core\\mtc\\firmware\\linux\\adv_ethernet_functionality_fw_mtc.py",
+        "subtests": []
+    },
+    "58474": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\Pytest\\core\\mtc\\firmware\\linux\\basic_ethernet_functionality_fw_mtc.py",
+        "subtests": []
+    },
+    "58765": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\Pytest\\core\\mtc\\firmware\\linux\\bd_container_fw_mtc.py",
+        "subtests": []
+    },
+    "57145": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\Pytest\\core\\mtc\\firmware\\linux\\bd_container_fw_mtc.py",
+        "subtests": []
+    },
+    "54889": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\Pytest\\core\\mtc\\firmware\\linux\\bd_container_fw_mtc.py",
+        "subtests": []
+    },
+    "57150": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\Pytest\\core\\mtc\\firmware\\linux\\bd_container_fw_mtc.py",
+        "subtests": []
+    },
+    "57151": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\Pytest\\core\\mtc\\firmware\\linux\\bd_container_fw_mtc.py",
+        "subtests": []
+    },
+    "57152": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\Pytest\\core\\mtc\\firmware\\linux\\bd_container_fw_mtc.py",
+        "subtests": []
+    },
+    "57153": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\Pytest\\core\\mtc\\firmware\\linux\\bd_container_fw_mtc.py",
+        "subtests": []
+    },
+    "57154": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\Pytest\\core\\mtc\\firmware\\linux\\bd_container_fw_mtc.py",
+        "subtests": []
+    },
+    "57155": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\Pytest\\core\\mtc\\firmware\\linux\\bd_container_fw_mtc.py",
+        "subtests": []
+    },
+    "57156": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\Pytest\\core\\mtc\\firmware\\linux\\bd_container_fw_mtc.py",
+        "subtests": []
+    },
+    "57157": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\Pytest\\core\\mtc\\firmware\\linux\\bd_container_fw_mtc.py",
+        "subtests": []
+    },
+    "57158": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\Pytest\\core\\mtc\\firmware\\linux\\bd_container_fw_mtc.py",
+        "subtests": []
+    },
+    "57160": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\Pytest\\core\\mtc\\firmware\\linux\\bd_container_fw_mtc.py",
+        "subtests": []
+    },
+    "57161": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\Pytest\\core\\mtc\\firmware\\linux\\bd_container_fw_mtc.py",
+        "subtests": []
+    },
+    "57162": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\Pytest\\core\\mtc\\firmware\\linux\\bd_container_fw_mtc.py",
+        "subtests": []
+    },
+    "57164": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\Pytest\\core\\mtc\\firmware\\linux\\bd_container_fw_mtc.py",
+        "subtests": []
+    },
+    "57719": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\Pytest\\core\\mtc\\firmware\\linux\\bd_container_fw_mtc.py",
+        "subtests": []
+    },
+    "57720": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\Pytest\\core\\mtc\\firmware\\linux\\bd_container_fw_mtc.py",
+        "subtests": []
+    },
+    "57721": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\Pytest\\core\\mtc\\firmware\\linux\\bd_container_fw_mtc.py",
+        "subtests": []
+    },
+    "57722": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\Pytest\\core\\mtc\\firmware\\linux\\bd_container_fw_mtc.py",
+        "subtests": []
+    },
+    "57723": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\Pytest\\core\\mtc\\firmware\\linux\\bd_container_fw_mtc.py",
+        "subtests": []
+    },
+    "57725": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\Pytest\\core\\mtc\\firmware\\linux\\bd_container_fw_mtc.py",
+        "subtests": []
+    },
+    "57726": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\Pytest\\core\\mtc\\firmware\\linux\\bd_container_fw_mtc.py",
+        "subtests": []
+    },
+    "58305": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\Pytest\\core\\mtc\\firmware\\linux\\bd_container_fw_mtc.py",
+        "subtests": []
+    },
+    "58370": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\Pytest\\core\\mtc\\firmware\\linux\\bd_container_fw_mtc.py",
+        "subtests": []
+    },
+    "58371": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\Pytest\\core\\mtc\\firmware\\linux\\bd_container_fw_mtc.py",
+        "subtests": []
+    },
+    "58372": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\Pytest\\core\\mtc\\firmware\\linux\\bd_container_fw_mtc.py",
+        "subtests": []
+    },
+    "58373": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\Pytest\\core\\mtc\\firmware\\linux\\bd_container_fw_mtc.py",
+        "subtests": []
+    },
+    "57324": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\Pytest\\core\\mtc\\firmware\\linux\\dpdk_fw_mtc.py",
+        "subtests": []
+    },
+    "57325": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\Pytest\\core\\mtc\\firmware\\linux\\dpdk_fw_mtc.py",
+        "subtests": []
+    },
+    "57326": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\Pytest\\core\\mtc\\firmware\\linux\\dpdk_fw_mtc.py",
+        "subtests": []
+    },
+    "57340": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\Pytest\\core\\mtc\\firmware\\linux\\dpdk_fw_mtc.py",
+        "subtests": []
+    },
+    "57345": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\Pytest\\core\\mtc\\firmware\\linux\\dpdk_fw_mtc.py",
+        "subtests": []
+    },
+    "57346": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\Pytest\\core\\mtc\\firmware\\linux\\dpdk_fw_mtc.py",
+        "subtests": []
+    },
+    "58103": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\Pytest\\core\\mtc\\firmware\\linux\\dpdk_fw_mtc.py",
+        "subtests": []
+    },
+    "58480": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\Pytest\\core\\mtc\\firmware\\linux\\dpdk_fw_mtc.py",
+        "subtests": []
+    },
+    "58417": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\Pytest\\core\\mtc\\firmware\\linux\\dpdk_fw_mtc.py",
+        "subtests": []
+    },
+    "58242": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\Pytest\\core\\mtc\\firmware\\linux\\fw_upgrade_dup_utilities_mtc.py",
+        "subtests": []
+    },
+    "58243": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\Pytest\\core\\mtc\\firmware\\linux\\fw_upgrade_dup_utilities_mtc.py",
+        "subtests": []
+    },
+    "58502": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\Pytest\\core\\mtc\\firmware\\linux\\network_virtualization_fw_mtc.py",
+        "subtests": []
+    },
+    "56641": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\Pytest\\core\\mtc\\firmware\\linux\\network_virtualization_fw_mtc.py",
+        "subtests": []
+    },
+    "56642": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\Pytest\\core\\mtc\\firmware\\linux\\network_virtualization_fw_mtc.py",
+        "subtests": []
+    },
+    "56640": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\Pytest\\core\\mtc\\firmware\\linux\\network_virtualization_fw_mtc.py",
+        "subtests": []
+    },
+    "56661": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\Pytest\\core\\mtc\\firmware\\linux\\network_virtualization_fw_mtc.py",
+        "subtests": []
+    },
+    "56689": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\Pytest\\core\\mtc\\firmware\\linux\\network_virtualization_fw_mtc.py",
+        "subtests": []
+    },
+    "56644": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\Pytest\\core\\mtc\\firmware\\linux\\network_virtualization_fw_mtc.py",
+        "subtests": []
+    },
+    "57349": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\Pytest\\core\\mtc\\firmware\\linux\\network_virtualization_fw_mtc.py",
+        "subtests": []
+    },
+    "58247": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\Pytest\\core\\mtc\\firmware\\linux\\network_virtualization_fw_mtc.py",
+        "subtests": []
+    },
+    "58633": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\Pytest\\core\\mtc\\firmware\\linux\\network_virtualization_fw_mtc.py",
+        "subtests": []
+    },
+    "57910": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\Pytest\\core\\mtc\\firmware\\linux\\niccli_utilities_mtc.py",
+        "subtests": []
+    },
+    "57912": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\Pytest\\core\\mtc\\firmware\\linux\\niccli_utilities_mtc.py",
+        "subtests": []
+    },
+    "57913": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\Pytest\\core\\mtc\\firmware\\linux\\niccli_utilities_mtc.py",
+        "subtests": []
+    },
+    "57914": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\Pytest\\core\\mtc\\firmware\\linux\\niccli_utilities_mtc.py",
+        "subtests": []
+    },
+    "57915": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\Pytest\\core\\mtc\\firmware\\linux\\niccli_utilities_mtc.py",
+        "subtests": []
+    },
+    "57916": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\Pytest\\core\\mtc\\firmware\\linux\\niccli_utilities_mtc.py",
+        "subtests": []
+    },
+    "57917": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\Pytest\\core\\mtc\\firmware\\linux\\niccli_utilities_mtc.py",
+        "subtests": []
+    },
+    "57972": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\Pytest\\core\\mtc\\firmware\\linux\\niccli_utilities_mtc.py",
+        "subtests": []
+    },
+    "57973": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\Pytest\\core\\mtc\\firmware\\linux\\niccli_utilities_mtc.py",
+        "subtests": []
+    },
+    "57974": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\Pytest\\core\\mtc\\firmware\\linux\\niccli_utilities_mtc.py",
+        "subtests": []
+    },
+    "57977": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\Pytest\\core\\mtc\\firmware\\linux\\niccli_utilities_mtc.py",
+        "subtests": []
+    },
+    "58045": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\Pytest\\core\\mtc\\firmware\\linux\\niccli_utilities_mtc.py",
+        "subtests": []
+    },
+    "58081": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\Pytest\\core\\mtc\\firmware\\linux\\niccli_utilities_mtc.py",
+        "subtests": []
+    },
+    "58152": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\Pytest\\core\\mtc\\firmware\\linux\\niccli_utilities_mtc.py",
+        "subtests": []
+    },
+    "56706": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\Pytest\\core\\mtc\\firmware\\linux\\npar_fw_mtc.py",
+        "subtests": []
+    },
+    "56714": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\Pytest\\core\\mtc\\firmware\\linux\\npar_fw_mtc.py",
+        "subtests": []
+    },
+    "56810": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\Pytest\\core\\mtc\\firmware\\linux\\npar_fw_mtc.py",
+        "subtests": []
+    },
+    "56754": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\Pytest\\core\\mtc\\firmware\\linux\\stateless_offloads_fw_mtc.py",
+        "subtests": []
+    },
+    "56755": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\Pytest\\core\\mtc\\firmware\\linux\\stateless_offloads_fw_mtc.py",
+        "subtests": []
+    },
+    "56756": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\Pytest\\core\\mtc\\firmware\\linux\\stateless_offloads_fw_mtc.py",
+        "subtests": []
+    },
+    "58624": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\Pytest\\core\\mtc\\firmware\\linux\\stateless_offloads_fw_mtc.py",
+        "subtests": []
+    },
+    "56765": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\Pytest\\core\\mtc\\firmware\\linux\\stateless_offloads_fw_mtc.py",
+        "subtests": []
+    },
+    "56766": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\Pytest\\core\\mtc\\firmware\\linux\\stateless_offloads_fw_mtc.py",
+        "subtests": []
+    },
+    "56767": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\Pytest\\core\\mtc\\firmware\\linux\\stateless_offloads_fw_mtc.py",
+        "subtests": []
+    },
+    "58001": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\Pytest\\core\\mtc\\firmware\\linux\\vswitch_acceleration_fw_mtc.py",
+        "subtests": []
+    },
+    "58002": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\Pytest\\core\\mtc\\firmware\\linux\\vswitch_acceleration_fw_mtc.py",
+        "subtests": []
+    },
+    "58003": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\Pytest\\core\\mtc\\firmware\\linux\\vswitch_acceleration_fw_mtc.py",
+        "subtests": []
+    },
+    "58004": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\Pytest\\core\\mtc\\firmware\\linux\\vswitch_acceleration_fw_mtc.py",
+        "subtests": []
+    },
+    "58005": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\Pytest\\core\\mtc\\firmware\\linux\\vswitch_acceleration_fw_mtc.py",
+        "subtests": []
+    },
+    "58006": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\Pytest\\core\\mtc\\firmware\\linux\\vswitch_acceleration_fw_mtc.py",
+        "subtests": []
+    },
+    "58007": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\Pytest\\core\\mtc\\firmware\\linux\\vswitch_acceleration_fw_mtc.py",
+        "subtests": []
+    },
+    "58008": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\Pytest\\core\\mtc\\firmware\\linux\\vswitch_acceleration_fw_mtc.py",
+        "subtests": []
+    },
+    "58504": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\Pytest\\core\\mtc\\firmware\\linux\\vswitch_acceleration_fw_mtc.py",
+        "subtests": []
+    },
+    "57848": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\Pytest\\core\\mtc\\firmware\\linux\\vswitch_acceleration_fw_mtc.py",
+        "subtests": []
+    },
+    "57849": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\Pytest\\core\\mtc\\firmware\\linux\\vswitch_acceleration_fw_mtc.py",
+        "subtests": []
+    },
+    "57846": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\Pytest\\core\\mtc\\firmware\\linux\\vswitch_acceleration_fw_mtc.py",
+        "subtests": []
+    },
+    "58099": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\Pytest\\core\\mtc\\firmware\\linux\\vswitch_acceleration_fw_mtc.py",
+        "subtests": []
+    },
+    "58100": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\Pytest\\core\\mtc\\firmware\\linux\\vswitch_acceleration_fw_mtc.py",
+        "subtests": []
+    },
+    "58097": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\Pytest\\core\\mtc\\firmware\\linux\\vswitch_acceleration_fw_mtc.py",
+        "subtests": []
+    },
+    "58098": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\Pytest\\core\\mtc\\firmware\\linux\\vswitch_acceleration_fw_mtc.py",
+        "subtests": []
+    },
+    "58259": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\Pytest\\core\\mtc\\firmware\\linux\\vswitch_acceleration_fw_mtc.py",
+        "subtests": []
+    },
+    "58260": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\Pytest\\core\\mtc\\firmware\\linux\\vswitch_acceleration_fw_mtc.py",
+        "subtests": []
+    },
+    "57997": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\Pytest\\core\\mtc\\firmware\\linux\\vswitch_acceleration_fw_mtc.py",
+        "subtests": []
+    },
+    "57998": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\Pytest\\core\\mtc\\firmware\\linux\\vswitch_acceleration_fw_mtc.py",
+        "subtests": []
+    },
+    "57999": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\Pytest\\core\\mtc\\firmware\\linux\\vswitch_acceleration_fw_mtc.py",
+        "subtests": []
+    },
+    "58000": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\Pytest\\core\\mtc\\firmware\\linux\\vswitch_acceleration_fw_mtc.py",
+        "subtests": []
+    },
+    "57808": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\Pytest\\core\\mtc\\firmware\\linux\\vswitch_acceleration_fw_mtc.py",
+        "subtests": []
+    },
+    "57811": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\Pytest\\core\\mtc\\firmware\\linux\\vswitch_acceleration_fw_mtc.py",
+        "subtests": []
+    },
+    "57812": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\Pytest\\core\\mtc\\firmware\\linux\\vswitch_acceleration_fw_mtc.py",
+        "subtests": []
+    },
+    "57813": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\Pytest\\core\\mtc\\firmware\\linux\\vswitch_acceleration_fw_mtc.py",
+        "subtests": []
+    },
+    "57814": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\Pytest\\core\\mtc\\firmware\\linux\\vswitch_acceleration_fw_mtc.py",
+        "subtests": []
+    },
+    "57816": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\Pytest\\core\\mtc\\firmware\\linux\\vswitch_acceleration_fw_mtc.py",
+        "subtests": []
+    },
+    "57817": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\Pytest\\core\\mtc\\firmware\\linux\\vswitch_acceleration_fw_mtc.py",
+        "subtests": []
+    },
+    "57818": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\Pytest\\core\\mtc\\firmware\\linux\\vswitch_acceleration_fw_mtc.py",
+        "subtests": []
+    },
+    "57819": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\Pytest\\core\\mtc\\firmware\\linux\\vswitch_acceleration_fw_mtc.py",
+        "subtests": []
+    },
+    "57820": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\Pytest\\core\\mtc\\firmware\\linux\\vswitch_acceleration_fw_mtc.py",
+        "subtests": []
+    },
+    "57821": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\Pytest\\core\\mtc\\firmware\\linux\\vswitch_acceleration_fw_mtc.py",
+        "subtests": []
+    },
+    "57823": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\Pytest\\core\\mtc\\firmware\\linux\\vswitch_acceleration_fw_mtc.py",
+        "subtests": []
+    },
+    "58273": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\Pytest\\core\\mtc\\firmware\\linux\\vswitch_acceleration_fw_mtc.py",
+        "subtests": []
+    },
+    "58272": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\Pytest\\core\\mtc\\firmware\\linux\\vswitch_acceleration_fw_mtc.py",
+        "subtests": []
+    },
+    "58094": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\Pytest\\core\\mtc\\firmware\\linux\\vswitch_acceleration_fw_mtc.py",
+        "subtests": []
+    },
+    "57118": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\Pytest\\core\\mtc\\firmware\\linux\\vswitch_acceleration_fw_mtc.py",
+        "subtests": []
+    },
+    "57128": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\Pytest\\core\\mtc\\firmware\\linux\\vswitch_acceleration_fw_mtc.py",
+        "subtests": []
+    },
+    "57121": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\Pytest\\core\\mtc\\firmware\\linux\\vswitch_acceleration_fw_mtc.py",
+        "subtests": []
+    },
+    "57122": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\Pytest\\core\\mtc\\firmware\\linux\\vswitch_acceleration_fw_mtc.py",
+        "subtests": []
+    },
+    "57127": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\Pytest\\core\\mtc\\firmware\\linux\\vswitch_acceleration_fw_mtc.py",
+        "subtests": []
+    },
+    "57129": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\Pytest\\core\\mtc\\firmware\\linux\\vswitch_acceleration_fw_mtc.py",
+        "subtests": []
+    },
+    "58093": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\Pytest\\core\\mtc\\firmware\\linux\\vswitch_acceleration_fw_mtc.py",
+        "subtests": []
+    },
+    "58104": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\Pytest\\core\\mtc\\firmware\\linux\\vswitch_acceleration_fw_mtc.py",
+        "subtests": []
+    },
+    "58105": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\Pytest\\core\\mtc\\firmware\\linux\\vswitch_acceleration_fw_mtc.py",
+        "subtests": []
+    },
+    "58106": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\Pytest\\core\\mtc\\firmware\\linux\\vswitch_acceleration_fw_mtc.py",
+        "subtests": []
+    },
+    "58107": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\Pytest\\core\\mtc\\firmware\\linux\\vswitch_acceleration_fw_mtc.py",
+        "subtests": []
+    },
+    "58108": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\Pytest\\core\\mtc\\firmware\\linux\\vswitch_acceleration_fw_mtc.py",
+        "subtests": []
+    },
+    "58109": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\Pytest\\core\\mtc\\firmware\\linux\\vswitch_acceleration_fw_mtc.py",
+        "subtests": []
+    },
+    "58110": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\Pytest\\core\\mtc\\firmware\\linux\\vswitch_acceleration_fw_mtc.py",
+        "subtests": []
+    },
+    "58111": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\Pytest\\core\\mtc\\firmware\\linux\\vswitch_acceleration_fw_mtc.py",
+        "subtests": []
+    },
+    "58112": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\Pytest\\core\\mtc\\firmware\\linux\\vswitch_acceleration_fw_mtc.py",
+        "subtests": []
+    },
+    "58096": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\Pytest\\core\\mtc\\firmware\\linux\\vswitch_acceleration_fw_mtc.py",
+        "subtests": []
+    },
+    "57490": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\Pytest\\core\\mtc\\firmware\\linux\\vswitch_acceleration_fw_mtc.py",
+        "subtests": []
+    },
+    "57491": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\Pytest\\core\\mtc\\firmware\\linux\\vswitch_acceleration_fw_mtc.py",
+        "subtests": []
+    },
+    "57489": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\Pytest\\core\\mtc\\firmware\\linux\\vswitch_acceleration_fw_mtc.py",
+        "subtests": []
+    },
+    "57492": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\Pytest\\core\\mtc\\firmware\\linux\\vswitch_acceleration_fw_mtc.py",
+        "subtests": []
+    },
+    "57493": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\Pytest\\core\\mtc\\firmware\\linux\\vswitch_acceleration_fw_mtc.py",
+        "subtests": []
+    },
+    "57494": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\Pytest\\core\\mtc\\firmware\\linux\\vswitch_acceleration_fw_mtc.py",
+        "subtests": []
+    },
+    "57495": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\Pytest\\core\\mtc\\firmware\\linux\\vswitch_acceleration_fw_mtc.py",
+        "subtests": []
+    },
+    "57496": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\Pytest\\core\\mtc\\firmware\\linux\\vswitch_acceleration_fw_mtc.py",
+        "subtests": []
+    },
+    "57497": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\Pytest\\core\\mtc\\firmware\\linux\\vswitch_acceleration_fw_mtc.py",
+        "subtests": []
+    },
+    "57498": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\Pytest\\core\\mtc\\firmware\\linux\\vswitch_acceleration_fw_mtc.py",
+        "subtests": []
+    },
+    "57500": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\Pytest\\core\\mtc\\firmware\\linux\\vswitch_acceleration_fw_mtc.py",
+        "subtests": []
+    },
+    "57503": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\Pytest\\core\\mtc\\firmware\\linux\\vswitch_acceleration_fw_mtc.py",
+        "subtests": []
+    },
+    "57507": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\Pytest\\core\\mtc\\firmware\\linux\\vswitch_acceleration_fw_mtc.py",
+        "subtests": []
+    },
+    "57516": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\Pytest\\core\\mtc\\firmware\\linux\\vswitch_acceleration_fw_mtc.py",
+        "subtests": []
+    },
+    "57520": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\Pytest\\core\\mtc\\firmware\\linux\\vswitch_acceleration_fw_mtc.py",
+        "subtests": []
+    },
+    "57521": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\Pytest\\core\\mtc\\firmware\\linux\\vswitch_acceleration_fw_mtc.py",
+        "subtests": []
+    },
+    "57522": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\Pytest\\core\\mtc\\firmware\\linux\\vswitch_acceleration_fw_mtc.py",
+        "subtests": []
+    },
+    "58095": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\Pytest\\core\\mtc\\firmware\\linux\\vswitch_acceleration_fw_mtc.py",
+        "subtests": []
+    },
+    "58505": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\Pytest\\core\\mtc\\firmware\\linux\\vswitch_acceleration_fw_mtc.py",
+        "subtests": []
+    },
+    "57465": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\Pytest\\core\\mtc\\firmware\\linux\\vswitch_acceleration_fw_mtc.py",
+        "subtests": []
+    },
+    "57466": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\Pytest\\core\\mtc\\firmware\\linux\\vswitch_acceleration_fw_mtc.py",
+        "subtests": []
+    },
+    "57640": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\Pytest\\core\\mtc\\firmware\\linux\\vswitch_acceleration_fw_mtc.py",
+        "subtests": []
+    },
+    "57456": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\Pytest\\core\\mtc\\firmware\\linux\\vswitch_acceleration_fw_mtc.py",
+        "subtests": []
+    },
+    "57457": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\Pytest\\core\\mtc\\firmware\\linux\\vswitch_acceleration_fw_mtc.py",
+        "subtests": []
+    },
+    "57459": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\Pytest\\core\\mtc\\firmware\\linux\\vswitch_acceleration_fw_mtc.py",
+        "subtests": []
+    },
+    "57460": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\Pytest\\core\\mtc\\firmware\\linux\\vswitch_acceleration_fw_mtc.py",
+        "subtests": []
+    },
+    "57461": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\Pytest\\core\\mtc\\firmware\\linux\\vswitch_acceleration_fw_mtc.py",
+        "subtests": []
+    },
+    "57464": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\Pytest\\core\\mtc\\firmware\\linux\\vswitch_acceleration_fw_mtc.py",
+        "subtests": []
+    },
+    "57469": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\Pytest\\core\\mtc\\firmware\\linux\\vswitch_acceleration_fw_mtc.py",
+        "subtests": []
+    },
+    "57471": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\Pytest\\core\\mtc\\firmware\\linux\\vswitch_acceleration_fw_mtc.py",
+        "subtests": []
+    },
+    "57473": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\Pytest\\core\\mtc\\firmware\\linux\\vswitch_acceleration_fw_mtc.py",
+        "subtests": []
+    },
+    "58503": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\Pytest\\core\\mtc\\firmware\\linux\\vswitch_acceleration_fw_mtc.py",
+        "subtests": []
+    },
+    "57116": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\Pytest\\core\\mtc\\firmware\\linux\\vswitch_acceleration_fw_mtc.py",
+        "subtests": []
+    },
+    "57131": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\Pytest\\core\\mtc\\firmware\\linux\\vswitch_acceleration_fw_mtc.py",
+        "subtests": []
+    },
+    "57115": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\Pytest\\core\\mtc\\firmware\\linux\\vswitch_acceleration_fw_mtc.py",
+        "subtests": []
+    },
+    "58494": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\Pytest\\core\\mtc\\firmware\\linux\\vswitch_acceleration_fw_mtc.py",
+        "subtests": []
+    },
+    "58496": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\Pytest\\core\\mtc\\firmware\\linux\\vswitch_acceleration_fw_mtc.py",
+        "subtests": []
+    },
+    "56566": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\Pytest\\core\\mtc\\firmware\\linux\\vswitch_acceleration_fw_mtc.py",
+        "subtests": []
+    },
+    "58048": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\Pytest\\core\\mtc\\firmware\\linux\\vswitch_acceleration_fw_mtc.py",
+        "subtests": []
+    },
+    "58477": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\Pytest\\core\\mtc\\firmware\\linux\\vswitch_acceleration_fw_mtc.py",
+        "subtests": []
+    },
+    "58478": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\Pytest\\core\\mtc\\firmware\\linux\\vswitch_acceleration_fw_mtc.py",
+        "subtests": []
+    },
+    "58479": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\Pytest\\core\\mtc\\firmware\\linux\\vswitch_acceleration_fw_mtc.py",
+        "subtests": []
+    },
+    "57579": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\Pytest\\core\\mtc\\preboot\\preboot_all_oem_tests.py",
+        "subtests": []
+    },
+    "57583": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\Pytest\\core\\mtc\\preboot\\preboot_all_oem_tests.py",
+        "subtests": []
+    },
+    "57574": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\Pytest\\core\\mtc\\preboot\\preboot_all_oem_tests.py",
+        "subtests": []
+    },
+    "57576": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\Pytest\\core\\mtc\\preboot\\preboot_all_oem_tests.py",
+        "subtests": []
+    },
+    "57582": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\Pytest\\core\\mtc\\preboot\\preboot_all_oem_tests.py",
+        "subtests": []
+    },
+    "58402": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\Pytest\\core\\mtc\\preboot\\preboot_all_oem_tests.py",
+        "subtests": []
+    },
+    "58403": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\Pytest\\core\\mtc\\preboot\\preboot_all_oem_tests.py",
+        "subtests": []
+    },
+    "58404": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\Pytest\\core\\mtc\\preboot\\preboot_all_oem_tests.py",
+        "subtests": []
+    },
+    "58506": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\Pytest\\core\\mtc\\preboot\\preboot_all_oem_tests.py",
+        "subtests": []
+    },
+    "57560": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\Pytest\\core\\mtc\\preboot\\preboot_all_oem_tests.py",
+        "subtests": []
+    },
+    "57561": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\Pytest\\core\\mtc\\preboot\\preboot_all_oem_tests.py",
+        "subtests": []
+    },
+    "57562": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\Pytest\\core\\mtc\\preboot\\preboot_all_oem_tests.py",
+        "subtests": []
+    },
+    "57563": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\Pytest\\core\\mtc\\preboot\\preboot_all_oem_tests.py",
+        "subtests": []
+    },
+    "57564": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\Pytest\\core\\mtc\\preboot\\preboot_all_oem_tests.py",
+        "subtests": []
+    },
+    "57565": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\Pytest\\core\\mtc\\preboot\\preboot_all_oem_tests.py",
+        "subtests": []
+    },
+    "57618": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\Pytest\\core\\mtc\\preboot\\preboot_all_oem_tests.py",
+        "subtests": []
+    },
+    "57619": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\Pytest\\core\\mtc\\preboot\\preboot_all_oem_tests.py",
+        "subtests": []
+    },
+    "57620": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\Pytest\\core\\mtc\\preboot\\preboot_all_oem_tests.py",
+        "subtests": []
+    },
+    "57621": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\Pytest\\core\\mtc\\preboot\\preboot_all_oem_tests.py",
+        "subtests": []
+    },
+    "40770": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\Pytest\\core\\mtc\\preboot\\preboot_all_oem_tests.py",
+        "subtests": []
+    },
+    "57184": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\Pytest\\core\\mtc\\preboot\\preboot_all_oem_tests.py",
+        "subtests": []
+    },
+    "58320": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\Pytest\\core\\mtc\\preboot\\preboot_all_oem_tests.py",
+        "subtests": []
+    },
+    "58560": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\Pytest\\core\\mtc\\preboot\\preboot_all_oem_tests.py",
+        "subtests": []
+    },
+    "57175": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\Pytest\\core\\mtc\\preboot\\preboot_all_oem_tests.py",
+        "subtests": []
+    },
+    "57603": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\Pytest\\core\\mtc\\preboot\\preboot_all_oem_tests.py",
+        "subtests": []
+    },
+    "57604": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\Pytest\\core\\mtc\\preboot\\preboot_all_oem_tests.py",
+        "subtests": []
+    },
+    "57605": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\Pytest\\core\\mtc\\preboot\\preboot_all_oem_tests.py",
+        "subtests": []
+    },
+    "57606": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\Pytest\\core\\mtc\\preboot\\preboot_all_oem_tests.py",
+        "subtests": []
+    },
+    "57584": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\Pytest\\core\\mtc\\preboot\\preboot_all_oem_tests.py",
+        "subtests": []
+    },
+    "57585": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\Pytest\\core\\mtc\\preboot\\preboot_all_oem_tests.py",
+        "subtests": []
+    },
+    "57586": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\Pytest\\core\\mtc\\preboot\\preboot_all_oem_tests.py",
+        "subtests": []
+    },
+    "57587": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\Pytest\\core\\mtc\\preboot\\preboot_all_oem_tests.py",
+        "subtests": []
+    },
+    "57598": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\Pytest\\core\\mtc\\preboot\\preboot_all_oem_tests.py",
+        "subtests": []
+    },
+    "57599": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\Pytest\\core\\mtc\\preboot\\preboot_all_oem_tests.py",
+        "subtests": []
+    },
+    "57600": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\Pytest\\core\\mtc\\preboot\\preboot_all_oem_tests.py",
+        "subtests": []
+    },
+    "57608": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\Pytest\\core\\mtc\\preboot\\preboot_all_oem_tests.py",
+        "subtests": []
+    },
+    "57609": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\Pytest\\core\\mtc\\preboot\\preboot_all_oem_tests.py",
+        "subtests": []
+    },
+    "57610": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\Pytest\\core\\mtc\\preboot\\preboot_all_oem_tests.py",
+        "subtests": []
+    },
+    "57611": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\Pytest\\core\\mtc\\preboot\\preboot_all_oem_tests.py",
+        "subtests": []
+    },
+    "57613": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\Pytest\\core\\mtc\\preboot\\preboot_all_oem_tests.py",
+        "subtests": []
+    },
+    "58509": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\Pytest\\core\\mtc\\preboot\\preboot_all_oem_tests.py",
+        "subtests": []
+    },
+    "58510": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\Pytest\\core\\mtc\\preboot\\preboot_all_oem_tests.py",
+        "subtests": []
+    },
+    "57590": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\Pytest\\core\\mtc\\preboot\\preboot_all_oem_tests.py",
+        "subtests": []
+    },
+    "57591": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\Pytest\\core\\mtc\\preboot\\preboot_all_oem_tests.py",
+        "subtests": []
+    },
+    "57592": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\Pytest\\core\\mtc\\preboot\\preboot_all_oem_tests.py",
+        "subtests": []
+    },
+    "57593": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\Pytest\\core\\mtc\\preboot\\preboot_all_oem_tests.py",
+        "subtests": []
+    },
+    "57594": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\Pytest\\core\\mtc\\preboot\\preboot_all_oem_tests.py",
+        "subtests": []
+    },
+    "57601": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\Pytest\\core\\mtc\\preboot\\preboot_all_oem_tests.py",
+        "subtests": []
+    },
+    "57623": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\Pytest\\core\\mtc\\preboot\\preboot_all_oem_tests.py",
+        "subtests": []
+    },
+    "57624": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\Pytest\\core\\mtc\\preboot\\preboot_all_oem_tests.py",
+        "subtests": []
+    },
+    "57671": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\Pytest\\core\\mtc\\preboot\\preboot_all_oem_tests.py",
+        "subtests": []
+    },
+    "57672": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\Pytest\\core\\mtc\\preboot\\preboot_all_oem_tests.py",
+        "subtests": []
+    },
+    "57673": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\Pytest\\core\\mtc\\preboot\\preboot_all_oem_tests.py",
+        "subtests": []
+    },
+    "57674": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\Pytest\\core\\mtc\\preboot\\preboot_all_oem_tests.py",
+        "subtests": []
+    },
+    "57675": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\Pytest\\core\\mtc\\preboot\\preboot_all_oem_tests.py",
+        "subtests": []
+    },
+    "57676": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\Pytest\\core\\mtc\\preboot\\preboot_all_oem_tests.py",
+        "subtests": []
+    },
+    "57670": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\Pytest\\core\\mtc\\preboot\\preboot_all_oem_tests.py",
+        "subtests": []
+    },
+    "57682": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\Pytest\\core\\mtc\\preboot\\preboot_all_oem_tests.py",
+        "subtests": []
+    },
+    "57683": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\Pytest\\core\\mtc\\preboot\\preboot_all_oem_tests.py",
+        "subtests": []
+    },
+    "57684": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\Pytest\\core\\mtc\\preboot\\preboot_all_oem_tests.py",
+        "subtests": []
+    },
+    "57685": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\Pytest\\core\\mtc\\preboot\\preboot_all_oem_tests.py",
+        "subtests": []
+    },
+    "57686": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\Pytest\\core\\mtc\\preboot\\preboot_all_oem_tests.py",
+        "subtests": []
+    },
+    "56916": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\Pytest\\core\\sporadic\\driver\\linux\\basic_ethernet_functionality_driver_sporadic.py",
+        "subtests": []
+    },
+    "56919": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\Pytest\\core\\sporadic\\driver\\linux\\basic_ethernet_functionality_driver_sporadic.py",
+        "subtests": []
+    },
+    "56920": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\Pytest\\core\\sporadic\\driver\\linux\\basic_ethernet_functionality_driver_sporadic.py",
+        "subtests": []
+    },
+    "56922": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\Pytest\\core\\sporadic\\driver\\linux\\basic_ethernet_functionality_driver_sporadic.py",
+        "subtests": []
+    },
+    "56938": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\Pytest\\core\\sporadic\\driver\\linux\\basic_ethernet_functionality_driver_sporadic.py",
+        "subtests": []
+    },
+    "56941": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\Pytest\\core\\sporadic\\driver\\linux\\basic_ethernet_functionality_driver_sporadic.py",
+        "subtests": []
+    },
+    "56942": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\Pytest\\core\\sporadic\\driver\\linux\\basic_ethernet_functionality_driver_sporadic.py",
+        "subtests": []
+    },
+    "56947": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\Pytest\\core\\sporadic\\driver\\linux\\basic_ethernet_functionality_driver_sporadic.py",
+        "subtests": []
+    },
+    "56948": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\Pytest\\core\\sporadic\\driver\\linux\\basic_ethernet_functionality_driver_sporadic.py",
+        "subtests": []
+    },
+    "56950": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\Pytest\\core\\sporadic\\driver\\linux\\basic_ethernet_functionality_driver_sporadic.py",
+        "subtests": []
+    },
+    "56951": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\Pytest\\core\\sporadic\\driver\\linux\\basic_ethernet_functionality_driver_sporadic.py",
+        "subtests": []
+    },
+    "56953": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\Pytest\\core\\sporadic\\driver\\linux\\basic_ethernet_functionality_driver_sporadic.py",
+        "subtests": []
+    },
+    "56956": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\Pytest\\core\\sporadic\\driver\\linux\\basic_ethernet_functionality_driver_sporadic.py",
+        "subtests": []
+    },
+    "56968": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\Pytest\\core\\sporadic\\driver\\linux\\basic_ethernet_functionality_driver_sporadic.py",
+        "subtests": []
+    },
+    "56970": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\Pytest\\core\\sporadic\\driver\\linux\\basic_ethernet_functionality_driver_sporadic.py",
+        "subtests": []
+    },
+    "57650": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\Pytest\\core\\sporadic\\driver\\linux\\basic_ethernet_functionality_driver_sporadic.py",
+        "subtests": []
+    },
+    "58204": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\Pytest\\core\\sporadic\\driver\\linux\\basic_ethernet_functionality_driver_sporadic.py",
+        "subtests": []
+    },
+    "58205": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\Pytest\\core\\sporadic\\driver\\linux\\basic_ethernet_functionality_driver_sporadic.py",
+        "subtests": []
+    },
+    "58206": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\Pytest\\core\\sporadic\\driver\\linux\\basic_ethernet_functionality_driver_sporadic.py",
+        "subtests": []
+    },
+    "58207": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\Pytest\\core\\sporadic\\driver\\linux\\basic_ethernet_functionality_driver_sporadic.py",
+        "subtests": []
+    },
+    "58210": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\Pytest\\core\\sporadic\\driver\\linux\\basic_ethernet_functionality_driver_sporadic.py",
+        "subtests": []
+    },
+    "58213": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\Pytest\\core\\sporadic\\driver\\linux\\basic_ethernet_functionality_driver_sporadic.py",
+        "subtests": []
+    },
+    "58215": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\Pytest\\core\\sporadic\\driver\\linux\\basic_ethernet_functionality_driver_sporadic.py",
+        "subtests": []
+    },
+    "58216": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\Pytest\\core\\sporadic\\driver\\linux\\basic_ethernet_functionality_driver_sporadic.py",
+        "subtests": []
+    },
+    "58263": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\Pytest\\core\\sporadic\\driver\\linux\\basic_ethernet_functionality_driver_sporadic.py",
+        "subtests": []
+    },
+    "58354": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\Pytest\\core\\sporadic\\driver\\linux\\basic_ethernet_functionality_driver_sporadic.py",
+        "subtests": []
+    },
+    "58355": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\Pytest\\core\\sporadic\\driver\\linux\\basic_ethernet_functionality_driver_sporadic.py",
+        "subtests": []
+    },
+    "58356": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\Pytest\\core\\sporadic\\driver\\linux\\basic_ethernet_functionality_driver_sporadic.py",
+        "subtests": []
+    },
+    "56487": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\Pytest\\core\\sporadic\\driver\\linux\\dpdk_driver_sporadic.py",
+        "subtests": []
+    },
+    "56490": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\Pytest\\core\\sporadic\\driver\\linux\\dpdk_driver_sporadic.py",
+        "subtests": []
+    },
+    "56492": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\Pytest\\core\\sporadic\\driver\\linux\\dpdk_driver_sporadic.py",
+        "subtests": []
+    },
+    "56506": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\Pytest\\core\\sporadic\\driver\\linux\\dpdk_driver_sporadic.py",
+        "subtests": []
+    },
+    "56560": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\Pytest\\core\\sporadic\\firmware\\linux\\dpdk_fw_sporadic.py",
+        "subtests": []
+    },
+    "56561": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\Pytest\\core\\sporadic\\firmware\\linux\\dpdk_fw_sporadic.py",
+        "subtests": []
+    },
+    "57328": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\Pytest\\core\\sporadic\\firmware\\linux\\dpdk_fw_sporadic.py",
+        "subtests": []
+    },
+    "57331": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\Pytest\\core\\sporadic\\firmware\\linux\\dpdk_fw_sporadic.py",
+        "subtests": []
+    },
+    "57332": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\Pytest\\core\\sporadic\\firmware\\linux\\dpdk_fw_sporadic.py",
+        "subtests": []
+    },
+    "57845": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\Pytest\\core\\sporadic\\firmware\\linux\\vswitch_acc_fw_sporadic.py",
+        "subtests": []
+    },
+    "56562": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\Pytest\\core\\sporadic\\firmware\\linux\\vswitch_acc_fw_sporadic.py",
+        "subtests": []
+    },
+    "56563": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\Pytest\\core\\sporadic\\firmware\\linux\\vswitch_acc_fw_sporadic.py",
+        "subtests": []
+    },
+    "56564": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\Pytest\\core\\sporadic\\firmware\\linux\\vswitch_acc_fw_sporadic.py",
+        "subtests": []
+    },
+    "56565": {
+        "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_suite\\Pytest\\core\\sporadic\\firmware\\linux\\vswitch_acc_fw_sporadic.py",
+        "subtests": []
+    }
+}

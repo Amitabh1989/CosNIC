@@ -10,13 +10,26 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
+import os
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-REPO_PATH = Path(__file__).resolve().parent.parent.parent / "ctrl_repo"
+
+REPO_URL = "/repo/"
+REPO_ROOT = os.path.join(BASE_DIR, "ctrl_repo")
+# REPO_ROOT = Path(__file__).resolve().parent.parent.parent / "ctrl_repo"
+
+LOG_URL = "/logs/"
+# LOGS_ROOT = Path(__file__).resolve().parent.parent / "test_logs"
+LOGS_ROOT = os.path.join(BASE_DIR, "test_logs")
+
+# settings.py
+MEDIA_URL = "/media/"
+MEDIA_ROOT = os.path.join(BASE_DIR, "media")
+
 print(f"BASE DIR : {BASE_DIR}")
-print(f"REPO_PATH : {REPO_PATH}")
+print(f"REPO_PATH : {REPO_ROOT}")
 
 
 # Quick-start development settings - unsuitable for production
@@ -42,7 +55,9 @@ INSTALLED_APPS = [
     "test_runner.apps.TestRunnerConfig",
     "configfile.apps.ConfigfileConfig",
     "sutclient.apps.SutclientConfig",
+    "django_celery_beat",
     "rest_framework",
+    "channels",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -199,6 +214,31 @@ LOGGING = {
         "": {
             "handlers": ["console"],
             "level": "INFO",
+        },
+    },
+}
+
+
+# EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+# # add your host of the email here in this case its Gmail so we are going to use Gmail host
+# EMAIL_HOST = "smtp.gmail.com"
+# EMAIL_USE_TLS = True
+# # add the port number of the email server
+# EMAIL_PORT = 587
+# # add your gamil here
+# EMAIL_HOST_USER = "cosnic-admin@broadcom.com"
+# CONSNIC_ADMIN_EMAIL = "cosnic-admin@broadcom.com"
+# # add your password here
+# EMAIL_HOST_PASSWORD = "<your_app_password>"
+# DEFAULT_FROM_EMAIL = "CosNIC Task Admin <cosnic-admin@broadcom.com>"
+
+
+# Configure Channels Redis layer
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels_redis.core.RedisChannelLayer",
+        "CONFIG": {
+            "hosts": [("127.0.0.1", 6379)],
         },
     },
 }

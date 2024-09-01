@@ -1,0 +1,204 @@
+=============================
+Basic Flow, Abstraction :
+=============================
+->  Pre-configure setup
+	->  Prepare iface_pair (wether PFs, VFs, NPARs or via switch) / dynamic pairing for Switch topology
+		->  Generate time duration patterns (sine, cos, linear, exponential, flat, etc)
+			-> Initiate PooledThreads to spwan threads - (**Framework level controls**)
+				->  Mount iFace pair on a Thread that runs (handle_pair_operation)
+					->  Each Thread runs all operations from operation map in random / defined flow : { 1: self.op_1, 2: self.op_, so on }
+					-> 	Operations allow **Hammer level controls**
+					->  Thread level Operation, Duration, Loop tracker and Result tracker.
+				->  In event of a failure due to setup issues, init endpoints / iface to allow other runs to work
+					(not up after 20 seconds, operation not permitted, etc)
+		->  Common Teardown
+->  Pre-test restoration
+
+
+=============================
+What prolems are we solving :
+=============================
+1. No standard format for hammer scripting.
+2. Only IO level parallelism. Meaning, onlu IOs run in parallel
+3. [ Primary ] => All funcional execution is sequential.
+4. Delays, duration, flow of execution is all on the author.
+5. Sequential runs on ifaces for quite a number of hammers.
+6. No minimum standard reset / init function across hammers.
+7. If a setup issue, iface issue is seen, all other test cases fail thereafter.
+8. Loop logic is on author and brilliant logics dont get shared across hammers and teams.
+9. Functions need to take care of all ifcae loop. Most of the core logics repeat in operations function / across hammers.
+10. A lot of code repetition and broiler plate coding.
+
+
+=============================
+Framework core ideas :
+=============================
+1. Minimum Broilerplate code, standarized and abstract framework.
+2. [ Introducing FUNCTIONAL PARALLELISM ] => All iface will have various operatios run, in parallel.
+3. Since duration picked is a pattern and pattern is unique to each thread, multiple windows of different operations across all interfaces will be created, increasing stress.
+4. Sum of all duration is equal to the stress duration mentioned in the config file.
+5. Multiple iteration of operation in various order is executed for varied time duration.
+6. Gurantees that all the operations run on each interface.
+7. All loop logic, duration logic, resets and pre-test restore is centralized and available for all hammers.
+8. Every run will be a new randomized combination. Can be controlled to fixed as well.
+9. Funtion borrow same skeleton and can concentrate on core logic.
+10. Quick hammer development due to simplified and standardized flow.
+
+
+=============================
+Operation map example :
+=============================
+    def operation_map_1(self):
+        _map = {
+            1: self.invoke_link_speed_test,
+            2: self.ethernet_stats_with_link_flap,
+            3: self.ethernet_stats_unicast_multicast_broadcast_traffic,
+            4: self.baseline_stats_with_payload,
+            5: self.jumbo_frame_test,
+            6: self.ring_change_with_traffic,
+            7: self.channel_ring_reset,
+        }
+        return _map
+		
+
+=============================
+Sample function example :
+=============================
+    def jumbo_frame_test(self, iface_pair=None, duration=360, *args, **kwargs):
+		"""
+		Below can be arranged, written in a way its needed
+		If verification is to be done after every run, so be it.
+		"""
+        self.jumbo_frame_stress_setup(iface_pair, *args, **kwargs)
+		self.jumbo_frame_stress_run(iface_pair, *args, **kwargs)
+		self.jumbo_frame_stress_verify(iface_pair, *args, **kwargs)
+
+
+
+
+
+=============================
+Process flow diagram :
+=============================
+
+                                      +-------------------+
+                                      |  Pre-configure    |
+                                      |  setup            |
+                                      +-------------------+
+                                                |
+                                                |
+                                                v
+                                     +----------------------+
+                                     | Prepare iface_pair   |
+                                     | (PFs, VFs, NPARs or  |
+                                     | via switch) / dynamic|
+                                     | pairing for Switch   |
+                                     | topology             |
+                                     +----------------------+
+                                                |
+                                                |
+                                                v
+                                     +-----------------------+
+                                     | Generate time duration|
+                                     | patterns (sine, cos,  |
+                                     | linear, exponential,  |
+                                     | flat, etc)            |
+                                     +-----------------------+
+                                                |
+                                                |
+                                                v                         
+									 +------------------------+           +-----------------------------+
+                                     |    Operation manager.  |           |    Run with all ifaces.     |           
+                                     |   Pair inclusive v/s   |---------->| Signal all threads to stop  |
+                                     |    Pair exclusive      |           |   Controlled via a Flag     |
+                                     +------------------------+           +-----------------------------+
+												|                         
+                                                |
+												v
+									   +--------------------+
+									   | if pair exclusive  |
+									   |                    |
+									   +--------------------+
+												|
+												|
+												v
+                                     +-----------------------+
+                                     | Initiate PooledThreads|
+                                     | to spawn threads      |
+                                     | (Framework level      |
+                                     | controls)             |
+                                     +-----------------------+
+                                                |
+                                                |
+                                                v
+                                     +------------------------+
+                                     | Mount iFace pair on    |
+                                     | a Thread that runs     |
+                                     | (handle_pair_operation)|
+                                     +------------------------+
+												|
+                    |---------------------------|------------------------------|
+                    v                           v                              v
+        +----------------------+      +----------------------+       +----------------------+
+        | Thread 1 runs all    |      | Thread 2 runs all    |       | Thread N runs all    |
+        | operations from      |      | operations from      |       | operations from      |
+        | operation map in     |      | operation map in     |       | operation map in     |
+        | random / defined     |      | random / defined     |       | random / defined     |
+        | flow                 |      | flow                 |       | flow                 |
+        +----------------------+      +----------------------+       +----------------------+
+                                                |
+                                                |
+                                                v
+                                     +-----------------------+
+                                     | Operations allow      |
+                                     | Hammer level controls | <---------------------------------------+
+									 | Reset / Repeat / Etc  |										   |
+                                     +-----------------------+										   |
+                                                |										               |
+                                                |										               |
+                                                v										               |
+                                     +------------------------+										   |
+                                     | Thread level Operation,|										   |
+                                     | Duration, Loop tracker |										   |
+                                     | and Result tracker     |										   |
+                                     +------------------------+										   |
+                                                |                                                      |
+                                                |										               |
+                                                v										               |
+                                     +-----------------------+										   |
+                                     | In event of failure   |										   |
+                                     | due to setup issues,  |										   |
+                                     | init endpoints / iface|-----------------------------------------+
+                                     | to allow other runs   |
+                                     | to work               |
+                                     +-----------------------+
+                                                |
+                                                |
+                                                v
+                                      +----------------------+
+                                      | Common Teardown      |
+                                      +----------------------+
+												|
+												|
+												v
+                                      +----------------------+
+                                      | Pre-Test Restore     |
+                                      +----------------------+
+
+
+
+===============================
+Backup 
+===============================
+
+Typical hammer functions
+1. Do the pre operation rituals
+	Set IP
+	Ping
+	Create Groups
+	Configure VF, N Functions, etc
+
+2. Loop through list of all ifaces
+3. Manage the While loop, exit conditions, durations
+4. Manage the pre-test restoration
+

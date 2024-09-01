@@ -1,0 +1,41 @@
+INFO     test_logging:test_logging.py:60 Logging gibberish: baz
+INFO     test_logging:test_logging.py:60 Logging gibberish: foo
+INFO     test_logging:test_logging.py:60 Logging gibberish: qux
+INFO     test_logging:test_logging.py:60 Logging gibberish: foo
+INFO     test_logging:test_logging.py:60 Logging gibberish: qux
+INFO     test_logging:test_logging.py:60 Logging gibberish: foo
+INFO     test_logging:test_logging.py:60 Logging gibberish: bar
+INFO     test_logging:test_logging.py:60 Logging gibberish: foo
+INFO     test_logging:test_logging.py:60 Logging gibberish: bar
+INFO     test_logging:test_logging.py:60 Logging gibberish: baz
+INFO     test_logging:test_logging.py:60 Logging gibberish: qux
+INFO     test_logging:test_logging.py:60 Logging gibberish: qux
+INFO     test_logging:test_logging.py:60 Logging gibberish: foo
+INFO     test_logging:test_logging.py:60 Logging gibberish: foo
+INFO     test_logging:test_logging.py:60 Logging gibberish: baz
+INFO     test_logging:test_logging.py:60 Logging gibberish: bar
+INFO     test_logging:test_logging.py:60 Logging gibberish: qux
+INFO     test_logging:test_logging.py:60 Logging gibberish: foo
+ish: qux
+2024-08-31 17:10:29,921 - INFO - Logging gibberish: qux
+2024-08-31 17:10:30,921 - INFO - Logging gibberish: foo
+2024-08-31 17:10:30,921 - INFO - Logging gibberish: foo
+2024-08-31 17:10:30,921 - INFO - Logging gibberish: foo
+2024-08-31 17:10:31,922 - INFO - Logging gibberish: foo
+2024-08-31 17:10:31,922 - INFO - Logging gibberish: foo
+2024-08-31 17:10:31,922 - INFO - Logging gibberish: foo
+2024-08-31 17:10:32,923 - INFO - Logging gibberish: baz
+2024-08-31 17:10:32,923 - INFO - Logging gibberish: baz
+2024-08-31 17:10:32,923 - INFO - Logging gibberish: baz
+2024-08-31 17:10:33,924 - INFO - Logging gibberish: bar
+2024-08-31 17:10:33,924 - INFO - Logging gibberish: bar
+2024-08-31 17:10:33,924 - INFO - Logging gibberish: bar
+2024-08-31 17:10:33,924 - INFO - Logging gibberish: bar
+2024-08-31 17:10:38,925 - INFO - Logging gibberish: qux
+2024-08-31 17:10:38,925 - INFO - Logging gibberish: qux
+2024-08-31 17:10:38,925 - INFO - Logging gibberish: qux
+2024-08-31 17:10:38,925 - INFO - Logging gibberish: qux
+2024-08-31 17:10:43,926 - INFO - Logging gibberish: foo
+2024-08-31 17:10:43,926 - INFO - Logging gibberish: foo
+2024-08-31 17:10:43,926 - INFO - Logging gibberish: foo
+2024-08-31 17:10:43,926 - INFO - Logging gibberish: foo

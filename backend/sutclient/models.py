@@ -115,7 +115,7 @@ class Dup(models.Model):
     supported_macs = ArrayField(models.CharField(max_length=100), default=list)
 
     def __str__(self):
-        return f"DUP"
+        return "DUP"
 
 
 class ClientSit(models.Model):
@@ -234,7 +234,7 @@ class PrePostValidation(models.Model):
     generate_bcm_sosreport = models.BooleanField(default=False)
 
     def __str__(self):
-        return f"PrePostVal"
+        return "PrePostVal object"
 
 
 def default_config_errors():

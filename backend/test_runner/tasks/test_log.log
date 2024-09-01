@@ -1,0 +1,10 @@
+INFO     test_logging:test_logging.py:65 Logging gibberish: baz => Controller version : 2.2.9a63
+INFO     test_logging:test_logging.py:65 Logging gibberish: baz => Controller version : 2.2.9a63
+INFO     test_logging:test_logging.py:65 Logging gibberish: bar => Controller version : 2.2.9a63
+INFO     test_logging:test_logging.py:65 Logging gibberish: bar => Controller version : 2.2.9a63
+- INFO - Logging gibberish: bar => Controller version : 2.2.9a63
+2024-08-31 22:52:34,250 - INFO - Logging gibberish: bar => Controller version : 2.2.9a63
+2024-08-31 22:52:35,252 - INFO - Logging gibberish: bar => Controller version : 2.2.9a63
+2024-08-31 22:52:35,252 - INFO - Logging gibberish: bar => Controller version : 2.2.9a63
+2024-08-31 22:52:35,252 - INFO - Logging gibberish: bar => Controller version : 2.2.9a63
+2024-08-31 22:52:35,252 - INFO - Logging gibberish: bar => Controller version : 2.2.9a63

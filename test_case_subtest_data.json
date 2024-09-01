@@ -1,0 +1,1105 @@
+{
+    "56809": {
+        "test_case_path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_script\\linux\\adv_ethernet_functionality\\QA_Controller_56809.py",
+        "subtests": [
+            {
+                "name": "subtest_1.py",
+                "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_script\\linux\\adv_ethernet_functionality\\qa_controller_56809\\subtest_1.py"
+            },
+            {
+                "name": "subtest_2.py",
+                "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_script\\linux\\adv_ethernet_functionality\\qa_controller_56809\\subtest_2.py"
+            },
+            {
+                "name": "subtest_3.py",
+                "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_script\\linux\\adv_ethernet_functionality\\qa_controller_56809\\subtest_3.py"
+            },
+            {
+                "name": "subtest_4.py",
+                "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_script\\linux\\adv_ethernet_functionality\\qa_controller_56809\\subtest_4.py"
+            }
+        ]
+    },
+    "56822": {
+        "test_case_path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_script\\linux\\adv_ethernet_functionality\\QA_Controller_56822.py",
+        "subtests": [
+            {
+                "name": "subtest_1.py",
+                "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_script\\linux\\adv_ethernet_functionality\\qa_controller_56822\\subtest_1.py"
+            },
+            {
+                "name": "subtest_10.py",
+                "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_script\\linux\\adv_ethernet_functionality\\qa_controller_56822\\subtest_10.py"
+            },
+            {
+                "name": "subtest_11.py",
+                "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_script\\linux\\adv_ethernet_functionality\\qa_controller_56822\\subtest_11.py"
+            },
+            {
+                "name": "subtest_2.py",
+                "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_script\\linux\\adv_ethernet_functionality\\qa_controller_56822\\subtest_2.py"
+            },
+            {
+                "name": "subtest_3.py",
+                "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_script\\linux\\adv_ethernet_functionality\\qa_controller_56822\\subtest_3.py"
+            },
+            {
+                "name": "subtest_4.py",
+                "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_script\\linux\\adv_ethernet_functionality\\qa_controller_56822\\subtest_4.py"
+            },
+            {
+                "name": "subtest_5.py",
+                "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_script\\linux\\adv_ethernet_functionality\\qa_controller_56822\\subtest_5.py"
+            },
+            {
+                "name": "subtest_6.py",
+                "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_script\\linux\\adv_ethernet_functionality\\qa_controller_56822\\subtest_6.py"
+            },
+            {
+                "name": "subtest_7.py",
+                "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_script\\linux\\adv_ethernet_functionality\\qa_controller_56822\\subtest_7.py"
+            },
+            {
+                "name": "subtest_8.py",
+                "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_script\\linux\\adv_ethernet_functionality\\qa_controller_56822\\subtest_8.py"
+            },
+            {
+                "name": "subtest_9.py",
+                "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_script\\linux\\adv_ethernet_functionality\\qa_controller_56822\\subtest_9.py"
+            }
+        ]
+    },
+    "56823": {
+        "test_case_path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_script\\linux\\adv_ethernet_functionality\\QA_Controller_56823.py",
+        "subtests": [
+            {
+                "name": "subtest_1.py",
+                "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_script\\linux\\adv_ethernet_functionality\\qa_controller_56823\\subtest_1.py"
+            },
+            {
+                "name": "subtest_2.py",
+                "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_script\\linux\\adv_ethernet_functionality\\qa_controller_56823\\subtest_2.py"
+            },
+            {
+                "name": "subtest_3.py",
+                "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_script\\linux\\adv_ethernet_functionality\\qa_controller_56823\\subtest_3.py"
+            }
+        ]
+    },
+    "56824": {
+        "test_case_path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_script\\linux\\adv_ethernet_functionality\\QA_Controller_56824.py",
+        "subtests": [
+            {
+                "name": "subtest_1.py",
+                "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_script\\linux\\adv_ethernet_functionality\\qa_controller_56824\\subtest_1.py"
+            },
+            {
+                "name": "subtest_10.py",
+                "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_script\\linux\\adv_ethernet_functionality\\qa_controller_56824\\subtest_10.py"
+            },
+            {
+                "name": "subtest_11.py",
+                "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_script\\linux\\adv_ethernet_functionality\\qa_controller_56824\\subtest_11.py"
+            },
+            {
+                "name": "subtest_12.py",
+                "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_script\\linux\\adv_ethernet_functionality\\qa_controller_56824\\subtest_12.py"
+            },
+            {
+                "name": "subtest_13.py",
+                "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_script\\linux\\adv_ethernet_functionality\\qa_controller_56824\\subtest_13.py"
+            },
+            {
+                "name": "subtest_14.py",
+                "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_script\\linux\\adv_ethernet_functionality\\qa_controller_56824\\subtest_14.py"
+            },
+            {
+                "name": "subtest_15.py",
+                "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_script\\linux\\adv_ethernet_functionality\\qa_controller_56824\\subtest_15.py"
+            },
+            {
+                "name": "subtest_2.py",
+                "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_script\\linux\\adv_ethernet_functionality\\qa_controller_56824\\subtest_2.py"
+            },
+            {
+                "name": "subtest_3.py",
+                "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_script\\linux\\adv_ethernet_functionality\\qa_controller_56824\\subtest_3.py"
+            },
+            {
+                "name": "subtest_4.py",
+                "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_script\\linux\\adv_ethernet_functionality\\qa_controller_56824\\subtest_4.py"
+            },
+            {
+                "name": "subtest_5.py",
+                "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_script\\linux\\adv_ethernet_functionality\\qa_controller_56824\\subtest_5.py"
+            },
+            {
+                "name": "subtest_6.py",
+                "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_script\\linux\\adv_ethernet_functionality\\qa_controller_56824\\subtest_6.py"
+            },
+            {
+                "name": "subtest_7.py",
+                "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_script\\linux\\adv_ethernet_functionality\\qa_controller_56824\\subtest_7.py"
+            },
+            {
+                "name": "subtest_8.py",
+                "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_script\\linux\\adv_ethernet_functionality\\qa_controller_56824\\subtest_8.py"
+            },
+            {
+                "name": "subtest_9.py",
+                "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_script\\linux\\adv_ethernet_functionality\\qa_controller_56824\\subtest_9.py"
+            }
+        ]
+    },
+    "56825": {
+        "test_case_path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_script\\linux\\adv_ethernet_functionality\\QA_Controller_56825.py",
+        "subtests": [
+            {
+                "name": "subtest_1.py",
+                "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_script\\linux\\adv_ethernet_functionality\\qa_controller_56825\\subtest_1.py"
+            },
+            {
+                "name": "subtest_10.py",
+                "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_script\\linux\\adv_ethernet_functionality\\qa_controller_56825\\subtest_10.py"
+            },
+            {
+                "name": "subtest_11.py",
+                "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_script\\linux\\adv_ethernet_functionality\\qa_controller_56825\\subtest_11.py"
+            },
+            {
+                "name": "subtest_12.py",
+                "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_script\\linux\\adv_ethernet_functionality\\qa_controller_56825\\subtest_12.py"
+            },
+            {
+                "name": "subtest_2.py",
+                "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_script\\linux\\adv_ethernet_functionality\\qa_controller_56825\\subtest_2.py"
+            },
+            {
+                "name": "subtest_3.py",
+                "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_script\\linux\\adv_ethernet_functionality\\qa_controller_56825\\subtest_3.py"
+            },
+            {
+                "name": "subtest_4.py",
+                "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_script\\linux\\adv_ethernet_functionality\\qa_controller_56825\\subtest_4.py"
+            },
+            {
+                "name": "subtest_5.py",
+                "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_script\\linux\\adv_ethernet_functionality\\qa_controller_56825\\subtest_5.py"
+            },
+            {
+                "name": "subtest_6.py",
+                "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_script\\linux\\adv_ethernet_functionality\\qa_controller_56825\\subtest_6.py"
+            },
+            {
+                "name": "subtest_7.py",
+                "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_script\\linux\\adv_ethernet_functionality\\qa_controller_56825\\subtest_7.py"
+            },
+            {
+                "name": "subtest_8.py",
+                "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_script\\linux\\adv_ethernet_functionality\\qa_controller_56825\\subtest_8.py"
+            },
+            {
+                "name": "subtest_9.py",
+                "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_script\\linux\\adv_ethernet_functionality\\qa_controller_56825\\subtest_9.py"
+            }
+        ]
+    },
+    "56826": {
+        "test_case_path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_script\\linux\\adv_ethernet_functionality\\QA_Controller_56826.py",
+        "subtests": [
+            {
+                "name": "subtest_1.py",
+                "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_script\\linux\\adv_ethernet_functionality\\qa_controller_56826\\subtest_1.py"
+            },
+            {
+                "name": "subtest_2.py",
+                "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_script\\linux\\adv_ethernet_functionality\\qa_controller_56826\\subtest_2.py"
+            },
+            {
+                "name": "subtest_3.py",
+                "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_script\\linux\\adv_ethernet_functionality\\qa_controller_56826\\subtest_3.py"
+            },
+            {
+                "name": "subtest_4.py",
+                "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_script\\linux\\adv_ethernet_functionality\\qa_controller_56826\\subtest_4.py"
+            },
+            {
+                "name": "subtest_5.py",
+                "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_script\\linux\\adv_ethernet_functionality\\qa_controller_56826\\subtest_5.py"
+            },
+            {
+                "name": "subtest_6.py",
+                "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_script\\linux\\adv_ethernet_functionality\\qa_controller_56826\\subtest_6.py"
+            },
+            {
+                "name": "subtest_7.py",
+                "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_script\\linux\\adv_ethernet_functionality\\qa_controller_56826\\subtest_7.py"
+            },
+            {
+                "name": "subtest_8.py",
+                "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_script\\linux\\adv_ethernet_functionality\\qa_controller_56826\\subtest_8.py"
+            },
+            {
+                "name": "subtest_9.py",
+                "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_script\\linux\\adv_ethernet_functionality\\qa_controller_56826\\subtest_9.py"
+            }
+        ]
+    },
+    "56827": {
+        "test_case_path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_script\\linux\\adv_ethernet_functionality\\QA_Controller_56827.py",
+        "subtests": [
+            {
+                "name": "subtest_1.py",
+                "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_script\\linux\\adv_ethernet_functionality\\qa_controller_56827\\subtest_1.py"
+            },
+            {
+                "name": "subtest_2.py",
+                "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_script\\linux\\adv_ethernet_functionality\\qa_controller_56827\\subtest_2.py"
+            },
+            {
+                "name": "subtest_3.py",
+                "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_script\\linux\\adv_ethernet_functionality\\qa_controller_56827\\subtest_3.py"
+            },
+            {
+                "name": "subtest_4.py",
+                "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_script\\linux\\adv_ethernet_functionality\\qa_controller_56827\\subtest_4.py"
+            },
+            {
+                "name": "subtest_5.py",
+                "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_script\\linux\\adv_ethernet_functionality\\qa_controller_56827\\subtest_5.py"
+            },
+            {
+                "name": "subtest_6.py",
+                "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_script\\linux\\adv_ethernet_functionality\\qa_controller_56827\\subtest_6.py"
+            }
+        ]
+    },
+    "56828": {
+        "test_case_path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_script\\linux\\adv_ethernet_functionality\\QA_Controller_56828.py",
+        "subtests": [
+            {
+                "name": "subtest_1.py",
+                "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_script\\linux\\adv_ethernet_functionality\\qa_controller_56828\\subtest_1.py"
+            },
+            {
+                "name": "subtest_2.py",
+                "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_script\\linux\\adv_ethernet_functionality\\qa_controller_56828\\subtest_2.py"
+            },
+            {
+                "name": "subtest_3.py",
+                "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_script\\linux\\adv_ethernet_functionality\\qa_controller_56828\\subtest_3.py"
+            },
+            {
+                "name": "subtest_4.py",
+                "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_script\\linux\\adv_ethernet_functionality\\qa_controller_56828\\subtest_4.py"
+            }
+        ]
+    },
+    "56829": {
+        "test_case_path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_script\\linux\\adv_ethernet_functionality\\QA_Controller_56829.py",
+        "subtests": [
+            {
+                "name": "subtest_1.py",
+                "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_script\\linux\\adv_ethernet_functionality\\qa_controller_56829\\subtest_1.py"
+            },
+            {
+                "name": "subtest_2.py",
+                "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_script\\linux\\adv_ethernet_functionality\\qa_controller_56829\\subtest_2.py"
+            },
+            {
+                "name": "subtest_3.py",
+                "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_script\\linux\\adv_ethernet_functionality\\qa_controller_56829\\subtest_3.py"
+            },
+            {
+                "name": "subtest_4.py",
+                "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_script\\linux\\adv_ethernet_functionality\\qa_controller_56829\\subtest_4.py"
+            },
+            {
+                "name": "subtest_5.py",
+                "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_script\\linux\\adv_ethernet_functionality\\qa_controller_56829\\subtest_5.py"
+            },
+            {
+                "name": "subtest_6.py",
+                "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_script\\linux\\adv_ethernet_functionality\\qa_controller_56829\\subtest_6.py"
+            }
+        ]
+    },
+    "56830": {
+        "test_case_path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_script\\linux\\adv_ethernet_functionality\\QA_Controller_56830.py",
+        "subtests": [
+            {
+                "name": "subtest_1.py",
+                "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_script\\linux\\adv_ethernet_functionality\\qa_controller_56830\\subtest_1.py"
+            },
+            {
+                "name": "subtest_10.py",
+                "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_script\\linux\\adv_ethernet_functionality\\qa_controller_56830\\subtest_10.py"
+            },
+            {
+                "name": "subtest_11.py",
+                "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_script\\linux\\adv_ethernet_functionality\\qa_controller_56830\\subtest_11.py"
+            },
+            {
+                "name": "subtest_12.py",
+                "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_script\\linux\\adv_ethernet_functionality\\qa_controller_56830\\subtest_12.py"
+            },
+            {
+                "name": "subtest_13.py",
+                "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_script\\linux\\adv_ethernet_functionality\\qa_controller_56830\\subtest_13.py"
+            },
+            {
+                "name": "subtest_14.py",
+                "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_script\\linux\\adv_ethernet_functionality\\qa_controller_56830\\subtest_14.py"
+            },
+            {
+                "name": "subtest_2.py",
+                "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_script\\linux\\adv_ethernet_functionality\\qa_controller_56830\\subtest_2.py"
+            },
+            {
+                "name": "subtest_3.py",
+                "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_script\\linux\\adv_ethernet_functionality\\qa_controller_56830\\subtest_3.py"
+            },
+            {
+                "name": "subtest_4.py",
+                "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_script\\linux\\adv_ethernet_functionality\\qa_controller_56830\\subtest_4.py"
+            },
+            {
+                "name": "subtest_5.py",
+                "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_script\\linux\\adv_ethernet_functionality\\qa_controller_56830\\subtest_5.py"
+            },
+            {
+                "name": "subtest_6.py",
+                "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_script\\linux\\adv_ethernet_functionality\\qa_controller_56830\\subtest_6.py"
+            },
+            {
+                "name": "subtest_7.py",
+                "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_script\\linux\\adv_ethernet_functionality\\qa_controller_56830\\subtest_7.py"
+            },
+            {
+                "name": "subtest_8.py",
+                "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_script\\linux\\adv_ethernet_functionality\\qa_controller_56830\\subtest_8.py"
+            },
+            {
+                "name": "subtest_9.py",
+                "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_script\\linux\\adv_ethernet_functionality\\qa_controller_56830\\subtest_9.py"
+            }
+        ]
+    },
+    "56834": {
+        "test_case_path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_script\\linux\\adv_ethernet_functionality\\QA_Controller_56834.py",
+        "subtests": [
+            {
+                "name": "subtest_1.py",
+                "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_script\\linux\\adv_ethernet_functionality\\qa_controller_56834\\subtest_1.py"
+            },
+            {
+                "name": "subtest_2.py",
+                "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_script\\linux\\adv_ethernet_functionality\\qa_controller_56834\\subtest_2.py"
+            },
+            {
+                "name": "subtest_3.py",
+                "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_script\\linux\\adv_ethernet_functionality\\qa_controller_56834\\subtest_3.py"
+            },
+            {
+                "name": "subtest_4.py",
+                "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_script\\linux\\adv_ethernet_functionality\\qa_controller_56834\\subtest_4.py"
+            },
+            {
+                "name": "subtest_5.py",
+                "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_script\\linux\\adv_ethernet_functionality\\qa_controller_56834\\subtest_5.py"
+            }
+        ]
+    },
+    "56835": {
+        "test_case_path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_script\\linux\\adv_ethernet_functionality\\QA_Controller_56835.py",
+        "subtests": [
+            {
+                "name": "subtest_1.py",
+                "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_script\\linux\\adv_ethernet_functionality\\qa_controller_56835\\subtest_1.py"
+            },
+            {
+                "name": "subtest_2.py",
+                "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_script\\linux\\adv_ethernet_functionality\\qa_controller_56835\\subtest_2.py"
+            },
+            {
+                "name": "subtest_3.py",
+                "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_script\\linux\\adv_ethernet_functionality\\qa_controller_56835\\subtest_3.py"
+            }
+        ]
+    },
+    "56839": {
+        "test_case_path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_script\\linux\\adv_ethernet_functionality\\QA_Controller_56839.py",
+        "subtests": [
+            {
+                "name": "subtest_1.py",
+                "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_script\\linux\\adv_ethernet_functionality\\qa_controller_56839\\subtest_1.py"
+            }
+        ]
+    },
+    "56848": {
+        "test_case_path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_script\\linux\\adv_ethernet_functionality\\QA_Controller_56848.py",
+        "subtests": [
+            {
+                "name": "subtest_1.py",
+                "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_script\\linux\\adv_ethernet_functionality\\qa_controller_56848\\subtest_1.py"
+            }
+        ]
+    },
+    "56849": {
+        "test_case_path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_script\\linux\\adv_ethernet_functionality\\QA_Controller_56849.py",
+        "subtests": [
+            {
+                "name": "subtest_1.py",
+                "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_script\\linux\\adv_ethernet_functionality\\qa_controller_56849\\subtest_1.py"
+            },
+            {
+                "name": "subtest_2.py",
+                "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_script\\linux\\adv_ethernet_functionality\\qa_controller_56849\\subtest_2.py"
+            },
+            {
+                "name": "subtest_3.py",
+                "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_script\\linux\\adv_ethernet_functionality\\qa_controller_56849\\subtest_3.py"
+            }
+        ]
+    },
+    "56850": {
+        "test_case_path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_script\\linux\\adv_ethernet_functionality\\QA_Controller_56850.py",
+        "subtests": [
+            {
+                "name": "subtest_1.py",
+                "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_script\\linux\\adv_ethernet_functionality\\qa_controller_56850\\subtest_1.py"
+            }
+        ]
+    },
+    "56851": {
+        "test_case_path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_script\\linux\\adv_ethernet_functionality\\QA_Controller_56851.py",
+        "subtests": [
+            {
+                "name": "subtest_1.py",
+                "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_script\\linux\\adv_ethernet_functionality\\qa_controller_56851\\subtest_1.py"
+            }
+        ]
+    },
+    "56852": {
+        "test_case_path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_script\\linux\\adv_ethernet_functionality\\QA_Controller_56852.py",
+        "subtests": [
+            {
+                "name": "subtest_1.py",
+                "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_script\\linux\\adv_ethernet_functionality\\qa_controller_56852\\subtest_1.py"
+            }
+        ]
+    },
+    "56853": {
+        "test_case_path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_script\\linux\\adv_ethernet_functionality\\QA_Controller_56853.py",
+        "subtests": [
+            {
+                "name": "subtest_1.py",
+                "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_script\\linux\\adv_ethernet_functionality\\qa_controller_56853\\subtest_1.py"
+            },
+            {
+                "name": "subtest_2.py",
+                "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_script\\linux\\adv_ethernet_functionality\\qa_controller_56853\\subtest_2.py"
+            },
+            {
+                "name": "subtest_3.py",
+                "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_script\\linux\\adv_ethernet_functionality\\qa_controller_56853\\subtest_3.py"
+            },
+            {
+                "name": "subtest_4.py",
+                "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_script\\linux\\adv_ethernet_functionality\\qa_controller_56853\\subtest_4.py"
+            }
+        ]
+    },
+    "56857": {
+        "test_case_path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_script\\linux\\adv_ethernet_functionality\\QA_Controller_56857.py",
+        "subtests": [
+            {
+                "name": "subtest_1.py",
+                "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_script\\linux\\adv_ethernet_functionality\\qa_controller_56857\\subtest_1.py"
+            },
+            {
+                "name": "subtest_2.py",
+                "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_script\\linux\\adv_ethernet_functionality\\qa_controller_56857\\subtest_2.py"
+            },
+            {
+                "name": "subtest_3.py",
+                "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_script\\linux\\adv_ethernet_functionality\\qa_controller_56857\\subtest_3.py"
+            }
+        ]
+    },
+    "56861": {
+        "test_case_path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_script\\linux\\adv_ethernet_functionality\\QA_Controller_56861.py",
+        "subtests": [
+            {
+                "name": "subtest_1.py",
+                "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_script\\linux\\adv_ethernet_functionality\\qa_controller_56861\\subtest_1.py"
+            }
+        ]
+    },
+    "56862": {
+        "test_case_path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_script\\linux\\adv_ethernet_functionality\\QA_Controller_56862.py",
+        "subtests": [
+            {
+                "name": "subtest_1.py",
+                "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_script\\linux\\adv_ethernet_functionality\\qa_controller_56862\\subtest_1.py"
+            }
+        ]
+    },
+    "56863": {
+        "test_case_path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_script\\linux\\adv_ethernet_functionality\\QA_Controller_56863.py",
+        "subtests": [
+            {
+                "name": "subtest_1.py",
+                "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_script\\linux\\adv_ethernet_functionality\\qa_controller_56863\\subtest_1.py"
+            }
+        ]
+    },
+    "56864": {
+        "test_case_path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_script\\linux\\adv_ethernet_functionality\\QA_Controller_56864.py",
+        "subtests": [
+            {
+                "name": "subtest_1.py",
+                "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_script\\linux\\adv_ethernet_functionality\\qa_controller_56864\\subtest_1.py"
+            }
+        ]
+    },
+    "56865": {
+        "test_case_path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_script\\linux\\adv_ethernet_functionality\\QA_Controller_56865.py",
+        "subtests": [
+            {
+                "name": "subtest_1.py",
+                "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_script\\linux\\adv_ethernet_functionality\\qa_controller_56865\\subtest_1.py"
+            },
+            {
+                "name": "subtest_2.py",
+                "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_script\\linux\\adv_ethernet_functionality\\qa_controller_56865\\subtest_2.py"
+            }
+        ]
+    },
+    "57475": {
+        "test_case_path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_script\\linux\\adv_ethernet_functionality\\QA_Controller_57475.py",
+        "subtests": [
+            {
+                "name": "subtest_1.py",
+                "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_script\\linux\\adv_ethernet_functionality\\qa_controller_57475\\subtest_1.py"
+            },
+            {
+                "name": "subtest_10.py",
+                "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_script\\linux\\adv_ethernet_functionality\\qa_controller_57475\\subtest_10.py"
+            },
+            {
+                "name": "subtest_11.py",
+                "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_script\\linux\\adv_ethernet_functionality\\qa_controller_57475\\subtest_11.py"
+            },
+            {
+                "name": "subtest_12.py",
+                "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_script\\linux\\adv_ethernet_functionality\\qa_controller_57475\\subtest_12.py"
+            },
+            {
+                "name": "subtest_13.py",
+                "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_script\\linux\\adv_ethernet_functionality\\qa_controller_57475\\subtest_13.py"
+            },
+            {
+                "name": "subtest_14.py",
+                "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_script\\linux\\adv_ethernet_functionality\\qa_controller_57475\\subtest_14.py"
+            },
+            {
+                "name": "subtest_15.py",
+                "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_script\\linux\\adv_ethernet_functionality\\qa_controller_57475\\subtest_15.py"
+            },
+            {
+                "name": "subtest_16.py",
+                "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_script\\linux\\adv_ethernet_functionality\\qa_controller_57475\\subtest_16.py"
+            },
+            {
+                "name": "subtest_2.py",
+                "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_script\\linux\\adv_ethernet_functionality\\qa_controller_57475\\subtest_2.py"
+            },
+            {
+                "name": "subtest_3.py",
+                "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_script\\linux\\adv_ethernet_functionality\\qa_controller_57475\\subtest_3.py"
+            },
+            {
+                "name": "subtest_4.py",
+                "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_script\\linux\\adv_ethernet_functionality\\qa_controller_57475\\subtest_4.py"
+            },
+            {
+                "name": "subtest_5.py",
+                "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_script\\linux\\adv_ethernet_functionality\\qa_controller_57475\\subtest_5.py"
+            },
+            {
+                "name": "subtest_6.py",
+                "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_script\\linux\\adv_ethernet_functionality\\qa_controller_57475\\subtest_6.py"
+            },
+            {
+                "name": "subtest_7.py",
+                "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_script\\linux\\adv_ethernet_functionality\\qa_controller_57475\\subtest_7.py"
+            },
+            {
+                "name": "subtest_8.py",
+                "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_script\\linux\\adv_ethernet_functionality\\qa_controller_57475\\subtest_8.py"
+            },
+            {
+                "name": "subtest_9.py",
+                "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_script\\linux\\adv_ethernet_functionality\\qa_controller_57475\\subtest_9.py"
+            }
+        ]
+    },
+    "57476": {
+        "test_case_path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_script\\linux\\adv_ethernet_functionality\\QA_Controller_57476.py",
+        "subtests": [
+            {
+                "name": "subtest_1.py",
+                "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_script\\linux\\adv_ethernet_functionality\\qa_controller_57476\\subtest_1.py"
+            },
+            {
+                "name": "subtest_10.py",
+                "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_script\\linux\\adv_ethernet_functionality\\qa_controller_57476\\subtest_10.py"
+            },
+            {
+                "name": "subtest_11.py",
+                "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_script\\linux\\adv_ethernet_functionality\\qa_controller_57476\\subtest_11.py"
+            },
+            {
+                "name": "subtest_12.py",
+                "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_script\\linux\\adv_ethernet_functionality\\qa_controller_57476\\subtest_12.py"
+            },
+            {
+                "name": "subtest_13.py",
+                "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_script\\linux\\adv_ethernet_functionality\\qa_controller_57476\\subtest_13.py"
+            },
+            {
+                "name": "subtest_14.py",
+                "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_script\\linux\\adv_ethernet_functionality\\qa_controller_57476\\subtest_14.py"
+            },
+            {
+                "name": "subtest_15.py",
+                "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_script\\linux\\adv_ethernet_functionality\\qa_controller_57476\\subtest_15.py"
+            },
+            {
+                "name": "subtest_16.py",
+                "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_script\\linux\\adv_ethernet_functionality\\qa_controller_57476\\subtest_16.py"
+            },
+            {
+                "name": "subtest_2.py",
+                "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_script\\linux\\adv_ethernet_functionality\\qa_controller_57476\\subtest_2.py"
+            },
+            {
+                "name": "subtest_3.py",
+                "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_script\\linux\\adv_ethernet_functionality\\qa_controller_57476\\subtest_3.py"
+            },
+            {
+                "name": "subtest_4.py",
+                "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_script\\linux\\adv_ethernet_functionality\\qa_controller_57476\\subtest_4.py"
+            },
+            {
+                "name": "subtest_5.py",
+                "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_script\\linux\\adv_ethernet_functionality\\qa_controller_57476\\subtest_5.py"
+            },
+            {
+                "name": "subtest_6.py",
+                "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_script\\linux\\adv_ethernet_functionality\\qa_controller_57476\\subtest_6.py"
+            },
+            {
+                "name": "subtest_7.py",
+                "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_script\\linux\\adv_ethernet_functionality\\qa_controller_57476\\subtest_7.py"
+            },
+            {
+                "name": "subtest_8.py",
+                "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_script\\linux\\adv_ethernet_functionality\\qa_controller_57476\\subtest_8.py"
+            },
+            {
+                "name": "subtest_9.py",
+                "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_script\\linux\\adv_ethernet_functionality\\qa_controller_57476\\subtest_9.py"
+            }
+        ]
+    },
+    "57483": {
+        "test_case_path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_script\\linux\\adv_ethernet_functionality\\QA_Controller_57483.py",
+        "subtests": [
+            {
+                "name": "subtest_1.py",
+                "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_script\\linux\\adv_ethernet_functionality\\qa_controller_57483\\subtest_1.py"
+            }
+        ]
+    },
+    "57484": {
+        "test_case_path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_script\\linux\\adv_ethernet_functionality\\QA_Controller_57484.py",
+        "subtests": [
+            {
+                "name": "subtest_1.py",
+                "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_script\\linux\\adv_ethernet_functionality\\qa_controller_57484\\subtest_1.py"
+            },
+            {
+                "name": "subtest_10.py",
+                "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_script\\linux\\adv_ethernet_functionality\\qa_controller_57484\\subtest_10.py"
+            },
+            {
+                "name": "subtest_11.py",
+                "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_script\\linux\\adv_ethernet_functionality\\qa_controller_57484\\subtest_11.py"
+            },
+            {
+                "name": "subtest_12.py",
+                "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_script\\linux\\adv_ethernet_functionality\\qa_controller_57484\\subtest_12.py"
+            },
+            {
+                "name": "subtest_13.py",
+                "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_script\\linux\\adv_ethernet_functionality\\qa_controller_57484\\subtest_13.py"
+            },
+            {
+                "name": "subtest_14.py",
+                "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_script\\linux\\adv_ethernet_functionality\\qa_controller_57484\\subtest_14.py"
+            },
+            {
+                "name": "subtest_15.py",
+                "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_script\\linux\\adv_ethernet_functionality\\qa_controller_57484\\subtest_15.py"
+            },
+            {
+                "name": "subtest_16.py",
+                "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_script\\linux\\adv_ethernet_functionality\\qa_controller_57484\\subtest_16.py"
+            },
+            {
+                "name": "subtest_2.py",
+                "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_script\\linux\\adv_ethernet_functionality\\qa_controller_57484\\subtest_2.py"
+            },
+            {
+                "name": "subtest_3.py",
+                "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_script\\linux\\adv_ethernet_functionality\\qa_controller_57484\\subtest_3.py"
+            },
+            {
+                "name": "subtest_4.py",
+                "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_script\\linux\\adv_ethernet_functionality\\qa_controller_57484\\subtest_4.py"
+            },
+            {
+                "name": "subtest_5.py",
+                "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_script\\linux\\adv_ethernet_functionality\\qa_controller_57484\\subtest_5.py"
+            },
+            {
+                "name": "subtest_6.py",
+                "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_script\\linux\\adv_ethernet_functionality\\qa_controller_57484\\subtest_6.py"
+            },
+            {
+                "name": "subtest_7.py",
+                "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_script\\linux\\adv_ethernet_functionality\\qa_controller_57484\\subtest_7.py"
+            },
+            {
+                "name": "subtest_8.py",
+                "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_script\\linux\\adv_ethernet_functionality\\qa_controller_57484\\subtest_8.py"
+            },
+            {
+                "name": "subtest_9.py",
+                "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_script\\linux\\adv_ethernet_functionality\\qa_controller_57484\\subtest_9.py"
+            }
+        ]
+    },
+    "57696": {
+        "test_case_path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_script\\linux\\adv_ethernet_functionality\\QA_Controller_57696.py",
+        "subtests": [
+            {
+                "name": "subtest_1.py",
+                "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_script\\linux\\adv_ethernet_functionality\\qa_controller_57696\\subtest_1.py"
+            },
+            {
+                "name": "subtest_2.py",
+                "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_script\\linux\\adv_ethernet_functionality\\qa_controller_57696\\subtest_2.py"
+            },
+            {
+                "name": "subtest_3.py",
+                "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_script\\linux\\adv_ethernet_functionality\\qa_controller_57696\\subtest_3.py"
+            },
+            {
+                "name": "subtest_4.py",
+                "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_script\\linux\\adv_ethernet_functionality\\qa_controller_57696\\subtest_4.py"
+            },
+            {
+                "name": "subtest_5.py",
+                "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_script\\linux\\adv_ethernet_functionality\\qa_controller_57696\\subtest_5.py"
+            },
+            {
+                "name": "subtest_6.py",
+                "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_script\\linux\\adv_ethernet_functionality\\qa_controller_57696\\subtest_6.py"
+            }
+        ]
+    },
+    "57697": {
+        "test_case_path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_script\\linux\\adv_ethernet_functionality\\QA_Controller_57697.py",
+        "subtests": [
+            {
+                "name": "subtest_1.py",
+                "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_script\\linux\\adv_ethernet_functionality\\qa_controller_57697\\subtest_1.py"
+            },
+            {
+                "name": "subtest_2.py",
+                "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_script\\linux\\adv_ethernet_functionality\\qa_controller_57697\\subtest_2.py"
+            },
+            {
+                "name": "subtest_3.py",
+                "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_script\\linux\\adv_ethernet_functionality\\qa_controller_57697\\subtest_3.py"
+            }
+        ]
+    },
+    "58037": {
+        "test_case_path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_script\\linux\\adv_ethernet_functionality\\QA_Controller_58037.py",
+        "subtests": [
+            {
+                "name": "subtest_1.py",
+                "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_script\\linux\\adv_ethernet_functionality\\qa_controller_58037\\subtest_1.py"
+            },
+            {
+                "name": "subtest_10.py",
+                "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_script\\linux\\adv_ethernet_functionality\\qa_controller_58037\\subtest_10.py"
+            },
+            {
+                "name": "subtest_11.py",
+                "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_script\\linux\\adv_ethernet_functionality\\qa_controller_58037\\subtest_11.py"
+            },
+            {
+                "name": "subtest_12.py",
+                "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_script\\linux\\adv_ethernet_functionality\\qa_controller_58037\\subtest_12.py"
+            },
+            {
+                "name": "subtest_13.py",
+                "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_script\\linux\\adv_ethernet_functionality\\qa_controller_58037\\subtest_13.py"
+            },
+            {
+                "name": "subtest_14.py",
+                "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_script\\linux\\adv_ethernet_functionality\\qa_controller_58037\\subtest_14.py"
+            },
+            {
+                "name": "subtest_15.py",
+                "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_script\\linux\\adv_ethernet_functionality\\qa_controller_58037\\subtest_15.py"
+            },
+            {
+                "name": "subtest_16.py",
+                "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_script\\linux\\adv_ethernet_functionality\\qa_controller_58037\\subtest_16.py"
+            },
+            {
+                "name": "subtest_17.py",
+                "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_script\\linux\\adv_ethernet_functionality\\qa_controller_58037\\subtest_17.py"
+            },
+            {
+                "name": "subtest_2.py",
+                "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_script\\linux\\adv_ethernet_functionality\\qa_controller_58037\\subtest_2.py"
+            },
+            {
+                "name": "subtest_3.py",
+                "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_script\\linux\\adv_ethernet_functionality\\qa_controller_58037\\subtest_3.py"
+            },
+            {
+                "name": "subtest_4.py",
+                "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_script\\linux\\adv_ethernet_functionality\\qa_controller_58037\\subtest_4.py"
+            },
+            {
+                "name": "subtest_5.py",
+                "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_script\\linux\\adv_ethernet_functionality\\qa_controller_58037\\subtest_5.py"
+            },
+            {
+                "name": "subtest_6.py",
+                "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_script\\linux\\adv_ethernet_functionality\\qa_controller_58037\\subtest_6.py"
+            },
+            {
+                "name": "subtest_7.py",
+                "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_script\\linux\\adv_ethernet_functionality\\qa_controller_58037\\subtest_7.py"
+            },
+            {
+                "name": "subtest_8.py",
+                "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_script\\linux\\adv_ethernet_functionality\\qa_controller_58037\\subtest_8.py"
+            },
+            {
+                "name": "subtest_9.py",
+                "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_script\\linux\\adv_ethernet_functionality\\qa_controller_58037\\subtest_9.py"
+            }
+        ]
+    },
+    "58038": {
+        "test_case_path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_script\\linux\\adv_ethernet_functionality\\QA_Controller_58038.py",
+        "subtests": [
+            {
+                "name": "subtest_1.py",
+                "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_script\\linux\\adv_ethernet_functionality\\qa_controller_58038\\subtest_1.py"
+            },
+            {
+                "name": "subtest_10.py",
+                "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_script\\linux\\adv_ethernet_functionality\\qa_controller_58038\\subtest_10.py"
+            },
+            {
+                "name": "subtest_11.py",
+                "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_script\\linux\\adv_ethernet_functionality\\qa_controller_58038\\subtest_11.py"
+            },
+            {
+                "name": "subtest_12.py",
+                "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_script\\linux\\adv_ethernet_functionality\\qa_controller_58038\\subtest_12.py"
+            },
+            {
+                "name": "subtest_13.py",
+                "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_script\\linux\\adv_ethernet_functionality\\qa_controller_58038\\subtest_13.py"
+            },
+            {
+                "name": "subtest_14.py",
+                "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_script\\linux\\adv_ethernet_functionality\\qa_controller_58038\\subtest_14.py"
+            },
+            {
+                "name": "subtest_15.py",
+                "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_script\\linux\\adv_ethernet_functionality\\qa_controller_58038\\subtest_15.py"
+            },
+            {
+                "name": "subtest_16.py",
+                "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_script\\linux\\adv_ethernet_functionality\\qa_controller_58038\\subtest_16.py"
+            },
+            {
+                "name": "subtest_17.py",
+                "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_script\\linux\\adv_ethernet_functionality\\qa_controller_58038\\subtest_17.py"
+            },
+            {
+                "name": "subtest_2.py",
+                "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_script\\linux\\adv_ethernet_functionality\\qa_controller_58038\\subtest_2.py"
+            },
+            {
+                "name": "subtest_3.py",
+                "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_script\\linux\\adv_ethernet_functionality\\qa_controller_58038\\subtest_3.py"
+            },
+            {
+                "name": "subtest_4.py",
+                "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_script\\linux\\adv_ethernet_functionality\\qa_controller_58038\\subtest_4.py"
+            },
+            {
+                "name": "subtest_5.py",
+                "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_script\\linux\\adv_ethernet_functionality\\qa_controller_58038\\subtest_5.py"
+            },
+            {
+                "name": "subtest_6.py",
+                "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_script\\linux\\adv_ethernet_functionality\\qa_controller_58038\\subtest_6.py"
+            },
+            {
+                "name": "subtest_7.py",
+                "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_script\\linux\\adv_ethernet_functionality\\qa_controller_58038\\subtest_7.py"
+            },
+            {
+                "name": "subtest_8.py",
+                "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_script\\linux\\adv_ethernet_functionality\\qa_controller_58038\\subtest_8.py"
+            },
+            {
+                "name": "subtest_9.py",
+                "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_script\\linux\\adv_ethernet_functionality\\qa_controller_58038\\subtest_9.py"
+            }
+        ]
+    },
+    "58039": {
+        "test_case_path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_script\\linux\\adv_ethernet_functionality\\QA_Controller_58039.py",
+        "subtests": [
+            {
+                "name": "subtest_1.py",
+                "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_script\\linux\\adv_ethernet_functionality\\qa_controller_58039\\subtest_1.py"
+            },
+            {
+                "name": "subtest_2.py",
+                "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_script\\linux\\adv_ethernet_functionality\\qa_controller_58039\\subtest_2.py"
+            },
+            {
+                "name": "subtest_3.py",
+                "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_script\\linux\\adv_ethernet_functionality\\qa_controller_58039\\subtest_3.py"
+            },
+            {
+                "name": "subtest_4.py",
+                "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_script\\linux\\adv_ethernet_functionality\\qa_controller_58039\\subtest_4.py"
+            },
+            {
+                "name": "subtest_5.py",
+                "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_script\\linux\\adv_ethernet_functionality\\qa_controller_58039\\subtest_5.py"
+            },
+            {
+                "name": "subtest_6.py",
+                "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_script\\linux\\adv_ethernet_functionality\\qa_controller_58039\\subtest_6.py"
+            }
+        ]
+    },
+    "58040": {
+        "test_case_path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_script\\linux\\adv_ethernet_functionality\\QA_Controller_58040.py",
+        "subtests": [
+            {
+                "name": "subtest_1.py",
+                "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_script\\linux\\adv_ethernet_functionality\\qa_controller_58040\\subtest_1.py"
+            },
+            {
+                "name": "subtest_2.py",
+                "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_script\\linux\\adv_ethernet_functionality\\qa_controller_58040\\subtest_2.py"
+            },
+            {
+                "name": "subtest_3.py",
+                "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_script\\linux\\adv_ethernet_functionality\\qa_controller_58040\\subtest_3.py"
+            },
+            {
+                "name": "subtest_4.py",
+                "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_script\\linux\\adv_ethernet_functionality\\qa_controller_58040\\subtest_4.py"
+            },
+            {
+                "name": "subtest_5.py",
+                "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_script\\linux\\adv_ethernet_functionality\\qa_controller_58040\\subtest_5.py"
+            },
+            {
+                "name": "subtest_6.py",
+                "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_script\\linux\\adv_ethernet_functionality\\qa_controller_58040\\subtest_6.py"
+            }
+        ]
+    },
+    "58289": {
+        "test_case_path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_script\\linux\\adv_ethernet_functionality\\l2_push\\QA_Controller_58289.py",
+        "subtests": [
+            {
+                "name": "subtest_1.py",
+                "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_script\\linux\\adv_ethernet_functionality\\l2_push\\qa_controller_58289\\subtest_1.py"
+            },
+            {
+                "name": "subtest_2.py",
+                "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_script\\linux\\adv_ethernet_functionality\\l2_push\\qa_controller_58289\\subtest_2.py"
+            },
+            {
+                "name": "subtest_3.py",
+                "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_script\\linux\\adv_ethernet_functionality\\l2_push\\qa_controller_58289\\subtest_3.py"
+            },
+            {
+                "name": "subtest_4.py",
+                "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_script\\linux\\adv_ethernet_functionality\\l2_push\\qa_controller_58289\\subtest_4.py"
+            },
+            {
+                "name": "subtest_5.py",
+                "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_script\\linux\\adv_ethernet_functionality\\l2_push\\qa_controller_58289\\subtest_5.py"
+            }
+        ]
+    },
+    "58290": {
+        "test_case_path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_script\\linux\\adv_ethernet_functionality\\l2_push\\QA_Controller_58290.py",
+        "subtests": [
+            {
+                "name": "subtest_1.py",
+                "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_script\\linux\\adv_ethernet_functionality\\l2_push\\qa_controller_58290\\subtest_1.py"
+            },
+            {
+                "name": "subtest_2.py",
+                "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_script\\linux\\adv_ethernet_functionality\\l2_push\\qa_controller_58290\\subtest_2.py"
+            },
+            {
+                "name": "subtest_3.py",
+                "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_script\\linux\\adv_ethernet_functionality\\l2_push\\qa_controller_58290\\subtest_3.py"
+            }
+        ]
+    },
+    "58291": {
+        "test_case_path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_script\\linux\\adv_ethernet_functionality\\l2_push\\QA_Controller_58291.py",
+        "subtests": [
+            {
+                "name": "subtest_1.py",
+                "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_script\\linux\\adv_ethernet_functionality\\l2_push\\qa_controller_58291\\subtest_1.py"
+            }
+        ]
+    },
+    "58292": {
+        "test_case_path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_script\\linux\\adv_ethernet_functionality\\l2_push\\QA_Controller_58292.py",
+        "subtests": [
+            {
+                "name": "subtest_1.py",
+                "path": "C:\\GitHub\\CosNIC\\backend\\venvs\\1\\alpha_21\\Lib\\site-packages\\controller\\cuw\\test_script\\linux\\adv_ethernet_functionality\\l2_push\\qa_controller_58292\\subtest_1.py"
+            }
+        ]
+    }
+}

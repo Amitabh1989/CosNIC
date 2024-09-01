@@ -1,0 +1,169 @@
+Question
+================================
+
+With Given my celery django app which has multiple venvs, and multiple tests are being run inside the venv, how can i queue multiple tests inside the venv and manage this queue. Adding, removing, query test status. Once the test starts to run, monitor logs for the test and present it to the user in real time
+
+================================
+
+Given your setup with Django, Celery, and multiple virtual environments (venvs), you need a system to handle test queues, monitor test execution, and present real-time updates to users. Here’s a structured approach to achieve this:
+
+### 1. **Queue Management for Tests**
+
+**a. Model Design:**
+Design models to manage the queue of tests. For example:
+
+```python
+from django.db import models
+from django.contrib.auth.models import User
+
+class VirtualEnvironment(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="venvs")
+    name = models.CharField(max_length=255, unique=True)
+    # Other fields...
+
+class TestJob(models.Model):
+    STATUS_CHOICES = [
+        ('pending', 'Pending'),
+        ('running', 'Running'),
+        ('completed', 'Completed'),
+        ('failed', 'Failed'),
+    ]
+    venv = models.ForeignKey(VirtualEnvironment, on_delete=models.CASCADE, related_name="test_jobs")
+    script_name = models.CharField(max_length=255)
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='pending')
+    start_time = models.DateTimeField(null=True, blank=True)
+    end_time = models.DateTimeField(null=True, blank=True)
+    log_file_path = models.TextField(null=True, blank=True)  # Path to the log file
+```
+
+**b. Celery Tasks:**
+Define Celery tasks to handle the execution of tests. For example:
+
+```python
+from celery import shared_task
+import subprocess
+import os
+from .models import TestJob
+
+@shared_task(bind=True)
+def run_test(self, test_job_id):
+    try:
+        test_job = TestJob.objects.get(id=test_job_id)
+        venv_path = test_job.venv.path
+        script_path = os.path.join(venv_path, 'scripts', test_job.script_name)
+        log_file_path = test_job.log_file_path
+
+        test_job.status = 'running'
+        test_job.start_time = timezone.now()
+        test_job.save()
+
+        # Run the test
+        with open(log_file_path, 'w') as log_file:
+            result = subprocess.run(['python', script_path], stdout=log_file, stderr=log_file)
+        
+        test_job.status = 'completed' if result.returncode == 0 else 'failed'
+        test_job.end_time = timezone.now()
+        test_job.save()
+
+    except Exception as e:
+        test_job.status = 'failed'
+        test_job.save()
+        raise e
+```
+
+### 2. **Adding/Removing Tests from Queue**
+
+**a. Adding a Test:**
+You can add a test job to the queue by creating a `TestJob` instance and triggering the Celery task.
+
+```python
+from .models import TestJob
+from .tasks import run_test
+
+def add_test_to_queue(venv_id, script_name, log_file_path):
+    venv = VirtualEnvironment.objects.get(id=venv_id)
+    test_job = TestJob.objects.create(
+        venv=venv,
+        script_name=script_name,
+        log_file_path=log_file_path
+    )
+    run_test.delay(test_job.id)
+```
+
+**b. Removing a Test:**
+To remove a test from the queue, you can delete the `TestJob` instance. However, be cautious with tasks that are already running.
+
+```python
+def remove_test_from_queue(test_job_id):
+    test_job = TestJob.objects.get(id=test_job_id)
+    if test_job.status in ['pending', 'running']:
+        # You may want to cancel the running task if possible
+        test_job.delete()
+```
+
+### 3. **Query Test Status**
+
+You can query the status of test jobs directly from the `TestJob` model.
+
+```python
+def get_test_status(test_job_id):
+    test_job = TestJob.objects.get(id=test_job_id)
+    return test_job.status
+```
+
+### 4. **Real-time Log Monitoring**
+
+**a. WebSocket Setup:**
+To provide real-time log updates, you can use Django Channels for WebSocket support.
+
+**b. WebSocket Consumer:**
+
+```python
+import json
+from channels.generic.websocket import AsyncWebsocketConsumer
+
+class TestLogConsumer(AsyncWebsocketConsumer):
+    async def connect(self):
+        await self.accept()
+
+    async def disconnect(self, close_code):
+        pass
+
+    async def receive(self, text_data):
+        data = json.loads(text_data)
+        test_job_id = data['test_job_id']
+        
+        test_job = TestJob.objects.get(id=test_job_id)
+        with open(test_job.log_file_path, 'r') as log_file:
+            logs = log_file.read()
+        
+        await self.send(text_data=json.dumps({
+            'test_job_id': test_job_id,
+            'logs': logs,
+        }))
+```
+
+**c. Frontend WebSocket Handling:**
+On the frontend, connect to the WebSocket and handle incoming logs.
+
+```javascript
+const socket = new WebSocket('ws://localhost:8000/ws/test_log/');
+
+socket.onmessage = function(event) {
+    const data = JSON.parse(event.data);
+    console.log('Logs:', data.logs);
+};
+
+function requestLogs(testJobId) {
+    socket.send(JSON.stringify({ 'test_job_id': testJobId }));
+}
+```
+
+### Summary
+
+1. **Queue Management:** Use Django models and Celery tasks to manage and execute test jobs.
+2. **Adding/Removing Tests:** Create or delete `TestJob` instances and handle execution through Celery.
+3. **Status Query:** Query the `TestJob` model to check the status of tests.
+4. **Real-time Monitoring:** Use Django Channels and WebSockets to provide real-time log updates to users.
+
+This approach ensures that your system can handle multiple venvs and tests, manage queues effectively, and provide real-time updates to users.

@@ -1,0 +1,163 @@
+If we need to store logs externally in an FTP server :
+
+To create a framework that automatically handles test job management, and stores logs and files on an FTP server or another external storage solution, you can follow these steps:
+
+### 1. **Configure External Storage**
+
+Use an external storage solution like an FTP server, S3 bucket, or other cloud storage services to store logs and files. For this example, I’ll use an FTP server, but you can adapt the approach for other storage solutions.
+
+**Install FTP Library (for FTP server)**
+
+```bash
+pip install paramiko  # For SFTP (alternative to FTP)
+pip install ftplib  # For FTP
+```
+
+### 2. **Set Up Models**
+
+Update your Django models to accommodate external storage paths and other necessary details.
+
+```python
+from django.db import models
+from django.contrib.auth.models import User
+
+class VirtualEnvironment(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="venvs")
+    name = models.CharField(max_length=255, unique=True)
+    # Other fields...
+
+class TestJob(models.Model):
+    STATUS_CHOICES = [
+        ('pending', 'Pending'),
+        ('running', 'Running'),
+        ('completed', 'Completed'),
+        ('failed', 'Failed'),
+    ]
+    venv = models.ForeignKey(VirtualEnvironment, on_delete=models.CASCADE, related_name="test_jobs")
+    script_name = models.CharField(max_length=255)
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='pending')
+    start_time = models.DateTimeField(null=True, blank=True)
+    end_time = models.DateTimeField(null=True, blank=True)
+    log_file_path = models.TextField(null=True, blank=True)  # External path to the log file
+```
+
+### 3. **Define External Storage Helper Functions**
+
+Create helper functions to handle file uploads and downloads from the FTP server.
+
+**FTP Helper Functions:**
+
+```python
+from ftplib import FTP
+import os
+
+FTP_SERVER = 'ftp.example.com'
+FTP_USER = 'username'
+FTP_PASS = 'password'
+
+def upload_file_to_ftp(local_file_path, remote_file_path):
+    with FTP(FTP_SERVER) as ftp:
+        ftp.login(user=FTP_USER, passwd=FTP_PASS)
+        with open(local_file_path, 'rb') as f:
+            ftp.storbinary(f'STOR {remote_file_path}', f)
+
+def download_file_from_ftp(remote_file_path, local_file_path):
+    with FTP(FTP_SERVER) as ftp:
+        ftp.login(user=FTP_USER, passwd=FTP_PASS)
+        with open(local_file_path, 'wb') as f:
+            ftp.retrbinary(f'RETR {remote_file_path}', f.write)
+```
+
+### 4. **Update Celery Tasks**
+
+Update your Celery tasks to use external storage.
+
+```python
+from celery import shared_task
+import subprocess
+from django.utils import timezone
+from .models import TestJob
+from .utils import upload_file_to_ftp, download_file_from_ftp  # Import helper functions
+
+@shared_task(bind=True)
+def run_test(self, test_job_id):
+    try:
+        test_job = TestJob.objects.get(id=test_job_id)
+        venv_path = test_job.venv.path
+        script_path = os.path.join(venv_path, 'scripts', test_job.script_name)
+        local_log_file_path = f"/tmp/{test_job.script_name}.log"  # Temporary local path
+        remote_log_file_path = f"logs/{test_job.script_name}.log"  # Remote path
+
+        test_job.status = 'running'
+        test_job.start_time = timezone.now()
+        test_job.save()
+
+        # Run the test
+        with open(local_log_file_path, 'w') as log_file:
+            result = subprocess.run(['python', script_path], stdout=log_file, stderr=log_file)
+        
+        # Upload log file to FTP
+        upload_file_to_ftp(local_log_file_path, remote_log_file_path)
+
+        test_job.status = 'completed' if result.returncode == 0 else 'failed'
+        test_job.end_time = timezone.now()
+        test_job.log_file_path = remote_log_file_path
+        test_job.save()
+
+        # Clean up local file
+        os.remove(local_log_file_path)
+
+    except Exception as e:
+        test_job.status = 'failed'
+        test_job.save()
+        raise e
+```
+
+### 5. **Creating the Framework**
+
+**a. Automated Test Job Creation:**
+
+You can create a view or a management command to automatically queue test jobs.
+
+**b. Scheduling and Monitoring:**
+
+Use Celery's periodic tasks or Django management commands to periodically check and manage test jobs.
+
+**c. Real-time Updates:**
+
+Implement real-time updates with WebSockets (Django Channels) to push logs and statuses to the user interface.
+
+### 6. **Expose External Storage Path**
+
+Ensure that the `log_file_path` provided to users or systems is accessible and properly handled. For external FTP paths, you may need to provide secure access or integrate with a frontend application to fetch logs.
+
+**a. API Endpoint to Fetch Logs:**
+
+Create an API endpoint to retrieve log content from the external storage:
+
+```python
+from django.http import HttpResponse
+from .utils import download_file_from_ftp
+
+def get_log_file(request, test_job_id):
+    test_job = TestJob.objects.get(id=test_job_id)
+    local_log_file_path = f"/tmp/{test_job.script_name}.log"  # Temporary local path
+
+    download_file_from_ftp(test_job.log_file_path, local_log_file_path)
+
+    with open(local_log_file_path, 'r') as log_file:
+        log_content = log_file.read()
+
+    os.remove(local_log_file_path)
+    return HttpResponse(log_content, content_type='text/plain')
+```
+
+### Summary
+
+1. **Use External Storage:** Store logs and files on an FTP server or other external storage.
+2. **Update Models and Tasks:** Modify Django models and Celery tasks to handle external storage paths.
+3. **Helper Functions:** Create functions to upload and download files from external storage.
+4. **Automated Framework:** Develop views, commands, and APIs to manage test jobs and monitor progress.
+5. **Real-Time Updates:** Use WebSockets to provide real-time updates to users.
+
+This approach ensures that your test management system is scalable, keeps data separate from the application, and provides real-time monitoring and management capabilities.

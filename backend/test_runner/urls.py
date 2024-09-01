@@ -10,6 +10,7 @@ from .views import (
     RunTestsView,
     ManualScanCtrlRepoView,
     FolderListView,
+    GetUserVenvs,
 )
 
 router = DefaultRouter()
@@ -20,6 +21,7 @@ router.register(r"testcaseresult", TestCaseResultView, "testcaseresult")
 urlpatterns = [
     path("", include(router.urls)),
     path("task-status/<str:task_id>/", TaskStatusView.as_view(), name="task_status"),
+    path("user/venvs", GetUserVenvs.as_view({"get": "list"}), name="user_venvs"),
     path("venv/create", CreateVenvView.as_view(), name="venv_create"),
     path(
         "venv/activate", ActivateVenvCopyInstallPackages.as_view(), name="venv_activate"

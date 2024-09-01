@@ -336,3 +336,12 @@ class FolderListView(APIView):
         return Response(
             {"repo_versions": cache.repo_versions, "last_scanned": cache.last_scanned}
         )
+
+
+class GetUserVenvs(viewsets.ModelViewSet):
+    queryset = VirtualEnvironment.objects.all()
+    serializer_class = VirtualEnvironmentSerializer
+
+    def get_queryset(self):
+        user = self.request.user
+        return VirtualEnvironment.objects.filter(user=user)

@@ -17,6 +17,7 @@ from django.core.files.base import ContentFile
 from django.core.files.storage import default_storage
 
 from ..models import VirtualEnvironment, CtrlPackageRepo, Config
+import yaml
 
 logger = logging.getLogger(__name__)
 python_executable = sys.executable
@@ -214,90 +215,6 @@ def deactivate_venv(venv_path):
     except Exception as e:
         logger.error(f"Error deactivating venv: {e}")
     return result.stdout if result else None
-
-
-# def copy_files(ctrl_pkg_version, venv_path, requirements_file=None, script_file=None):
-#     if ctrl_pkg_version is None:
-#         ctrl_pkg_version = "latest.zip"
-
-#     logger.info(f"Venv path is : {venv_path}")
-#     # Check or create user_files folder inside the venv
-#     os.makedirs(os.path.join(venv_path, "user_files"), exist_ok=True)
-
-#     user_files_path = os.path.join(venv_path, "user_files")
-#     logger.info(f"User_files path is : {user_files_path}")
-#     os.chmod(user_files_path, 0o755)
-
-#     # ctrl and lib package
-#     src = os.path.join(settings.REPO_PATH, ctrl_pkg_version)
-#     dest = os.path.join(user_files_path)
-#     shutil.copy2(src, dest)
-
-#     # Copy requirement.txt and scripts
-#     custom_files = []
-#     if requirements_file:
-#         custom_files.append(requirements_file)
-#     if script_file:
-#         custom_files.append(script_file)
-
-#     if custom_files:
-#         for file in custom_files:
-#             dest = os.path.join(user_files_path)
-#             shutil.copy(file, dest)
-
-
-# def copy_files(
-#     ctrl_pkg_version="latest",
-#     venv_path=None,
-#     requirements_file=None,
-#     script_file=None,
-# ):
-#     """
-#     Copies the control package, requirements file, and script file to the specified virtual environment path.
-
-#     Args:
-#         ctrl_pkg_version (str): Version of the control package to copy. Defaults to "latest.zip".
-#         venv_path (str): Path to the virtual environment where files will be copied.
-#         requirements_file (str, optional): Path to the requirements.txt file to copy.
-#         script_file (str, optional): Path to a user-provided script file to copy.
-
-#     Raises:
-#         ValueError: If `venv_path` is not provided.
-#     """
-#     if not venv_path:
-#         raise ValueError("The virtual environment path (`venv_path`) must be provided.")
-
-#     logger.info(f"Using virtual environment path: {venv_path}")
-
-#     # Define the user files directory and create it if necessary
-#     user_files_path = os.path.join(venv_path, "user_files")
-#     os.makedirs(user_files_path, exist_ok=True)
-#     logger.info(f"User files directory created at: {user_files_path}")
-
-#     # Set appropriate permissions
-#     os.chmod(user_files_path, 0o755)
-
-#     logger.info(f"Latest Package : {ctrl_pkg_version}")
-
-#     ctrl_pkg_src = os.path.join(settings.REPO_PATH, ctrl_pkg_version)
-#     logger.info(f"Controller package found at : {ctrl_pkg_src}")
-
-#     os.chmod(ctrl_pkg_src, 0o755)
-
-#     # shutil.copy2(ctrl_pkg_src, user_files_path)
-#     if os.path.isdir(ctrl_pkg_src):
-#         shutil.copytree(
-#             ctrl_pkg_src, os.path.join(user_files_path, os.path.basename(ctrl_pkg_src))
-#         )
-#     else:
-#         shutil.copy2(ctrl_pkg_src, user_files_path)
-#     logger.info(f"Control package '{ctrl_pkg_version}' copied to: {user_files_path}")
-
-#     # Copy additional files if provided
-#     for custom_file in (requirements_file, script_file):
-#         if custom_file:
-#             shutil.copy(custom_file, user_files_path)
-#             logger.info(f"Copied custom file '{custom_file}' to: {user_files_path}")
 
 
 def create_user_files_directory(venv_path):
@@ -499,19 +416,10 @@ def copy_install_packages_to_venv(**kwargs):
     """
     user = User.objects.get(id=kwargs.get("user"))
     venv_name = kwargs.get("venv_name")
-    # ctrl_pkg_version = kwargs.get("ctrl_package_version")
-    # venv_obj = get_object_or_404(VirtualEnvironment, name=venv_name, user=user)
     venv_obj = get_object_or_404(VirtualEnvironment, venv_name=venv_name, user=user)
     logger.info(f"Venv object is {venv_obj}")
 
-    # Copy the control package to the user files directory
-    # if ctrl_pkg_version == "latest":
-    #     versions = CtrlPackageRepo.objects.get(id=1)
-    #     ctrl_pkg_version = versions.repo_versions[0]  # get the first item
-    # logger.info(f"Control package version is : {ctrl_pkg_version}")
-
     # Start the VENV
-    # venv_path = activate_venv(venv_name, venv_obj.path)
     venv_path = activate_venv(venv_obj.path)
     logger.info(f"Venv activated : {venv_path}")
 
@@ -519,7 +427,6 @@ def copy_install_packages_to_venv(**kwargs):
     venv_obj.status = "in-use"
     venv_obj.assigned_at = timezone.now()
     venv_obj.last_used_at = timezone.now()
-    # venv_obj.ctrl_package_version = ctrl_pkg_version
     venv_obj.save()
 
     # Copy the requirements file, controller package
@@ -549,3 +456,69 @@ def copy_install_packages_to_venv(**kwargs):
     requirements_file_name = os.path.basename(venv_obj.requirements.name)
     result = install_packages(venv_obj.path, requirements_file_name)
     logger.info(f"Requirements installed : {result}")
+
+
+# def save_config_to_venv(venv_id):
+#     # Get the VirtualEnvironment object
+#     venv = VirtualEnvironment.objects.get(id=venv_id)
+
+#     # Get the associated Config object
+#     config = venv.config_file
+
+#     if config:  # Ensure there is a config object associated
+#         # Serialize the Config object to a dictionary
+#         config_dict = {
+#             "nickname": config.nickname,
+#             "backup_restore_config_files": config.backup_restore_config_files,
+#             "validate_config_params": config.validate_config_params,
+#             "os_platform": config.os_platform,
+#             "rpyc_port": config.rpyc_port,
+#             "topology": config.topology,
+#             "card_type": config.card_type,
+#             "switch_config": config.switch_config.id,  # or config.switch_config.name if you want the name
+#             "sut": config.sut.id,
+#             "client": config.client.id,
+#             "client_2": config.client_2.id,
+#             "rmii_interface": config.rmii_interface.id,
+#             "fw_version": list(config.fw_version.values_list("id", flat=True)),
+#             "fw_upgrade_types": list(
+#                 config.fw_upgrade_types.values_list("id", flat=True)
+#             ),
+#             "sit": config.sit.id,
+#             "spl_pkg_file_path": config.spl_pkg_file_path.id,
+#             "load_roce_driver": config.load_roce_driver,
+#             "inbox_driver": config.inbox_driver,
+#             "driver_name": config.driver_name,
+#             "client_sit": config.client_sit.id,
+#             "repave": config.repave,
+#             "mtu_list": config.mtu_list,
+#             "vlan_id_list": config.vlan_id_list,
+#             "vm_os": config.vm_os,
+#             "vfs_per_pf": config.vfs_per_pf,
+#             "vnic_per_vm": config.vnic_per_vm,
+#             "number_of_vms_to_test": config.number_of_vms_to_test,
+#             "errors_to_flag": config.errors_to_flag,
+#             "fw_reset_check": config.fw_reset_check,
+#             "error_recovery_check": config.error_recovery_check,
+#             "cleanup_on_failure": config.cleanup_on_failure,
+#         }
+
+#         # Convert the dictionary to YAML format
+#         yaml_content = yaml.dump(config_dict)
+
+#         # Determine the destination path in the virtual environment directory
+#         venv_directory = os.path.join(settings.MEDIA_ROOT, "venvs", venv.venv_name)
+#         os.makedirs(
+#             venv_directory, exist_ok=True
+#         )  # Create the directory if it doesn't exist
+
+#         yaml_file_path = os.path.join(venv_directory, "config.yaml")
+
+#         # Save the YAML content to the destination path
+#         with open(yaml_file_path, "w") as yaml_file:
+#             yaml_file.write(yaml_content)
+
+#         print(f"Config file saved to {yaml_file_path}")
+
+#     else:
+#         print("No config object associated with this virtual environment.")

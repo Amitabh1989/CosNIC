@@ -6,6 +6,7 @@ from .models import (
     VirtualEnvironment,
     TestJob,
     CtrlPackageRepo,
+    SubTests,
 )
 
 # Register your models here.
@@ -40,10 +41,15 @@ class TestRunResultInline(admin.TabularInline):
     extra = 0  # Number of empty forms to display
 
 
+class SubTestInline(admin.StackedInline):
+    model = SubTests
+    extra = 0  # Adj
+
+
 class TestCaseAdmin(admin.ModelAdmin):
     list_display = ("tcid", "title", "category", "path")
     list_display_links = ("tcid", "title")
-    inlines = [TestRunResultInline]
+    inlines = [SubTestInline, TestRunResultInline]
 
 
 class VirtualEnvironmentAdmin(admin.ModelAdmin):

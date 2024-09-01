@@ -15,6 +15,7 @@ class TestCase(models.Model):
     tcid = models.CharField(max_length=100, unique=True)
     title = models.CharField(max_length=250)
     path = models.CharField(max_length=500)
+    # subtests = models.ManyToManyField("SubTests", related_name="subtests")
     category = models.CharField(
         max_length=20,
         choices=[
@@ -39,53 +40,6 @@ class SubTests(models.Model):
 
     def __str__(self):
         return f"{self.test_case.tcid} : {self.name}"
-
-
-# class TestRun(models.Model):
-#     STATUS_CHOICES = [
-#         ("pending", "Pending"),
-#         ("running", "Running"),
-#         ("completed", "Completed"),
-#         ("failed", "Failed"),
-#         ("aborted", "Aborted"),
-#     ]
-#     nickname = models.CharField(max_length=100, blank=True, null=True)
-#     category = models.CharField(
-#         max_length=20,
-#         choices=[
-#             ("stress", "Stress"),
-#             ("functional", "Functional"),
-#             ("hammer", "Hammer"),
-#             ("sanity", "Sanity"),
-#         ],
-#         default="functional",
-#     )
-#     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="test_runs")
-#     test_cases = models.ManyToManyField(TestCase, through="TestCaseResult")
-#     created_at = models.DateTimeField(auto_now_add=True)
-#     modified_at = models.DateTimeField(auto_now=True)
-#     status = models.CharField(
-#         max_length=20,
-#         choices=STATUS_CHOICES,
-#     )
-
-#     def __str__(self):
-#         return f"Test Run {self.id} by {self.user.username}"
-
-
-# def create_path(user_id, test_case_name, test_run_number, result_status):
-# def create_path(instance, filename):
-#     base_dir = (
-#         f"user_{instance.user.id}/test_case_{instance.test_case.tcid}/run_{instance.id}"
-#     )
-#     date_dir = datetime.now().strftime("date_%Y-%m-%d")
-#     result_dir = f"result_{instance.status}"
-
-#     # Create directory structure
-#     path = os.path.join(base_dir, date_dir, result_dir)
-#     os.makedirs(path, exist_ok=True)
-
-#     return path
 
 
 def create_path(instance, filename):
@@ -168,7 +122,6 @@ class TestRun(models.Model):
 
 class TestCaseResult(models.Model):
     test_case = models.ForeignKey(TestCase, on_delete=models.CASCADE)
-    # test_case = models.ManyToManyField(TestCase)
     test_run = models.ForeignKey(TestRun, on_delete=models.CASCADE)
     status = models.CharField(
         max_length=20,
@@ -217,24 +170,6 @@ def scripts_upload_path(instance, filename):
     return f"scripts/{instance.user.id}/{instance.venv_name}/{filename}"
 
 
-# class TestJob(models.Model):
-#     STATUS_CHOICES = [
-#         ("pending", "Pending"),
-#         ("running", "Running"),
-#         ("completed", "Completed"),
-#         ("failed", "Failed"),
-#         ("aborted", "Aborted"),
-#     ]
-#     script_name = models.CharField(max_length=255)
-#     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default="pending")
-#     start_time = models.DateTimeField(null=True, blank=True)
-#     end_time = models.DateTimeField(null=True, blank=True)
-#     log_file_path = models.TextField(null=True, blank=True)  # Path to the log file
-
-#     def __str__(self):
-#         return f"A job for {self.script_name} has been created successfully : status : {self.status}"
-
-
 class CtrlPackageRepo(models.Model):
     # repo_version = models.JSONField(default=list)
     repo_version = models.CharField(
@@ -244,12 +179,7 @@ class CtrlPackageRepo(models.Model):
     url = models.URLField(blank=True, null=True)  # incase i need to read from ftp
 
     def __str__(self):
-        print(f"Self.repo : {self.repo_version}")
-        # return f"All repos reported are {', '.join(self.repo_versions)}"
         return f"{self.repo_version}"  # Just a simple human-readable string
-
-    # def get_version_choices(self):
-    #     return [(version, version) for version in self.repo_versions]
 
 
 class TestJob(models.Model):
@@ -295,9 +225,7 @@ class VirtualEnvironment(models.Model):
     )
     nickname = models.CharField(max_length=100, blank=True, null=True)
     venv_name = models.CharField(max_length=255)
-    # test_jobs = models.ManyToManyField(TestJob, related_name="venv", blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
-    # ctrl_package_version = models.CharField(max_length=255, blank=True, null=True)
     ctrl_package_version = models.ForeignKey(
         CtrlPackageRepo,
         on_delete=models.SET_NULL,

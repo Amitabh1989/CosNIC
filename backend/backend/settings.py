@@ -57,6 +57,7 @@ INSTALLED_APPS = [
     "sutclient.apps.SutclientConfig",
     "django_celery_beat",
     "rest_framework",
+    "channels",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -218,15 +219,26 @@ LOGGING = {
 }
 
 
-EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
-# add your host of the email here in this case its Gmail so we are going to use Gmail host
-EMAIL_HOST = "smtp.gmail.com"
-EMAIL_USE_TLS = True
-# add the port number of the email server
-EMAIL_PORT = 587
-# add your gamil here
-EMAIL_HOST_USER = "cosnic-admin@broadcom.com"
-CONSNIC_ADMIN_EMAIL = "cosnic-admin@broadcom.com"
-# add your password here
-EMAIL_HOST_PASSWORD = "<your_app_password>"
-DEFAULT_FROM_EMAIL = "CosNIC Task Admin <cosnic-admin@broadcom.com>"
+# EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+# # add your host of the email here in this case its Gmail so we are going to use Gmail host
+# EMAIL_HOST = "smtp.gmail.com"
+# EMAIL_USE_TLS = True
+# # add the port number of the email server
+# EMAIL_PORT = 587
+# # add your gamil here
+# EMAIL_HOST_USER = "cosnic-admin@broadcom.com"
+# CONSNIC_ADMIN_EMAIL = "cosnic-admin@broadcom.com"
+# # add your password here
+# EMAIL_HOST_PASSWORD = "<your_app_password>"
+# DEFAULT_FROM_EMAIL = "CosNIC Task Admin <cosnic-admin@broadcom.com>"
+
+
+# Configure Channels Redis layer
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels_redis.core.RedisChannelLayer",
+        "CONFIG": {
+            "hosts": [("127.0.0.1", 6379)],
+        },
+    },
+}

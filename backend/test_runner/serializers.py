@@ -5,13 +5,23 @@ from .models import (
     VirtualEnvironment,
     TestJob,
     Server,
+    SubTests,
 )
 from rest_framework import serializers
 from django.contrib.auth.models import User
 from django.db import transaction
 
 
+class SubTestSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = SubTests
+        fields = ["test_case", "name", "path"]
+
+
 class TestCaseSerializer(serializers.ModelSerializer):
+    # subtests = SubTestSerializer(many=True, read_only=True)
+    subtest = serializers.ListField(child=serializers.CharField())
+
     class Meta:
         model = TestCase
         fields = "__all__"
@@ -73,6 +83,8 @@ class RunTestSerializer(serializers.Serializer):
 
 class VirtualEnvironmentSerializer(serializers.ModelSerializer):
     # test_jobs = TestJobSerializer(many=True)
+    ctrl_package_version = serializers.SerializerMethodField()
+
     class Meta:
         model = VirtualEnvironment
         exclude = [
@@ -86,9 +98,16 @@ class VirtualEnvironmentSerializer(serializers.ModelSerializer):
             # "test_jobs",  # Exclude because it's not defined in the current model context
         ]
 
+    def get_ctrl_package_version(self, obj):
+        # Check if ctrl_package_version exists
+        if obj.ctrl_package_version:
+            return obj.ctrl_package_version.repo_version
+        return None
+
 
 class VirtualEnvironmentInitSerializer(serializers.ModelSerializer):
     # test_jobs = TestJobSerializer(many=True)
+
     class Meta:
         model = VirtualEnvironment
         fields = ["venv_name"]

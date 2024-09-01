@@ -75,7 +75,33 @@ class VirtualEnvironmentSerializer(serializers.ModelSerializer):
     # test_jobs = TestJobSerializer(many=True)
     class Meta:
         model = VirtualEnvironment
-        fields = "__all__"
+        exclude = [
+            "status",  # Exclude because this is managed internally or by task
+            "last_used_at",  # Exclude because it is updated based on usage
+            "user",  # Exclude because it is set based on the current logged-in user
+            "lease_duration",  # Exclude because it is set based on the current logged-in user
+            "assigned_at",  # Exclude because it is set based on the current logged-in user
+            "path",  # Exclude because it is set automatically
+            "server",  # Exclude because it is set by server (in future)
+            # "test_jobs",  # Exclude because it's not defined in the current model context
+        ]
+
+
+class VirtualEnvironmentInitSerializer(serializers.ModelSerializer):
+    # test_jobs = TestJobSerializer(many=True)
+    class Meta:
+        model = VirtualEnvironment
+        fields = ["venv_name"]
+        # exclude = [
+        #     "status",  # Exclude because this is managed internally or by task
+        #     "last_used_at",  # Exclude because it is updated based on usage
+        #     "user",  # Exclude because it is set based on the current logged-in user
+        #     "lease_duration",  # Exclude because it is set based on the current logged-in user
+        #     "assigned_at",  # Exclude because it is set based on the current logged-in user
+        #     "path",  # Exclude because it is set automatically
+        #     "server",  # Exclude because it is set by server (in future)
+        #     # "test_jobs",  # Exclude because it's not defined in the current model context
+        # ]
 
 
 class ServerSerializer(serializers.ModelSerializer):

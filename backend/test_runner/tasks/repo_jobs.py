@@ -2,11 +2,16 @@ import os
 import re
 from django.conf import settings
 from django.utils import timezone
+from django.db import transaction, IntegrityError
+from django.shortcuts import get_object_or_404
+
 
 # from django_cron import CronJobBase, Schedule
 from ..models import CtrlPackageRepo
 
 from celery import shared_task
+
+# from django.exceptions import IntegrityError
 
 
 def sort_versions(versions):
@@ -24,7 +29,7 @@ def sort_versions(versions):
 def scan_folder_and_update_cache(start_name=None):
     if start_name is None:
         start_name = "Controller-"
-    folder_path = os.path.join(settings.REPO_REPO)
+    folder_path = os.path.join(settings.REPO_ROOT)
     repo_versions = [
         name
         for name in os.listdir(folder_path)
@@ -33,8 +38,15 @@ def scan_folder_and_update_cache(start_name=None):
     repo_versions = [
         name for name in repo_versions if name.startswith(start_name)
     ]  # Filter by name
-    cache, created = CtrlPackageRepo.objects.get_or_create(id=1)
-    cache.repo_versions = sort_versions(repo_versions)
-    cache.last_scanned = timezone.now()
-    cache.save()
+    print(f"Repo versions celery : {repo_versions}")
+
+    with transaction.atomic():
+        for repo in repo_versions:
+            try:
+                repo, created = CtrlPackageRepo.objects.get_or_create(repo_version=repo)
+                print(f"Repo celery : {repo}, {created}")
+                if created:
+                    repo.save()
+            except IntegrityError as e:
+                print(f"IntegrityError: {e}")
     print(f"Celery scanned folder and completed updating cache : {repo_versions}")

@@ -235,6 +235,23 @@ def scripts_upload_path(instance, filename):
 #         return f"A job for {self.script_name} has been created successfully : status : {self.status}"
 
 
+class CtrlPackageRepo(models.Model):
+    # repo_version = models.JSONField(default=list)
+    repo_version = models.CharField(
+        max_length=100, default="Controller-2.2.9a63", unique=True
+    )
+    last_scanned = models.DateTimeField(auto_now=True)
+    url = models.URLField(blank=True, null=True)  # incase i need to read from ftp
+
+    def __str__(self):
+        print(f"Self.repo : {self.repo_version}")
+        # return f"All repos reported are {', '.join(self.repo_versions)}"
+        return f"{self.repo_version}"  # Just a simple human-readable string
+
+    # def get_version_choices(self):
+    #     return [(version, version) for version in self.repo_versions]
+
+
 class TestJob(models.Model):
     STATUS_CHOICES = [
         ("pending", "Pending"),
@@ -271,13 +288,23 @@ class VirtualEnvironment(models.Model):
         Server, on_delete=models.CASCADE, blank=True, null=True, related_name="venv"
     )
     config_file = models.ForeignKey(
-        Config, on_delete=models.CASCADE, blank=True, null=True
+        Config,
+        on_delete=models.CASCADE,
+        blank=True,
+        null=True,
     )
     nickname = models.CharField(max_length=100, blank=True, null=True)
     venv_name = models.CharField(max_length=255)
     # test_jobs = models.ManyToManyField(TestJob, related_name="venv", blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
-    ctrl_package_version = models.CharField(max_length=255, blank=True, null=True)
+    # ctrl_package_version = models.CharField(max_length=255, blank=True, null=True)
+    ctrl_package_version = models.ForeignKey(
+        CtrlPackageRepo,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="venv",
+    )
     status = models.CharField(
         max_length=50,
         default="created",
@@ -310,12 +337,3 @@ class VirtualEnvironment(models.Model):
 
     def __str__(self):
         return f"{self.venv_name} at path {self.path}"
-
-
-class CtrlPackageRepo(models.Model):
-    repo_versions = models.JSONField(default=list)
-    last_scanned = models.DateTimeField(auto_now=True)
-    # url = models.URLField()  # incase i need to read from ftp
-
-    def __str__(self):
-        return self.repo_versions

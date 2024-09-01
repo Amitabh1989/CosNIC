@@ -17,10 +17,13 @@ from pathlib import Path
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 REPO_URL = "/repo/"
-REPO_ROOT = Path(__file__).resolve().parent.parent.parent / "ctrl_repo"
+REPO_ROOT = os.path.join(BASE_DIR, "ctrl_repo")
+# REPO_ROOT = Path(__file__).resolve().parent.parent.parent / "ctrl_repo"
 
 LOG_URL = "/logs/"
-LOGS_ROOT = Path(__file__).resolve().parent.parent / "test_logs"
+# LOGS_ROOT = Path(__file__).resolve().parent.parent / "test_logs"
+LOGS_ROOT = os.path.join(BASE_DIR, "test_logs")
+
 # settings.py
 MEDIA_URL = "/media/"
 MEDIA_ROOT = os.path.join(BASE_DIR, "media")
@@ -213,3 +216,17 @@ LOGGING = {
         },
     },
 }
+
+
+EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+# add your host of the email here in this case its Gmail so we are going to use Gmail host
+EMAIL_HOST = "smtp.gmail.com"
+EMAIL_USE_TLS = True
+# add the port number of the email server
+EMAIL_PORT = 587
+# add your gamil here
+EMAIL_HOST_USER = "cosnic-admin@broadcom.com"
+CONSNIC_ADMIN_EMAIL = "cosnic-admin@broadcom.com"
+# add your password here
+EMAIL_HOST_PASSWORD = "<your_app_password>"
+DEFAULT_FROM_EMAIL = "CosNIC Task Admin <cosnic-admin@broadcom.com>"

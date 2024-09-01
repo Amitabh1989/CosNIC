@@ -1,5 +1,12 @@
 from django.contrib import admin
-from .models import TestCase, TestRun, TestCaseResult, VirtualEnvironment, TestJob
+from .models import (
+    TestCase,
+    TestRun,
+    TestCaseResult,
+    VirtualEnvironment,
+    TestJob,
+    CtrlPackageRepo,
+)
 
 # Register your models here.
 
@@ -51,6 +58,15 @@ class VirtualEnvironmentAdmin(admin.ModelAdmin):
 
 class TestJobAdmin(admin.ModelAdmin):
     list_display = ("id", "test_run", "celery_result")
+
+
+# @admin.register(CtrlPackageRepo)
+# class CtrlPackageRepoAdmin(admin.ModelAdmin):
+#     list_display = ["last_scanned"]
+#     search_fields = ["repo_versions"]
+@admin.register(CtrlPackageRepo)
+class CtrlPackageRepoAdmin(admin.ModelAdmin):
+    list_display = ("last_scanned", "repo_version", "url")  # Adjust as needed
 
 
 admin.site.register(TestJob, TestJobAdmin)

@@ -6,6 +6,7 @@ from .serializers import (
     TestRunSerializer,
     VirtualEnvironmentSerializer,
     VirtualEnvironmentTestJobSerializer,
+    VirtualEnvironmentInitSerializer,
 )
 from .models import (
     TestCase,
@@ -25,6 +26,11 @@ from .tasks.venv_jobs import create_venv, copy_install_packages_to_venv
 from django.contrib.auth import get_user_model
 from .tasks.repo_jobs import scan_folder_and_update_cache
 from .tasks.test_jobs import run_test_job
+from django.core.files.storage import default_storage
+from django.core.files.base import ContentFile
+from django.conf import settings
+import os
+from .forms import VirtualEnvironmentForm
 
 # Create your views here.
 
@@ -44,18 +50,42 @@ class TestCaseResultView(viewsets.ModelViewSet):
     serializer_class = TestCaseResultSerializer
 
 
+def temp_save_uploaded_files(request):
+    # Save files temporarily
+    temp_dir = os.path.join(settings.LOGS_ROOT, "temp")
+    os.makedirs(temp_dir, exist_ok=True)
+
+    temp_requirements_path = None
+    temp_script_path = None
+
+    if "requirements" in request.FILES:
+        temp_requirements_path = os.path.join(
+            temp_dir, request.FILES["requirements"].name
+        )
+        with default_storage.open(temp_requirements_path, "wb+") as destination:
+            for chunk in request.FILES["requirements"].chunks():
+                destination.write(chunk)
+
+    if "script" in request.FILES:
+        temp_script_path = os.path.join(temp_dir, request.FILES["script"].name)
+        with default_storage.open(temp_script_path, "wb+") as destination:
+            for chunk in request.FILES["script"].chunks():
+                destination.write(chunk)
+
+
 class CreateVenvView(APIView):
     queryset = VirtualEnvironment.objects.all()
     serializer_class = VirtualEnvironmentSerializer
 
     def post(self, request):
-        # Example: Create a new virtual environment
         print("Request data: ", request.data)
         user = get_user_model().objects.get(username=self.request.user.username)
 
         venv_name = request.data.get("venv_name", None)
+        config_file = request.data.get("config_file", None)
+        print("Config file : ", config_file)
+        config_file = config_file[0] if config_file else None
         # Check if name is unique
-        # if self.get_queryset().filter(name=venv_name, user=user).exists():
         print(
             f"Venv name : {VirtualEnvironment.objects.filter(user=user, venv_name=venv_name)}"
         )
@@ -70,22 +100,60 @@ class CreateVenvView(APIView):
                 {"message": "Venv name cannot be empty"},
                 status=status.HTTP_400_BAD_REQUEST,
             )
-        # Get the currently logged-in user (requires authentication)
 
-        print(f"User of the request: {user} {user.id} {user.email}")
-        # task = create_venv.delay(venv_name)
-        task = create_venv.apply_async(
-            # args=("my_venv_name",),
-            kwargs={"version": "3.9", "user": user.id, "venv_name": venv_name},
-            countdown=10,
-        )
-        return Response(
-            {
-                "message": "Virtual environment creation request submitted",
-                "task_id": task.id,
-            },
-            status=status.HTTP_201_CREATED,
-        )
+        # Handle file uploads
+        if "requirements" in request.FILES:
+            requirements_file = request.FILES.get("requirements")
+
+        if "script" in request.FILES:
+            script_file = request.FILES.get("script")
+        print(f"Requirements file : {requirements_file}")
+        print(f"Script file : {script_file}")
+
+        # Prepare data for the serializer
+        data = {
+            "venv_name": venv_name,
+            "python_version": request.data.get("python_version"),
+            "nickname": request.data.get("nickname"),
+            "requirements": requirements_file,
+            "script": script_file,
+            "user": user.id,
+        }
+
+        print(f"Processed data is : {data}")
+
+        # Send to serializer :
+        serializer = self.serializer_class(data=data)
+        # Save the files to the VirtualEnvironment object
+        if serializer.is_valid():
+            print(
+                f"Virtial environment {venv_name} instance creation in progress for user {user.username}. Spwanning VENV"
+            )
+
+            task = create_venv.delay(
+                venv_name=venv_name,
+                python_version=data["python_version"],
+                nickname=data["nickname"],
+                user_id=user.id,
+                requirements_file=(
+                    requirements_file.read() if requirements_file else None
+                ),
+                script_file=script_file.read() if script_file else None,
+                config_file_id=config_file,
+            )
+            return Response(
+                {
+                    "task_id": task.id,
+                    "message": "Virtual environment creation initiated.",
+                },
+                status=status.HTTP_202_ACCEPTED,
+            )
+        else:
+            print(f"Serializer errors: {serializer.errors}")
+            return Response(
+                {"message": "Validation error", "errors": serializer.errors},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
 
 
 class TaskStatusView(APIView):
@@ -124,19 +192,25 @@ class TaskStatusView(APIView):
 #         )
 
 
-class StartVenvCopyInstallPackages(APIView):
+class ActivateVenvCopyInstallPackages(APIView):
     queryset = VirtualEnvironment.objects.all()
-    serializer_class = VirtualEnvironmentSerializer
+    # serializer_class = VirtualEnvironmentSerializer
+    serializer_class = VirtualEnvironmentInitSerializer
+    # form_class = VirtualEnvironmentForm
 
     def post(self, request):
+        # form = self.form_class(request.data)
+        # if form.is_valid():
+        # Process form data
         # Example: Run a test script
         user = get_user_model().objects.get(username=self.request.user.username)
         venv_name = request.data.get("venv_name")
         print(f"Venv name received in the request : {venv_name}")
-        ctrl_package_version = request.data.get("ctrl_package_version", False)
-        if not ctrl_package_version:
-            ctrl_package_version = "latest"
-        print(f"Venv ctrl_package_version in the request : {ctrl_package_version}")
+        # ctrl_package_version = request.data.get("ctrl_package_version", False)
+        # The code is attempting to retrieve the value of the "ctrl_package_version" key from the data in a request object. If the key is not found in the data, it will default to False.
+        # if not ctrl_package_version:
+        # ctrl_package_version = "latest"
+        # print(f"Venv ctrl_package_version in the request : {ctrl_package_version}")
 
         if not VirtualEnvironment.objects.filter(
             user=user, venv_name=venv_name
@@ -151,7 +225,7 @@ class StartVenvCopyInstallPackages(APIView):
         data_for_task = {
             "venv_name": venv_name,
             "user": user.id,
-            "ctrl_package_version": ctrl_package_version,
+            # "ctrl_package_version": ctrl_package_version,
         }
         task = copy_install_packages_to_venv.apply_async(
             kwargs=data_for_task, countdown=5
@@ -258,6 +332,7 @@ class FolderListView(APIView):
 
     def get(self, request):
         cache = CtrlPackageRepo.objects.get(id=1)
+        print(f"Repo version : {cache.repo_versions} : {type(cache.repo_versions)}")
         return Response(
             {"repo_versions": cache.repo_versions, "last_scanned": cache.last_scanned}
         )

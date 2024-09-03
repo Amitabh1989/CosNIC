@@ -1,15 +1,17 @@
-from .models import (
-    TestCase,
-    TestRun,
-    TestCaseResult,
-    VirtualEnvironment,
-    TestJob,
-    Server,
-    SubTests,
-)
-from rest_framework import serializers
 from django.contrib.auth.models import User
 from django.db import transaction
+from rest_framework import serializers
+
+from .models import (
+    CtrlPackageRepo,
+    Server,
+    SubTests,
+    TestCase,
+    TestCaseResult,
+    TestJob,
+    TestRun,
+    VirtualEnvironment,
+)
 
 
 class SubTestSerializer(serializers.ModelSerializer):
@@ -20,7 +22,7 @@ class SubTestSerializer(serializers.ModelSerializer):
 
 class TestCaseSerializer(serializers.ModelSerializer):
     # subtests = SubTestSerializer(many=True, read_only=True)
-    subtest = serializers.ListField(child=serializers.CharField())
+    subtests = serializers.ListField(child=serializers.CharField())
 
     class Meta:
         model = TestCase
@@ -194,3 +196,9 @@ class VirtualEnvironmentTestJobSerializer(serializers.ModelSerializer):
             )
 
         return venv
+
+
+class CtrlPackageRepoSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CtrlPackageRepo
+        fields = "__all__"

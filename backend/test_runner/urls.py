@@ -9,14 +9,14 @@ from .views import (
     ActivateVenvCopyInstallPackages,
     RunTestsView,
     ManualScanCtrlRepoView,
-    FolderListView,
+    CtrlRepoListView,
     GetUserVenvs,
 )
 
 router = DefaultRouter()
 router.register(r"testcase", TestCaseView, "testcase")
 router.register(r"testrun", TestRunView, "testrun")
-router.register(r"testcaseresult", TestCaseResultView, "testcaseresult")
+router.register(r"ctrl_repo", CtrlRepoListView, "ctrl_repo")
 
 urlpatterns = [
     path("", include(router.urls)),
@@ -29,5 +29,5 @@ urlpatterns = [
     path("run", RunTestsView.as_view(), name="test_run"),
     # path("test/status", RunTestsView.as_view(), name="test_status"),
     path("repo/scan", ManualScanCtrlRepoView.as_view(), name="repo_scan"),
-    path("repo/list", FolderListView.as_view(), name="repo_list"),
-]
+    # path("repo/list", CtrlRepoListView.as_view(), name="repo_list"), # as modelViewSet takes care of all routings
+] + router.urls

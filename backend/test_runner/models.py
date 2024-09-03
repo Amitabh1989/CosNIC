@@ -15,7 +15,12 @@ class TestCase(models.Model):
     tcid = models.CharField(max_length=100, unique=True)
     title = models.CharField(max_length=250)
     path = models.CharField(max_length=500)
-    # subtests = models.ManyToManyField("SubTests", related_name="subtests")
+    suite_name = models.CharField(max_length=100, blank=True, null=True)
+    applicable_os = models.CharField(
+        max_length=20, blank=True, null=True, default="linux"
+    )
+    feature = models.CharField(max_length=100, blank=True, null=True)
+    sub_feature = models.CharField(max_length=100, blank=True, null=True)
     category = models.CharField(
         max_length=20,
         choices=[

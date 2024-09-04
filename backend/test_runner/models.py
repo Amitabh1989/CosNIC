@@ -1,10 +1,12 @@
-from django.db import models
-from django.contrib.auth.models import User
-from sutclient.models import Config
-from django.contrib.postgres.fields import ArrayField
 import os
 from datetime import datetime
+
 from django.conf import settings
+from django.contrib.auth.models import User
+from django.contrib.postgres.fields import ArrayField
+from django.db import models
+from django.utils import timezone
+from sutclient.models import Config
 
 # from django.db.postgresql.fields import ArrayField
 
@@ -15,7 +17,13 @@ class TestCase(models.Model):
     tcid = models.CharField(max_length=100, unique=True)
     title = models.CharField(max_length=250)
     path = models.CharField(max_length=500)
-    # subtests = models.ManyToManyField("SubTests", related_name="subtests")
+    suite_name = models.CharField(max_length=100, blank=True, null=True)
+    applicable_os = models.CharField(
+        max_length=20, blank=True, null=True, default="linux"
+    )
+    feature = models.CharField(max_length=100, blank=True, null=True)
+    sub_feature = models.CharField(max_length=100, blank=True, null=True)
+    controllers = models.JSONField(default=list)
     category = models.CharField(
         max_length=20,
         choices=[
@@ -26,6 +34,19 @@ class TestCase(models.Model):
         ],
         default="functional",
     )
+    created_at = models.DateTimeField(auto_now_add=True)
+    modified_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        """
+        5. Indexing for Performance
+        If you expect to run these queries frequently, consider adding a
+        database index on the controllers field to improve query performance:
+        """
+
+        indexes = [
+            models.Index(fields=["controllers"]),
+        ]
 
     def __str__(self):
         return f"{self.tcid} : {self.title}"
@@ -37,6 +58,8 @@ class SubTests(models.Model):
     )
     name = models.CharField(max_length=250)
     path = models.CharField(max_length=500)
+    created_at = models.DateTimeField(auto_now_add=True)
+    modified_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
         return f"{self.test_case.tcid} : {self.name}"
@@ -177,6 +200,8 @@ class CtrlPackageRepo(models.Model):
     )
     last_scanned = models.DateTimeField(auto_now=True)
     url = models.URLField(blank=True, null=True)  # incase i need to read from ftp
+    created_at = models.DateTimeField(auto_now_add=True)
+    modified_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
         return f"{self.repo_version}"  # Just a simple human-readable string
@@ -207,6 +232,8 @@ class TestJob(models.Model):
         blank=True,
         null=True,
     )
+    created_at = models.DateTimeField(auto_now_add=True)
+    modified_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
         return f"A job for {self.test_run} has been created successfully : status : {self.status}"
@@ -226,6 +253,7 @@ class VirtualEnvironment(models.Model):
     nickname = models.CharField(max_length=100, blank=True, null=True)
     venv_name = models.CharField(max_length=255)
     created_at = models.DateTimeField(auto_now_add=True)
+    modified_at = models.DateTimeField(auto_now=True)
     ctrl_package_version = models.ForeignKey(
         CtrlPackageRepo,
         on_delete=models.SET_NULL,

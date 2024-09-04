@@ -1,13 +1,11 @@
+from django.contrib.contenttypes.models import ContentType
+from django.core.serializers import serialize
 from django.shortcuts import render
 from models import Config
-from rest_framework import status
+from rest_framework import status, viewsets
+from rest_framework.response import Response
 from rest_framework.views import APIView
-from rest_framework.response import Response
-from rest_framework import viewsets
 from tasks import save_config_to_venv
-from rest_framework.response import Response
-from django.core.serializers import serialize
-from django.contrib.contenttypes.models import ContentType
 
 # Create your views here.
 

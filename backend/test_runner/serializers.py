@@ -1,15 +1,17 @@
-from .models import (
-    TestCase,
-    TestRun,
-    TestCaseResult,
-    VirtualEnvironment,
-    TestJob,
-    Server,
-    SubTests,
-)
-from rest_framework import serializers
 from django.contrib.auth.models import User
 from django.db import transaction
+from rest_framework import serializers
+
+from .models import (
+    CtrlPackageRepo,
+    Server,
+    SubTests,
+    TestCase,
+    TestCaseResult,
+    TestJob,
+    TestRun,
+    VirtualEnvironment,
+)
 
 
 class SubTestSerializer(serializers.ModelSerializer):
@@ -19,8 +21,8 @@ class SubTestSerializer(serializers.ModelSerializer):
 
 
 class TestCaseSerializer(serializers.ModelSerializer):
-    # subtests = SubTestSerializer(many=True, read_only=True)
-    subtest = serializers.ListField(child=serializers.CharField())
+    subtests = SubTestSerializer(many=True, read_only=True)
+    # subtests = serializers.ListField(child=serializers.CharField())
 
     class Meta:
         model = TestCase
@@ -83,7 +85,7 @@ class RunTestSerializer(serializers.Serializer):
 
 class VirtualEnvironmentSerializer(serializers.ModelSerializer):
     # test_jobs = TestJobSerializer(many=True)
-    ctrl_package_version = serializers.SerializerMethodField()
+    # ctrl_package_version = serializers.SerializerMethodField()
 
     class Meta:
         model = VirtualEnvironment
@@ -98,11 +100,16 @@ class VirtualEnvironmentSerializer(serializers.ModelSerializer):
             # "test_jobs",  # Exclude because it's not defined in the current model context
         ]
 
-    def get_ctrl_package_version(self, obj):
-        # Check if ctrl_package_version exists
-        if obj.ctrl_package_version:
-            return obj.ctrl_package_version.repo_version
-        return None
+    # def get_ctrl_package_version(self, obj):
+    # Check if ctrl_package_version exists
+    # if obj.ctrl_package_version:
+    #     return obj.ctrl_package_version.repo_version
+    # The line `ctrl_package_version = serializers.SerializerMethodField()` in the `VirtualEnvironmentSerializer` class is defining a custom field in the serializer that will be populated by a method named `get_ctrl_package_version`.
+    # return None
+    # versions = CtrlPackageRepo.objects.values_list(
+    #     "repo_version", flat=True
+    # ).distinct()
+    # return list(versions)
 
 
 class VirtualEnvironmentInitSerializer(serializers.ModelSerializer):
@@ -194,3 +201,9 @@ class VirtualEnvironmentTestJobSerializer(serializers.ModelSerializer):
             )
 
         return venv
+
+
+class CtrlPackageRepoSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CtrlPackageRepo
+        fields = "__all__"

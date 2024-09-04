@@ -24,7 +24,7 @@ urlpatterns = [
     path("admin/", admin.site.urls),
     path("users/", include("users.urls")),
     path("configuration/", include("configfile.urls")),
-    path("test_runs/", include("test_runner.urls")),
+    path("test_ops/", include("test_runner.urls")),
 ]
 
 

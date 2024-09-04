@@ -1,22 +1,17 @@
 from django.contrib import admin
+
 from .models import (
-    TestCase,
-    TestRun,
-    TestCaseResult,
-    VirtualEnvironment,
-    TestJob,
     CtrlPackageRepo,
     SubTests,
+    TestCase,
+    TestCaseResult,
+    TestJob,
+    TestRun,
+    VirtualEnvironment,
 )
 
+
 # Register your models here.
-
-
-# class TestCaseAdmin(admin.ModelAdmin):
-#     list_display = ("tcid", "title", "category", "path")
-#     list_display_links = ("tcid", "title")
-
-
 class TestCaseResultAdmin(admin.ModelAdmin):
     list_display = ("id", "test_run", "status", "created_at")
     list_display_links = ("id", "test_run")
@@ -47,9 +42,34 @@ class SubTestInline(admin.StackedInline):
 
 
 class TestCaseAdmin(admin.ModelAdmin):
-    list_display = ("tcid", "title", "category", "path")
+    list_display = (
+        "tcid",
+        "title",
+        "category",
+        "path",
+        "subtest_count",
+        "controller_count",
+    )
     list_display_links = ("tcid", "title")
     inlines = [SubTestInline, TestRunResultInline]
+
+    def subtest_count(self, obj):
+        """
+        Returns the count of SubTests related to this TestCase.
+        """
+        return (
+            obj.subtests.count()
+        )  # Assuming a reverse relationship named 'subtests' exists
+
+    subtest_count.short_description = "Number of Subtests"
+
+    def controller_count(self, obj):
+        """
+        Returns the number of unique controllers in the controllers JSON field.
+        """
+        return len(obj.controllers)
+
+    controller_count.short_description = "Number of Supported Controllers"
 
 
 class VirtualEnvironmentAdmin(admin.ModelAdmin):
@@ -57,9 +77,9 @@ class VirtualEnvironmentAdmin(admin.ModelAdmin):
     list_display_links = ("id", "venv_name")
 
 
-# class VirtualEnvironmentAdminInline(admin.TabularInline):
-#     model = VirtualEnvironment
-#     extra = 1  # Number of empty forms to display
+class VirtualEnvironmentAdminInline(admin.TabularInline):
+    model = VirtualEnvironment
+    extra = 1  # Number of empty forms to display
 
 
 class TestJobAdmin(admin.ModelAdmin):
@@ -70,12 +90,15 @@ class TestJobAdmin(admin.ModelAdmin):
 # class CtrlPackageRepoAdmin(admin.ModelAdmin):
 #     list_display = ["last_scanned"]
 #     search_fields = ["repo_versions"]
+
+
 @admin.register(CtrlPackageRepo)
 class CtrlPackageRepoAdmin(admin.ModelAdmin):
     list_display = ("last_scanned", "repo_version", "url")  # Adjust as needed
 
 
 admin.site.register(TestJob, TestJobAdmin)
+# The line `admin.site.register(TestCase, TestCaseAdmin)` is used to register the `TestCase` model with the `TestCaseAdmin` class in the Django admin interface.
 admin.site.register(TestCase, TestCaseAdmin)
 admin.site.register(TestRun, TestRunAdmin)
 admin.site.register(TestCaseResult, TestCaseResultAdmin)

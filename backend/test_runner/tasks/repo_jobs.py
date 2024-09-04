@@ -1,15 +1,15 @@
 import os
 import re
-from django.conf import settings
-from django.utils import timezone
-from django.db import transaction, IntegrityError
-from django.shortcuts import get_object_or_404
+import stat
 
+from celery import shared_task
+from django.conf import settings
+from django.db import IntegrityError, transaction
+from django.shortcuts import get_object_or_404
+from django.utils import timezone
 
 # from django_cron import CronJobBase, Schedule
 from ..models import CtrlPackageRepo
-
-from celery import shared_task
 
 # from django.exceptions import IntegrityError
 

@@ -1,37 +1,43 @@
 # from django.shortcuts import render
-from rest_framework import viewsets
+import os
+
+from celery.result import AsyncResult
+from django.conf import settings
+from django.contrib.auth import get_user_model
+from django.core.files.storage import default_storage
+from rest_framework import status, viewsets
+from rest_framework.exceptions import NotAuthenticated
+from rest_framework.permissions import AllowAny, IsAuthenticated
+from rest_framework.response import Response
+from rest_framework.views import APIView
+
+from .models import (
+    CtrlPackageRepo,
+    TestCase,
+    TestCaseResult,
+    TestRun,
+    VirtualEnvironment,
+)
+from .paginations import CustomLimitOffsetPagination
 from .serializers import (
-    TestCaseSerializer,
+    CtrlPackageRepoSerializer,
     TestCaseResultSerializer,
+    TestCaseSerializer,
     TestRunSerializer,
+    VirtualEnvironmentInitSerializer,
     VirtualEnvironmentSerializer,
     VirtualEnvironmentTestJobSerializer,
-    VirtualEnvironmentInitSerializer,
-    CtrlPackageRepoSerializer,
 )
-from .models import (
-    TestCase,
-    TestRun,
-    TestCaseResult,
-    VirtualEnvironment,
-    CtrlPackageRepo,
-)
-from rest_framework import status
-from rest_framework.views import APIView
-from rest_framework.response import Response
-from celery.result import AsyncResult
-from rest_framework.permissions import IsAuthenticated, AllowAny
-
-# from tasks.venv_manager import create_venv
-from .tasks.venv_jobs import create_venv, copy_install_packages_to_venv
-from django.contrib.auth import get_user_model
 from .tasks.repo_jobs import scan_folder_and_update_cache
 from .tasks.test_jobs import run_test_job
-from django.core.files.storage import default_storage
-from django.conf import settings
-import os
-from rest_framework.exceptions import NotAuthenticated
+from .tasks.testcases_jobs import update_testcase_subtests
 
+# from tasks.venv_manager import create_venv
+from .tasks.venv_jobs import (
+    copy_install_packages_to_venv,
+    create_venv_task,
+    sanitize_venv_name,
+)
 
 # Create your views here.
 
@@ -39,6 +45,12 @@ from rest_framework.exceptions import NotAuthenticated
 class TestCaseView(viewsets.ModelViewSet):
     queryset = TestCase.objects.all()
     serializer_class = TestCaseSerializer
+    pagination_class = CustomLimitOffsetPagination
+
+    def list(self, request):
+        queryset = self.get_queryset().order_by("-created_at")
+        serializer = TestCaseSerializer(queryset, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
 
 class TestRunView(viewsets.ModelViewSet):
@@ -49,6 +61,17 @@ class TestRunView(viewsets.ModelViewSet):
 class TestCaseResultView(viewsets.ModelViewSet):
     queryset = TestCaseResult.objects.all()
     serializer_class = TestCaseResultSerializer
+
+
+class UpdateTestCaseSubtestsAPI(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        task = update_testcase_subtests.apply_async()
+        return Response(
+            {"message": "Subtests updated", "task_id": task.id},
+            status=status.HTTP_200_OK,
+        )
 
 
 def temp_save_uploaded_files(request):
@@ -84,6 +107,13 @@ class CreateVenvView(APIView):
         user = get_user_model().objects.get(username=self.request.user.username)
 
         venv_name = request.data.get("venv_name", None)
+        venv_name = sanitize_venv_name(venv_name)
+        print("venv_name name : ", venv_name)
+
+        ctrl_package_version_id = request.data.get("ctrl_package_version", None)
+        # venv_name = sanitize_venv_name(venv_name)
+        print("ctrl_package_version name : ", ctrl_package_version_id)
+
         config_file = request.data.get("config_file", None)
         print("Config file : ", config_file)
         config_file = config_file[0] if config_file else None
@@ -118,6 +148,7 @@ class CreateVenvView(APIView):
             "requirements": requirements_file,
             "script": script_file,
             "user": user.id,
+            "ctrl_package_version_id": ctrl_package_version_id,
         }
 
         print(f"Processed data is : {data}")
@@ -131,7 +162,7 @@ class CreateVenvView(APIView):
                 "progress for user {user.username}. Spwanning VENV"
             )
 
-            task = create_venv.delay(
+            task = create_venv_task.delay(
                 venv_name=venv_name,
                 python_version=data["python_version"],
                 nickname=data["nickname"],

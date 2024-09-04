@@ -1,23 +1,26 @@
 import logging
 import os
 import re
+import shutil
+import stat
 import subprocess
 import sys
-from django.shortcuts import get_object_or_404
+from stat import S_IRWXU
+
+import yaml
 from celery import shared_task
 from django.conf import settings
-from django.contrib.auth.models import User
-from django.utils import timezone
 from django.contrib.auth import get_user_model
-import shutil
-from django.db import transaction
-from stat import S_IRWXU
+from django.contrib.auth.models import User
+from django.core.exceptions import ObjectDoesNotExist
 from django.core.files import File
 from django.core.files.base import ContentFile
 from django.core.files.storage import default_storage
+from django.db import transaction
+from django.shortcuts import get_object_or_404
+from django.utils import timezone
 
-from ..models import VirtualEnvironment, CtrlPackageRepo, Config
-import yaml
+from ..models import Config, CtrlPackageRepo, VirtualEnvironment
 
 logger = logging.getLogger(__name__)
 python_executable = sys.executable
@@ -37,6 +40,29 @@ def create_virtualenv(venv_path, python_executable):
         logger.info(
             f"Creating virtual environment at {venv_path} using {python_executable}"
         )
+        # Ensure the correct permissions are set (e.g., read/write/execute)
+        for root, dirs, files in os.walk(venv_path):
+            for dir in dirs:
+                os.chmod(
+                    os.path.join(root, dir), stat.S_IRWXU | stat.S_IRWXG | stat.S_IRWXO
+                )
+            for file in files:
+                os.chmod(
+                    os.path.join(root, file), stat.S_IRUSR | stat.S_IWUSR | stat.S_IXUSR
+                )
+        # Try creating the virtual environment
+        logger.info(f"Using Python executable at: {python_executable}")
+        os.chmod(venv_path, S_IRWXU)
+        os.chmod(python_executable, S_IRWXU)
+        # os.chmod(
+        #     os.path.join(python_executable), stat.S_IRUSR | stat.S_IWUSR | stat.S_IXUSR
+        # )
+        #
+        # python_executable = os.path.join(
+        #     settings.BASE_DIR, ".venv", "Scripts", "python.exe"
+        # )
+        # logger.info(f"Using Python executable at: {python_executable}")
+
         result = subprocess.run(
             [python_executable, "-m", "venv", venv_path],
             check=True,
@@ -69,8 +95,9 @@ def assign_config_file(obj, config_file_id):
     return True
 
 
-@shared_task
-def create_venv(
+@shared_task(bind=True)
+def create_venv_task(
+    self,
     venv_name=None,
     python_version=None,
     nickname=None,
@@ -78,43 +105,94 @@ def create_venv(
     requirements_file=None,
     script_file=None,
     config_file_id=None,
+    ctrl_package_version_id="latest",
 ):
-    user = get_user_model().objects.get(id=user_id)
-    venv_name = sanitize_venv_name(venv_name)
-    venv_path = os.path.join(settings.BASE_DIR, "venvs", str(user.id), venv_name)
-    # python_executable = os.path.join(
-    #     settings.BASE_DIR, "venvs", "python"
-    # )  # Adjust as needed
+    print(
+        f"Received arguments: venv_name={venv_name}, python_version={python_version}, nickname={nickname}, user_id={user_id}"
+    )
 
-    logger.info(f"Venv path is: {venv_path}")
+    try:
+        user = get_user_model().objects.get(id=user_id)
+        venv_name = sanitize_venv_name(venv_name)
+        venv_path = os.path.join(settings.BASE_DIR, "venvs", str(user.id), venv_name)
 
-    os.makedirs(venv_path, exist_ok=True)
+        logger.info(f"Venv path is: {venv_path}")
 
-    success, error_message = create_virtualenv(venv_path, python_executable)
-    if not success:
-        return f"Error creating virtual environment: {error_message}"
+        try:
+            os.makedirs(venv_path, exist_ok=True)
+        except OSError as e:
+            os.chmod(
+                venv_path, stat.S_IRWXU | stat.S_IRWXG | stat.S_IRWXO
+            )  # Full permissions
+            os.makedirs(venv_path, exist_ok=True)
 
-    with transaction.atomic():
-        obj = VirtualEnvironment(
-            user=user,
-            venv_name=venv_name,
-            path=venv_path,
-            python_version=python_version,
-            nickname=nickname,
-            status="created",
-            ctrl_package_version=CtrlPackageRepo.objects.get(id=int(config_file_id)),
-        )
-        obj.save()
+        success, error_message = create_virtualenv(venv_path, python_executable)
+        if not success:
+            return f"Error creating virtual environment: {error_message}"
 
-        save_files(obj, requirements_file, script_file)
+        if ctrl_package_version_id == "latest":
+            # Ensure that the CtrlPackageRepo model is ordered by 'repo_version' if you want to get the latest
+            ctrl_package_version_obj = CtrlPackageRepo.objects.latest("repo_version")
+            # ctrl_package_version = ctrl_package_version_obj.repo_version
+        else:
+            try:
+                ctrl_package_version_obj = CtrlPackageRepo.objects.get(
+                    id=int(ctrl_package_version_id)
+                )
+                # ctrl_package_version = ctrl_package_version_obj.repo_version
+            except CtrlPackageRepo.DoesNotExist:
+                logger.error(
+                    f"CtrlPackageRepo with repo_version {ctrl_package_version} does not exist."
+                )
+                ctrl_package_version_obj = None
+                # Handle the case where the specified version does not exist
+                # raise ValueError(f"Repo version {ctrl_package_version} does not exist.")
 
-        if not assign_config_file(obj, config_file_id):
-            return "Failed to assign config file."
+        # ctrl_package_version = None
+        # if config_file_id:
+        #     try:
+        #         config_file_id = CtrlPackageRepo.objects.get(id=int(config_file_id))
+        #     except ObjectDoesNotExist:
+        #         logger.error(
+        #             f"CtrlPackageRepo with id {config_file_id} does not exist."
+        #         )
+        # Optionally, handle the case where the config file is invalid
+        # raise ValueError(f"Config file ID {config_file_id} is invalid.")
 
-        obj.save()
-        logger.info(f"Venv object created: {obj}")
+        with transaction.atomic():
+            obj = VirtualEnvironment(
+                user=user,
+                venv_name=venv_name,
+                path=venv_path,
+                python_version=python_version,
+                nickname=nickname,
+                status="created",
+            )
+            logger.info(f"Ctrl package version object: {ctrl_package_version_obj}")
+            if ctrl_package_version_obj:
+                obj.ctrl_package_version = ctrl_package_version_obj
+            obj.save()
 
-    return "Virtual environment created successfully."
+            save_files(obj, requirements_file, script_file)
+
+            if not assign_config_file(obj, config_file_id):
+                return "Failed to assign config file."
+
+            obj.save()
+            logger.info(f"Venv object created: {obj}")
+
+        return "Virtual environment created successfully."
+    except Exception as e:
+        try:
+            # Clean up by deleting the created folder
+            if os.path.exists(venv_path):
+                shutil.rmtree(venv_path)
+                logger.info(f"Virtual environment directory removed: {venv_path}")
+        except Exception as e:
+            logger.error(f"Error removing virtual environment directory: {e}")
+        logger.error(f"Error creating virtual environment '{venv_name}': {e}")
+        # raise self.retry(exc=exc, countdown=60)  # Retry after 60 seconds
+        raise e
 
 
 def get_venv_status(venv_name):

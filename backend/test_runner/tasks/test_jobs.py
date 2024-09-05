@@ -1,9 +1,10 @@
 import json
+import logging
 import os
 import subprocess
 import time
 
-from celery import shared_task
+from celery import chain, shared_task
 from django.contrib.auth import get_user_model
 from django.core.files import File
 from django.db import transaction
@@ -11,8 +12,9 @@ from django.utils import timezone
 
 from ..models import TestJob, VirtualEnvironment
 from ..tasks.repo_jobs import get_latest_ctrl_repo_version
-from ..tasks.venv_jobs import block_copy_install_packages_to_venv_task
+from ..tasks.venv_jobs import copy_install_packages_to_venv_task
 
+logger = logging.getLogger(__name__)
 # import zipfile
 # from .venv_jobs import activate_venv, deactivate_venv
 
@@ -47,13 +49,18 @@ Repeat until all jobs are completed
 
 
 def execute_script_in_venv(venv_path, command):
+    logger.info(f"Executing script in venv: {venv_path}, command: {command}")
     python_executable = (
         os.path.join(venv_path, "Scripts", "python.exe")
         if os.name == "nt"
         else os.path.join(venv_path, "bin", "python")
     )
+    logger.info(f"python_executable 0 : {python_executable}")
 
-    full_command = [python_executable] + command
+    full_command = python_executable + " -m " + command
+    logger.info(f"python_executable 1 : {python_executable}")
+    logger.info(f"command: {command}")
+    logger.info(f"Complete command: {full_command}")
     result = subprocess.run(full_command, check=True, text=True, shell=False)
     return result
 
@@ -263,19 +270,187 @@ def activate_venv(venv_path, command):
 #     print(f"Controller package installation result: Return code {result.returncode}")
 
 
-@shared_task(bind=True, max_retries=5, default_retry_delay=60)
-def run_test_job(self, venv_name, user_id):
-    """
-    Celery task to run test jobs in a specified virtual environment.
-    """
+# @shared_task(bind=True, max_retries=5, default_retry_delay=60)
+# def run_test_job(self, venv_name, user_id):
+#     """
+#     Celery task to run test jobs in a specified virtual environment.
+#     """
 
-    # Helper function to handle the status update of test job and test run
-    def update_status(job, test_run_obj, status, error_stack=None, error_code=None):
-        job.status = status
-        job.end_time = timezone.now()
-        job.modified_at = timezone.now()
-        job.save()
+#     # Helper function to handle the status update of test job and test run
+#     def update_status(job, test_run_obj, status, error_stack=None, error_code=None):
+#         job.status = status
+#         job.end_time = timezone.now()
+#         job.modified_at = timezone.now()
+#         job.save()
 
+#         test_run_obj.status = status
+#         test_run_obj.modified_at = timezone.now()
+#         if error_stack:
+#             test_run_obj.error_stack = error_stack
+#             test_run_obj.error_code = error_code
+#         test_run_obj.save()
+
+#     # Helper function to handle file uploads and parsing
+#     def handle_files(test_run_obj, log_file_path, json_report_file_path):
+#         test_run_obj.log_file.save(
+#             os.path.basename(log_file_path), File(open(log_file_path, "rb"))
+#         )
+#         test_run_obj.report_file.save(
+#             os.path.basename(json_report_file_path),
+#             File(open(json_report_file_path, "rb")),
+#         )
+#         parse_json_report(json_report_file_path)
+
+#     try:
+#         user = get_user_model().objects.get(id=user_id)
+#         venv_obj = VirtualEnvironment.objects.get(venv_name=venv_name, user=user)
+#     except (get_user_model().DoesNotExist, VirtualEnvironment.DoesNotExist) as e:
+#         print(f"Error: {e}")
+#         return
+
+#     test_jobs = TestJob.objects.filter(venv=venv_obj, status="pending")
+
+#     try:
+#         while True:
+#             if venv_obj.status in ("free", "created") or test_jobs.count() == 0:
+#                 venv_obj.status = "in-use"
+#                 venv_obj.last_used_at = timezone.now()
+#                 venv_obj.save()
+#                 break
+#             elif venv_obj.status == "error":
+#                 venv_obj.status = "in-use"
+#                 venv_obj.ctrl_package_version = None
+#                 venv_obj.last_used_at = timezone.now()
+#                 venv_obj.save()
+
+#             else:
+#                 print(f"Venv {venv_name} is in use. Retrying in 60 seconds...")
+#                 self.retry(countdown=60)
+
+#         # Check if controller package is installed. If yes, proceed. Else, install it.
+#         # Check if the controller package is installed
+#         print(
+#             f"Controller package ver installed in venv {venv_obj.ctrl_package_version}"
+#         )
+#         if venv_obj.ctrl_package_version is None:
+#             print("Controller package is not installed. Installing it now...")
+
+#             # Get the latest version object
+#             # version_to_install_obj = get_latest_ctrl_repo_version()
+
+#             # Install the controller package
+#             data_for_task = {
+#                 "venv_name": venv_name,
+#                 "user": str(user.id),
+#                 "ctrl_package_version_id": get_latest_ctrl_repo_version().repo_version,
+#             }
+#             print(f"Data for task: {data_for_task}")
+#             task = block_copy_install_packages_to_venv_task(kwargs=data_for_task)
+
+#             print(f"Activated venv {venv_name} from path {venv_obj.path}")
+#             print(f"Test jobs to run: {test_jobs.count()}")
+#     except Exception as e:
+#         print(f"Error while installing controller package: {e}")
+#         venv_obj.status = "error"
+#         venv_obj.last_used_at = timezone.now()
+#         venv_obj.save()
+
+#     try:
+#         for job in test_jobs:
+#             with transaction.atomic():
+#                 log_file_path = os.path.join(os.path.dirname(__file__), "test_log.log")
+#                 json_report_file_path = os.path.join(
+#                     os.path.dirname(__file__), "result.json"
+#                 )
+#                 test_run_obj = job.test_run
+#                 test_run_obj.status = "running"
+#                 test_run_obj.modified_at = timezone.now()
+#                 test_run_obj.log_file = log_file_path
+#                 test_run_obj.save()
+
+#                 print(f"Running test job {job.id} in venv {venv_name}")
+#                 job.status = "running"
+#                 job.save()
+
+#                 # Compose the command
+#                 full_script_path = os.path.join(
+#                     venv_obj.path, "Lib", "site-packages", job.test_run.test_case.path
+#                 )
+#                 print(f"Full script path: {full_script_path}")
+
+#                 if os.path.exists(full_script_path):
+#                     cmd = f"pytest {full_script_path} --log-file={log_file_path} --json-report --json-report-file={json_report_file_path}"
+#                     print(f"CMD is {cmd}")
+
+#                     stdout, stderr, returncode = activate_venv(venv_obj.path, cmd)
+#                     if returncode == 0:
+#                         print("Command executed successfully.")
+#                     else:
+#                         print(f"Command failed with return code {returncode}")
+#                         print(f"Error output: {stderr}")
+
+#                     result = execute_script_in_venv(venv_obj.path, cmd.split())
+#                     print(
+#                         f"Result of the test run: {result}, return code: {result.returncode}"
+#                     )
+
+#                     if result.returncode == 0:
+#                         update_status(job, test_run_obj, "completed")
+#                     elif result.returncode < 0:
+#                         update_status(
+#                             job,
+#                             test_run_obj,
+#                             "aborted",
+#                             result.stderr,
+#                             result.returncode,
+#                         )
+#                     else:
+#                         update_status(
+#                             job,
+#                             test_run_obj,
+#                             "failed",
+#                             result.stderr,
+#                             result.returncode,
+#                         )
+
+#                 else:
+#                     print(f"Test case path {full_script_path} does not exist.")
+#                     update_status(
+#                         job, test_run_obj, "failed", "Test case path does not exist", 1
+#                     )
+
+#                 handle_files(test_run_obj, log_file_path, json_report_file_path)
+
+#                 print(f"Test job {job.id} completed in venv {venv_name}")
+
+#     except Exception as e:
+#         print(f"Exception while executing the test job: {e}")
+#         for job in test_jobs:
+#             update_status(job, job.test_run, "failed", str(e), 1)
+
+#     finally:
+#         print(f"Setting venv {venv_name} status to free")
+#         venv_obj.status = "free"
+#         venv_obj.last_used_at = timezone.now()
+#         venv_obj.save()
+
+#         if "e" in locals():
+#             raise e
+
+
+# ===========================================================================================
+
+
+# 1. Helper to Update Status
+def update_job_status(
+    job, status, test_run_obj=None, error_stack=None, error_code=None
+):
+    job.status = status
+    job.end_time = timezone.now()
+    job.modified_at = timezone.now()
+    job.save()
+
+    if test_run_obj:
         test_run_obj.status = status
         test_run_obj.modified_at = timezone.now()
         if error_stack:
@@ -283,150 +458,173 @@ def run_test_job(self, venv_name, user_id):
             test_run_obj.error_code = error_code
         test_run_obj.save()
 
-    # Helper function to handle file uploads and parsing
-    def handle_files(test_run_obj, log_file_path, json_report_file_path):
-        test_run_obj.log_file.save(
-            os.path.basename(log_file_path), File(open(log_file_path, "rb"))
-        )
-        test_run_obj.report_file.save(
-            os.path.basename(json_report_file_path),
-            File(open(json_report_file_path, "rb")),
-        )
-        parse_json_report(json_report_file_path)
 
+# 2. Helper to Handle File Uploads and Parsing
+def handle_file_uploads(test_run_obj, log_file_path, json_report_file_path):
+    test_run_obj.log_file.save(
+        os.path.basename(log_file_path), File(open(log_file_path, "rb"))
+    )
+    test_run_obj.report_file.save(
+        os.path.basename(json_report_file_path),
+        File(open(json_report_file_path, "rb")),
+    )
+    # Assuming parse_json_report function is defined elsewhere
+    parse_json_report(json_report_file_path)
+
+
+# 3. Install Controller Package
+def install_controller_package(venv_obj, user, latest_ctrl_package_version):
+    if venv_obj.ctrl_package_version is None:
+        logging.info("Controller package is not installed. Installing it now...")
+        # task_data = {
+        #     "venv_name": venv_obj.venv_name,
+        #     "user_id": str(user.id),
+        #     "ctrl_package_version_id": latest_ctrl_package_version.repo_version,
+        # }
+        # task = copy_install_packages_to_venv_task.s(**task_data) | run_test_task.s(
+        #     venv_obj.venv_name, user.id
+        # )
+        # task = copy_install_packages_to_venv_task.s(**task_data) | run_test_task.s()
+        # task = copy_install_packages_to_venv_task.s(**task_data)
+        # task.apply_async()
+        return False
+    return True
+
+
+@shared_task(bind=True, max_retries=5, default_retry_delay=60)
+def process_task_data(self, data):
+    # Extract the required values from the data dictionary
+    logger.info(f"Processing task data: {data}")
+    venv_name = data.get("venv_name")
+    user_id = data.get("user_id")
     try:
         user = get_user_model().objects.get(id=user_id)
         venv_obj = VirtualEnvironment.objects.get(venv_name=venv_name, user=user)
     except (get_user_model().DoesNotExist, VirtualEnvironment.DoesNotExist) as e:
         print(f"Error: {e}")
         return
-
     test_jobs = TestJob.objects.filter(venv=venv_obj, status="pending")
+    # Call the next task with the correct parameters
+    # return run_test_jobs.s(venv_name, user_id).apply_async()
+    run_test_jobs(venv_obj, test_jobs)
 
-    try:
-        while True:
-            if venv_obj.status in ("free", "created") or test_jobs.count() == 0:
-                venv_obj.status = "in-use"
-                venv_obj.last_used_at = timezone.now()
-                venv_obj.save()
-                break
-            elif venv_obj.status == "error":
-                venv_obj.status = "in-use"
-                venv_obj.ctrl_package_version = None
-                venv_obj.last_used_at = timezone.now()
-                venv_obj.save()
 
-            else:
-                print(f"Venv {venv_name} is in use. Retrying in 60 seconds...")
-                self.retry(countdown=60)
+# 4. Prepare and Run Test Jobs
+# @shared_task(bind=True, max_retries=5, default_retry_delay=60)
+def run_test_jobs(venv_obj, test_jobs):
+    logger.info(f"Processing run_test_jobs data: {venv_obj, test_jobs}")
 
-        # Check if controller package is installed. If yes, proceed. Else, install it.
-        # Check if the controller package is installed
-        print(
-            f"Controller package ver installed in venv {venv_obj.ctrl_package_version}"
-        )
-        if venv_obj.ctrl_package_version is None:
-            print("Controller package is not installed. Installing it now...")
-
-            # Get the latest version object
-            # version_to_install_obj = get_latest_ctrl_repo_version()
-
-            # Install the controller package
-            data_for_task = {
-                "venv_name": venv_name,
-                "user": user.id,
-                "ctrl_package_version_id": get_latest_ctrl_repo_version().repo_version(),
-            }
-            task = block_copy_install_packages_to_venv_task(kwargs=data_for_task)
-
-            print(f"Activated venv {venv_name} from path {venv_obj.path}")
-            print(f"Test jobs to run: {test_jobs.count()}")
-    except Exception as e:
-        venv_obj.status = "error"
-        venv_obj.last_used_at = timezone.now()
-        venv_obj.save()
-
-    try:
-        for job in test_jobs:
+    for job in test_jobs:
+        try:
             with transaction.atomic():
+                logger.info(f"Go indide transaction.atomic() for job {job.id}")
                 log_file_path = os.path.join(os.path.dirname(__file__), "test_log.log")
                 json_report_file_path = os.path.join(
                     os.path.dirname(__file__), "result.json"
                 )
                 test_run_obj = job.test_run
-                test_run_obj.status = "running"
-                test_run_obj.modified_at = timezone.now()
-                test_run_obj.log_file = log_file_path
-                test_run_obj.save()
 
-                print(f"Running test job {job.id} in venv {venv_name}")
-                job.status = "running"
-                job.save()
+                # Set job status to running
+                update_job_status(job, "running", test_run_obj)
 
-                # Compose the command
-                full_script_path = os.path.join(
-                    venv_obj.path, "Lib", "site-packages", job.test_run.test_case.path
+                # Compose the test command
+                script_path = os.path.join(
+                    venv_obj.path, "Lib", "site-packages", test_run_obj.test_case.path
                 )
-                print(f"Full script path: {full_script_path}")
-
-                if os.path.exists(full_script_path):
-                    cmd = f"pytest {full_script_path} --log-file={log_file_path} --json-report --json-report-file={json_report_file_path}"
-                    print(f"CMD is {cmd}")
-
-                    stdout, stderr, returncode = activate_venv(venv_obj.path, cmd)
-                    if returncode == 0:
-                        print("Command executed successfully.")
-                    else:
-                        print(f"Command failed with return code {returncode}")
-                        print(f"Error output: {stderr}")
-
-                    result = execute_script_in_venv(venv_obj.path, cmd.split())
-                    print(
-                        f"Result of the test run: {result}, return code: {result.returncode}"
-                    )
-
-                    if result.returncode == 0:
-                        update_status(job, test_run_obj, "completed")
-                    elif result.returncode < 0:
-                        update_status(
-                            job,
-                            test_run_obj,
-                            "aborted",
-                            result.stderr,
-                            result.returncode,
-                        )
-                    else:
-                        update_status(
-                            job,
-                            test_run_obj,
-                            "failed",
-                            result.stderr,
-                            result.returncode,
-                        )
-
+                cmd = f"pytest {script_path} --log-file={log_file_path} --json-report --json-report-file={json_report_file_path}"
+                logger.info(f"Command to execute : {cmd}")
+                result = execute_script_in_venv(venv_obj.path, cmd)
+                if result.returncode == 0:
+                    update_job_status(job, "completed", test_run_obj)
                 else:
-                    print(f"Test case path {full_script_path} does not exist.")
-                    update_status(
-                        job, test_run_obj, "failed", "Test case path does not exist", 1
+                    update_job_status(
+                        job, "failed", test_run_obj, result.stderr, result.returncode
                     )
 
-                handle_files(test_run_obj, log_file_path, json_report_file_path)
+                handle_file_uploads(test_run_obj, log_file_path, json_report_file_path)
 
-                print(f"Test job {job.id} completed in venv {venv_name}")
+        except Exception as e:
+            update_job_status(job, "failed", test_run_obj, str(e), 1)
+            logging.error(f"Error executing job {job.id}: {e}")
+
+
+# 5. Helper to Check Venv Availability
+def ensure_venv_availability(venv_obj, test_jobs, self):
+    while True:
+        if venv_obj.status in ("free", "created") or not test_jobs.exists():
+            venv_obj.status = "in-use"
+            venv_obj.last_used_at = timezone.now()
+            venv_obj.save()
+            break
+        elif venv_obj.status == "error":
+            venv_obj.status = "in-use"
+            venv_obj.ctrl_package_version = None
+            venv_obj.last_used_at = timezone.now()
+            venv_obj.save()
+        else:
+            logging.info(
+                f"Venv {venv_obj.venv_name} is in use. Retrying in 60 seconds..."
+            )
+            self.retry(countdown=60)
+
+
+# 6. Celery Task to Run Test Jobs
+@shared_task(bind=True, max_retries=5, default_retry_delay=60)
+# def run_test_task(self, venv_name, user_id):
+def run_test_task(self, *args, **kwargs):
+    # Perform test tasks
+    logger.info(
+        f"Running tests for venv: {kwargs.get('venv_name')} and user: {kwargs.get('user_id')}"
+    )
+    venv_name = kwargs.get("venv_name")
+    user_id = kwargs.get("user_id")
+    try:
+        user = get_user_model().objects.get(id=int(user_id))
+        venv_obj = VirtualEnvironment.objects.get(venv_name=venv_name, user=user)
+        test_jobs = TestJob.objects.filter(venv=venv_obj, status="pending")
+
+        # Ensure venv availability before proceeding
+        ensure_venv_availability(venv_obj, test_jobs, self)
+
+        logger.info(
+            f"Virtual env ctrl package : {venv_obj.ctrl_package_version}, venv status : {venv_obj.status}"
+        )
+
+        # if not install_controller_package(venv_obj, user, latest_ctrl_package_version):
+        if venv_obj.ctrl_package_version is None:
+            # Call create_venv_task and wait for it to complete
+            # Install controller package if necessary
+            latest_ctrl_package_version = get_latest_ctrl_repo_version()
+            task_data = {
+                "venv_name": venv_obj.venv_name,
+                "user_id": str(user.id),
+                "ctrl_package_version_id": latest_ctrl_package_version.repo_version,
+            }
+            task = (
+                copy_install_packages_to_venv_task.s(**task_data)
+                | process_task_data.s()
+            )
+            task.apply_async()
+            logger.info(f"Controller package installation task initiated: {task}")
+        else:
+            task_data = {"venv_name": venv_name, "user_id": user_id}
+            process_task_data(task_data)
+        logger.info("Controller package installation done, calling run_test_jobs")
 
     except Exception as e:
-        print(f"Exception while executing the test job: {e}")
-        for job in test_jobs:
-            update_status(job, job.test_run, "failed", str(e), 1)
+        logging.error(f"Error in run_test_job task: {e}")
+        venv_obj.status = "error"
+        venv_obj.last_used_at = timezone.now()
+        venv_obj.save()
 
     finally:
-        print(f"Setting venv {venv_name} status to free")
+        logging.info(f"Setting venv {venv_name} status to free")
         venv_obj.status = "free"
         venv_obj.last_used_at = timezone.now()
         venv_obj.save()
 
-        if "e" in locals():
-            raise e
+
+# ===========================================================================================
 
 
 # "--json-report", "--json-report-file=result.json"]

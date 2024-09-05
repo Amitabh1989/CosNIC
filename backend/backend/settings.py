@@ -16,17 +16,17 @@ from pathlib import Path
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+# Repository settings
 REPO_URL = "/repo/"
-REPO_ROOT = os.path.join(BASE_DIR, "ctrl_repo")
-# REPO_ROOT = Path(__file__).resolve().parent.parent.parent / "ctrl_repo"
+REPO_ROOT = BASE_DIR / "ctrl_repo"
 
+# Logs settings
 LOG_URL = "/logs/"
-# LOGS_ROOT = Path(__file__).resolve().parent.parent / "test_logs"
-LOGS_ROOT = os.path.join(BASE_DIR, "test_logs")
+LOGS_ROOT = BASE_DIR / "test_logs"
 
-# settings.py
+# Media settings
 MEDIA_URL = "/media/"
-MEDIA_ROOT = os.path.join(BASE_DIR, "media")
+MEDIA_ROOT = BASE_DIR / "media"
 
 print(f"BASE DIR : {BASE_DIR}")
 print(f"REPO_PATH : {REPO_ROOT}")
@@ -207,21 +207,77 @@ CELERY_ACKS_LATE = True
 CELERY_TASK_REJECT_ON_WORKER_LOST = True
 # CELERY_BROKER_URL = "redis://172.17.21.179:6379/0"
 # CELERY_RESULT_BACKEND = "redis://172.17.21.179:6379/0"
+
+# Configure Celery logging
+CELERY_HIJACK_ROOT_LOGGER = False  # Prevent Celery from overriding the root logger
+
 LOGGING = {
     "version": 1,
     "disable_existing_loggers": False,
+    "formatters": {
+        "verbose": {
+            "format": "{levelname} {asctime} {module} {funcName} {lineno} - {message}",
+            "style": "{",
+        },
+        "simple": {
+            "format": "{levelname} {message}",
+            "style": "{",
+        },
+    },
     "handlers": {
         "console": {
             "class": "logging.StreamHandler",
+            "formatter": "verbose",
         },
     },
     "loggers": {
         "": {
             "handlers": ["console"],
             "level": "INFO",
+            "formatter": "verbose",
         },
     },
 }
+
+# LOGGING = {
+#     "version": 1,
+#     "disable_existing_loggers": False,
+#     "formatters": {
+#         "verbose": {
+#             "format": "{levelname} {asctime} {module} {funcName} {lineno} - {message}",
+#             "style": "{",
+#         },
+#         "simple": {
+#             "format": "{levelname} {message}",
+#             "style": "{",
+#         },
+#     },
+#     "handlers": {
+#         "console": {
+#             "level": "INFO",
+#             "class": "logging.StreamHandler",
+#             "formatter": "verbose",
+#         },
+#         "file": {
+#             "level": "INFO",
+#             "class": "logging.FileHandler",
+#             "filename": "celery.log",
+#             "formatter": "verbose",
+#         },
+#     },
+#     "loggers": {
+#         "celery": {
+#             "handlers": ["console", "file"],
+#             "level": "INFO",
+#             "propagate": True,
+#         },
+#         "django": {
+#             "handlers": ["console", "file"],
+#             "level": "INFO",
+#             "propagate": True,
+#         },
+#     },
+# }
 
 
 # EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"

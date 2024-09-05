@@ -23,7 +23,13 @@ class TestCase(models.Model):
     )
     feature = models.CharField(max_length=100, blank=True, null=True)
     sub_feature = models.CharField(max_length=100, blank=True, null=True)
-    controllers = models.JSONField(default=list)
+    controllers = models.JSONField(default=list, blank=True, null=True)
+    stream = models.CharField(
+        max_length=20,
+        blank=True,
+        null=True,
+        choices=[("core", "Core"), ("aiml", "AI-ML")],
+    )
     category = models.CharField(
         max_length=20,
         choices=[
@@ -126,7 +132,10 @@ class TestRun(models.Model):
     subtests_to_run = ArrayField(
         models.CharField(), default=list
     )  # Meaning run all subtests
-    error = models.TextField(blank=True)
+    error_stack = models.TextField(blank=True)
+    error_code = models.CharField(
+        max_length=100, blank=True
+    )  # added so that we can get list of test by error codes and prioritize fixes / areas
     log_file = models.FileField(
         upload_to=create_path, blank=True, null=True, max_length=500
     )
@@ -199,6 +208,7 @@ class CtrlPackageRepo(models.Model):
         max_length=100, default="Controller-2.2.9a63", unique=True
     )
     last_scanned = models.DateTimeField(auto_now=True)
+    local_path = models.TextField(blank=True, null=True)
     url = models.URLField(blank=True, null=True)  # incase i need to read from ftp
     created_at = models.DateTimeField(auto_now_add=True)
     modified_at = models.DateTimeField(auto_now=True)
@@ -293,3 +303,15 @@ class VirtualEnvironment(models.Model):
 
     def __str__(self):
         return f"{self.venv_name} at path {self.path}"
+
+
+# class TestCaseCart(models.Model):
+#     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="cart")
+#     test_cases = models.ManyToManyField(TestCase, related_name="carts")
+#     venv = models.ForeignKey(VirtualEnvironment, on_delete=models.CASCADE, related_name="cart")
+
+#     created_at = models.DateTimeField(auto_now_add=True)
+#     modified_at = models.DateTimeField(auto_now=True)
+
+#     def __str__(self):
+#         return f"Cart for {self.user.username}"

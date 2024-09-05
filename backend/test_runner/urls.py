@@ -13,12 +13,14 @@ from .views import (
     TestCaseView,
     TestRunView,
     UpdateTestCaseSubtestsAPI,
+    VenvStatusView,
 )
 
 router = DefaultRouter()
 router.register(r"testcase", TestCaseView, "testcase")
 router.register(r"testrun", TestRunView, "testrun")
 router.register(r"ctrl_repo", CtrlRepoListView, "ctrl_repo")
+router.register(r"venv-status", VenvStatusView, "venv-status")
 
 urlpatterns = [
     path("", include(router.urls)),

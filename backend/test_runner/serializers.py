@@ -1,5 +1,9 @@
+from datetime import datetime
+
 from django.contrib.auth.models import User
 from django.db import transaction
+from django.utils import timezone
+from django.utils.dateformat import format
 from rest_framework import serializers
 
 from .models import (
@@ -14,6 +18,12 @@ from .models import (
 )
 
 
+class UserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ["username"]
+
+
 class SubTestSerializer(serializers.ModelSerializer):
     class Meta:
         model = SubTests
@@ -22,41 +32,31 @@ class SubTestSerializer(serializers.ModelSerializer):
 
 class TestCaseSerializer(serializers.ModelSerializer):
     subtests = SubTestSerializer(many=True, read_only=True)
+    created_at = serializers.SerializerMethodField()
+    modified_at = serializers.SerializerMethodField()
     # subtests = serializers.ListField(child=serializers.CharField())
 
     class Meta:
         model = TestCase
         fields = "__all__"
 
+    def get_created_at(self, obj):
+        return format(
+            obj.created_at, "F j, Y, P"
+        )  # Example: "September 4, 2024, 3:55 AM"
+
+    def get_modified_at(self, obj):
+        return format(
+            obj.modified_at, "F j, Y, P"
+        )  # Example: "September 4, 2024, 3:55 AM"
+
 
 class TestCaseResultSerializer(serializers.ModelSerializer):
-    test_run = serializers.StringRelatedField()
     test_run = serializers.StringRelatedField()
 
     class Meta:
         model = TestCaseResult
         fields = "__all__"
-
-
-# class TestRunSerializer(serializers.ModelSerializer):
-#     test_cases = serializers.PrimaryKeyRelatedField(
-#         queryset=TestCase.objects.all(), many=True
-#     )
-#     # Reverse relationship here
-#     test_case_results = TestCaseResultSerializer(
-#         source="testcaseresult_set", many=True, read_only=True
-#     )
-
-#     class Meta:
-#         model = TestRun
-#         fields = "__all__"
-
-#     def create(self, validated_data):
-#         test_cases = validated_data.pop("test_cases")
-#         test_run = TestRun.objects.create(**validated_data)
-#         for test_case in test_cases:
-#             TestCaseResult.objects.create(test_run=test_run, test_case=test_case)
-#         return test_run
 
 
 class TestJobSerializer(serializers.ModelSerializer):
@@ -100,16 +100,17 @@ class VirtualEnvironmentSerializer(serializers.ModelSerializer):
             # "test_jobs",  # Exclude because it's not defined in the current model context
         ]
 
-    # def get_ctrl_package_version(self, obj):
-    # Check if ctrl_package_version exists
-    # if obj.ctrl_package_version:
-    #     return obj.ctrl_package_version.repo_version
-    # The line `ctrl_package_version = serializers.SerializerMethodField()` in the `VirtualEnvironmentSerializer` class is defining a custom field in the serializer that will be populated by a method named `get_ctrl_package_version`.
-    # return None
-    # versions = CtrlPackageRepo.objects.values_list(
-    #     "repo_version", flat=True
-    # ).distinct()
-    # return list(versions)
+    def create(self, validated_data):
+        print(f"Nickname called : {validated_data['nickname']}")
+        if not validated_data["nickname"].strip():
+            validated_data["nickname"] = (
+                f'{validated_data["venv_name"]}_{timezone.now().strftime("%Y-%m-%d-%H%M%S")}'
+            )
+        else:
+            validated_data["nickname"] = (
+                f'{validated_data["nickname"]}_{timezone.now().strftime("%Y-%m-%d-%H%M%S")}'
+            )
+        return super().create(validated_data)
 
 
 class VirtualEnvironmentInitSerializer(serializers.ModelSerializer):
@@ -207,3 +208,23 @@ class CtrlPackageRepoSerializer(serializers.ModelSerializer):
     class Meta:
         model = CtrlPackageRepo
         fields = "__all__"
+
+
+class VenvsStatusJobsUsersSerializer(serializers.ModelSerializer):
+    # test_jobs = TestJobSerializer(many=True)
+    user = UserSerializer()
+    """
+    https://chatgpt.com/share/758a96f2-b506-4ee3-aaad-9f420adfbe7f
+    """
+
+    class Meta:
+        model = VirtualEnvironment
+        fields = ["venv_name", "status", "user", "test_jobs", "last_used_at"]
+
+    def to_representation(self, instance):
+        representation = super().to_representation(instance)
+        representation["test_jobs"] = (
+            instance.test_jobs.count()
+        )  # Assuming related name is 'test_jobs'
+        representation["user"] = instance.user.username
+        return representation

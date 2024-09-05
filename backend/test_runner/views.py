@@ -24,6 +24,7 @@ from .serializers import (
     TestCaseResultSerializer,
     TestCaseSerializer,
     TestRunSerializer,
+    VenvsStatusJobsUsersSerializer,
     VirtualEnvironmentInitSerializer,
     VirtualEnvironmentSerializer,
     VirtualEnvironmentTestJobSerializer,
@@ -34,7 +35,7 @@ from .tasks.testcases_jobs import update_testcase_subtests
 
 # from tasks.venv_manager import create_venv
 from .tasks.venv_jobs import (
-    copy_install_packages_to_venv,
+    copy_install_packages_to_venv_task,
     create_venv_task,
     sanitize_venv_name,
 )
@@ -214,6 +215,17 @@ class ActivateVenvCopyInstallPackages(APIView):
     permission_classes = [IsAuthenticated]
 
     def post(self, request):
+        """
+        Request must contain ctrl_package_version from the drop down present in the frontend.
+        User will be presented with 2 more options in the GUI, inlline iwth above comment.
+        1. Show the ctrl package version on the VENV + Config File associated with it
+        2. Give list of Ctrl Packages and Script files to choose from
+        3. Ask if user needs to update only if versions dont match (can be a default option)
+        4. Force update option
+
+        # TODO : Check if the celery task needs to copy new files and config file in case the
+        user selects a new / different ctrl package version to run new batch of tests.
+        """
         user = get_user_model().objects.get(username=self.request.user.username)
         venv_name = request.data.get("venv_name")
         print(f"Venv name received in the request : {venv_name}")
@@ -232,8 +244,8 @@ class ActivateVenvCopyInstallPackages(APIView):
             "venv_name": venv_name,
             "user": user.id,
         }
-        task = copy_install_packages_to_venv.apply_async(
-            kwargs=data_for_task, countdown=5
+        task = copy_install_packages_to_venv_task.apply_async(
+            kwargs=data_for_task, countdown=2
         )
 
         return Response(
@@ -323,23 +335,39 @@ class GetUserVenvs(viewsets.ModelViewSet):
             return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
 
 
-class VenvStatusView(APIView):
+# class VenvStatusView(APIView):
+class VenvStatusView(viewsets.ModelViewSet):
     queryset = VirtualEnvironment.objects.all()
-    serializer_class = VirtualEnvironmentSerializer
+    # serializer_class = VirtualEnvironmentSerializer
+    serializer_class = VenvsStatusJobsUsersSerializer
 
-    def get(self, request, venv_name):
+    def retrieve(self, request, *args, **kwargs):
         user = get_user_model().objects.get(username=self.request.user.username)
-        venv = VirtualEnvironment.objects.get(venv_name=venv_name, user=user)
+        # venv = VirtualEnvironment.objects.get(venv_name=venv_name, user=user)
+        # Filter queryset based on the user
+        venvs = self.queryset.filter(user=user)
+
+        # Prepare data for response
+        venv_data = []
+        for venv in venvs:
+            venv_data.append(
+                {
+                    "venv_name": venv.venv_name,
+                    "status": venv.status,
+                    "last_used_at": venv.last_used_at,
+                    "num_test_cases": venv.test_jobs.count(),
+                }
+            )
+
         return Response(
             {
-                "venv_name": venv.venv_name,
-                "status": venv.status,
-                "last_used_at": venv.last_used_at,
+                "user": user.username,
+                "venvs": venv_data,
             },
             status=status.HTTP_200_OK,
         )
 
     def list(self, request):
-        queryset = self.get_queryset()
-        serializer = VirtualEnvironmentSerializer(queryset, many=True)
+        queryset = self.get_queryset().order_by("user", "status")
+        serializer = self.get_serializer(queryset, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)

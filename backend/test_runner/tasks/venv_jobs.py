@@ -6,6 +6,7 @@ import stat
 import subprocess
 import sys
 from stat import S_IRWXU
+from typing import Optional
 
 import yaml
 from celery import shared_task
@@ -21,6 +22,7 @@ from django.shortcuts import get_object_or_404
 from django.utils import timezone
 
 from ..models import Config, CtrlPackageRepo, VirtualEnvironment
+from ..tasks.repo_jobs import get_latest_ctrl_repo_version
 
 logger = logging.getLogger(__name__)
 python_executable = sys.executable
@@ -35,10 +37,13 @@ def sanitize_venv_name(name):
         return re.sub(r"[^\w-]", "-", name)
 
 
-def create_virtualenv(venv_path, python_executable):
+def create_virtualenv(
+    venv_path, python_executable=None
+):  # use the default Python executable on the server
     try:
         logger.info(
-            f"Creating virtual environment at {venv_path} using {python_executable}"
+            f"Creating virtual environment at {venv_path} using Python version {python_executable}"
+            # Creating virtual environment at C:\GitHub\CosNIC\backend\venvs\1\alpha_34 using Python version 3.9
         )
         # Ensure the correct permissions are set (e.g., read/write/execute)
         for root, dirs, files in os.walk(venv_path):
@@ -51,17 +56,10 @@ def create_virtualenv(venv_path, python_executable):
                     os.path.join(root, file), stat.S_IRUSR | stat.S_IWUSR | stat.S_IXUSR
                 )
         # Try creating the virtual environment
+        python_executable = sys.executable
         logger.info(f"Using Python executable at: {python_executable}")
         os.chmod(venv_path, S_IRWXU)
         os.chmod(python_executable, S_IRWXU)
-        # os.chmod(
-        #     os.path.join(python_executable), stat.S_IRUSR | stat.S_IWUSR | stat.S_IXUSR
-        # )
-        #
-        # python_executable = os.path.join(
-        #     settings.BASE_DIR, ".venv", "Scripts", "python.exe"
-        # )
-        # logger.info(f"Using Python executable at: {python_executable}")
 
         result = subprocess.run(
             [python_executable, "-m", "venv", venv_path],
@@ -95,20 +93,130 @@ def assign_config_file(obj, config_file_id):
     return True
 
 
+# @shared_task(bind=True)
+# def create_venv_task(
+#     self,
+#     venv_name=None,
+#     python_version=None,
+#     nickname=None,
+#     user_id=None,
+#     requirements_file=None,
+#     script_file=None,
+#     config_file_id=None,
+#     ctrl_package_version_id="latest",
+# ):
+#     print(
+#         f"Received arguments: venv_name={venv_name}, python_version={python_version}, nickname={nickname}, user_id={user_id}"
+#     )
+
+#     try:
+#         user = get_user_model().objects.get(id=user_id)
+#         venv_name = sanitize_venv_name(venv_name)
+#         venv_path = os.path.join(settings.BASE_DIR, "venvs", str(user.id), venv_name)
+
+#         logger.info(f"Venv path is: {venv_path}")
+
+#         try:
+#             os.makedirs(venv_path, exist_ok=True)
+#         except OSError as e:
+#             os.chmod(
+#                 venv_path, stat.S_IRWXU | stat.S_IRWXG | stat.S_IRWXO
+#             )  # Full permissions
+#             os.makedirs(venv_path, exist_ok=True)
+
+#         success, error_message = create_virtualenv(venv_path, python_executable)
+#         if not success:
+#             return f"Error creating virtual environment: {error_message}"
+
+#         if ctrl_package_version_id == "latest":
+#             # Ensure that the CtrlPackageRepo model is ordered by 'repo_version' if you want to get the latest
+#             ctrl_package_version_obj = CtrlPackageRepo.objects.latest("repo_version")
+#             # ctrl_package_version = ctrl_package_version_obj.repo_version
+#         else:
+#             try:
+#                 ctrl_package_version_obj = CtrlPackageRepo.objects.get(
+#                     id=int(ctrl_package_version_id)
+#                 )
+#                 # ctrl_package_version = ctrl_package_version_obj.repo_version
+#             except CtrlPackageRepo.DoesNotExist:
+#                 logger.error(
+#                     f"CtrlPackageRepo with repo_version {ctrl_package_version_id} does not exist."
+#                 )
+#                 ctrl_package_version_obj = None
+
+#         # Handle nickname if it's empty
+#         if not nickname or nickname.strip() == "":
+#             nickname = f'{venv_name}_{timezone.now().strftime("%Y-%m-%d-%H%M%S")}'
+#         else:
+#             nickname = f'{nickname}_{timezone.now().strftime("%Y-%m-%d-%H%M%S")}'
+
+#         with transaction.atomic():
+#             obj = VirtualEnvironment(
+#                 user=user,
+#                 venv_name=venv_name,
+#                 path=venv_path,
+#                 python_version=python_version,
+#                 nickname=nickname,
+#                 status="created",
+#             )
+#             logger.info(f"Ctrl package version object: {ctrl_package_version_obj}")
+#             if ctrl_package_version_obj:
+#                 obj.ctrl_package_version = ctrl_package_version_obj
+#             obj.save()
+
+#             save_files(obj, requirements_file, script_file)
+
+#             if not assign_config_file(obj, config_file_id):
+#                 return "Failed to assign config file."
+
+#             obj.save()
+#             logger.info(f"Venv object created: {obj}")
+
+#         return "Virtual environment created successfully."
+#     except Exception as e:
+#         try:
+#             # Clean up by deleting the created folder
+#             if os.path.exists(venv_path):
+#                 shutil.rmtree(venv_path)
+#                 logger.info(f"Virtual environment directory removed: {venv_path}")
+#         except Exception as e:
+#             logger.error(f"Error removing virtual environment directory: {e}")
+#         logger.error(f"Error creating virtual environment '{venv_name}': {e}")
+#         # raise self.retry(exc=exc, countdown=60)  # Retry after 60 seconds
+#         raise e
+
+
 @shared_task(bind=True)
 def create_venv_task(
     self,
-    venv_name=None,
-    python_version=None,
-    nickname=None,
-    user_id=None,
-    requirements_file=None,
-    script_file=None,
-    config_file_id=None,
-    ctrl_package_version_id="latest",
-):
-    print(
-        f"Received arguments: venv_name={venv_name}, python_version={python_version}, nickname={nickname}, user_id={user_id}"
+    venv_name: Optional[str] = None,
+    python_version: Optional[str] = None,
+    nickname: Optional[str] = None,
+    user_id: Optional[int] = None,
+    requirements_file: Optional[str] = None,
+    script_file: Optional[str] = None,
+    config_file_id: Optional[int] = None,
+    ctrl_package_version_id: str = "latest",
+) -> str:
+    """
+    Creates a new virtual environment and assigns necessary files and configurations.
+
+    Args:
+        venv_name (Optional[str]): The name of the virtual environment.
+        python_version (Optional[str]): The Python version to use for the virtual environment.
+        nickname (Optional[str]): An optional nickname for the virtual environment.
+        user_id (Optional[int]): The ID of the user creating the virtual environment.
+        requirements_file (Optional[str]): Path to the requirements file to be used.
+        script_file (Optional[str]): Path to the script file to be used.
+        config_file_id (Optional[int]): ID of the configuration file to be assigned.
+        ctrl_package_version_id (str): Version ID of the CtrlPackageRepo. Defaults to "latest".
+
+    Returns:
+        str: Success or error message.
+    """
+    logger.info(
+        f"Received arguments: venv_name={venv_name}, python_version={python_version}, "
+        f"nickname={nickname}, user_id={user_id}"
     )
 
     try:
@@ -118,47 +226,46 @@ def create_venv_task(
 
         logger.info(f"Venv path is: {venv_path}")
 
-        try:
-            os.makedirs(venv_path, exist_ok=True)
-        except OSError as e:
+        # Create the virtual environment directory
+        os.makedirs(venv_path, exist_ok=True)
+
+        # Set permissions if directory already exists
+        if not os.path.exists(venv_path):
             os.chmod(
                 venv_path, stat.S_IRWXU | stat.S_IRWXG | stat.S_IRWXO
             )  # Full permissions
             os.makedirs(venv_path, exist_ok=True)
 
-        success, error_message = create_virtualenv(venv_path, python_executable)
+        logger.info(f">>>>> Python venv_path is : {venv_path}\n\n\n")
+
+        # Create virtual environment
+        success, error_message = create_virtualenv(venv_path, python_version)
         if not success:
             return f"Error creating virtual environment: {error_message}"
 
-        if ctrl_package_version_id == "latest":
-            # Ensure that the CtrlPackageRepo model is ordered by 'repo_version' if you want to get the latest
-            ctrl_package_version_obj = CtrlPackageRepo.objects.latest("repo_version")
-            # ctrl_package_version = ctrl_package_version_obj.repo_version
-        else:
+        # Fetch CtrlPackageRepo object
+        ctrl_package_version_obj = get_latest_ctrl_repo_version()
+        if str(ctrl_package_version_id) != "latest":
             try:
                 ctrl_package_version_obj = CtrlPackageRepo.objects.get(
                     id=int(ctrl_package_version_id)
                 )
-                # ctrl_package_version = ctrl_package_version_obj.repo_version
             except CtrlPackageRepo.DoesNotExist:
                 logger.error(
-                    f"CtrlPackageRepo with repo_version {ctrl_package_version} does not exist."
+                    f"CtrlPackageRepo with repo_version {ctrl_package_version_id} does not exist."
                 )
-                ctrl_package_version_obj = None
-                # Handle the case where the specified version does not exist
-                # raise ValueError(f"Repo version {ctrl_package_version} does not exist.")
+            finally:
+                print(
+                    f"Ctrl package version object: {ctrl_package_version_obj} and version {ctrl_package_version_obj.repo_version}"
+                )
 
-        # ctrl_package_version = None
-        # if config_file_id:
-        #     try:
-        #         config_file_id = CtrlPackageRepo.objects.get(id=int(config_file_id))
-        #     except ObjectDoesNotExist:
-        #         logger.error(
-        #             f"CtrlPackageRepo with id {config_file_id} does not exist."
-        #         )
-        # Optionally, handle the case where the config file is invalid
-        # raise ValueError(f"Config file ID {config_file_id} is invalid.")
+        # Handle nickname
+        if not nickname or nickname.strip() == "":
+            nickname = f'{venv_name}_{timezone.now().strftime("%Y-%m-%d-%H%M%S")}'
+        else:
+            nickname = f'{nickname}_{timezone.now().strftime("%Y-%m-%d-%H%M%S")}'
 
+        # Create VirtualEnvironment object
         with transaction.atomic():
             obj = VirtualEnvironment(
                 user=user,
@@ -168,7 +275,6 @@ def create_venv_task(
                 nickname=nickname,
                 status="created",
             )
-            logger.info(f"Ctrl package version object: {ctrl_package_version_obj}")
             if ctrl_package_version_obj:
                 obj.ctrl_package_version = ctrl_package_version_obj
             obj.save()
@@ -182,17 +288,20 @@ def create_venv_task(
             logger.info(f"Venv object created: {obj}")
 
         return "Virtual environment created successfully."
+
     except Exception as e:
         try:
             # Clean up by deleting the created folder
             if os.path.exists(venv_path):
                 shutil.rmtree(venv_path)
                 logger.info(f"Virtual environment directory removed: {venv_path}")
-        except Exception as e:
-            logger.error(f"Error removing virtual environment directory: {e}")
+        except Exception as cleanup_error:
+            logger.error(
+                f"Error removing virtual environment directory: {cleanup_error}"
+            )
+
         logger.error(f"Error creating virtual environment '{venv_name}': {e}")
-        # raise self.retry(exc=exc, countdown=60)  # Retry after 60 seconds
-        raise e
+        raise e  # Optionally, you could use self.retry(exc=e, countdown=60) to ret
 
 
 def get_venv_status(venv_name):
@@ -252,21 +361,29 @@ def activate_venv(venv_path):
     return op
 
 
-# def activate_venv(venv_path):
-#     logger.info(f"Ven path is {venv_path}")
-#     if sys.platform == "win32":
-#         venv_bin = os.path.join(venv_path, "Scripts")
+# def install_ctrl_package_in_venv(venv_path: str, package_path: str) -> None:
+#     """
+#     Install the controller package in the specified virtual environment.
+
+#     Args:
+#         venv_path (str): Path to the virtual environment.
+#         package_path (str): Path to the controller package to be installed.
+#     """
+#     # Determine the path to pip in the virtual environment
+#     if os.name == "nt":
+#         pip_path = os.path.join(venv_path, "Scripts", "pip.exe")
 #     else:
-#         venv_bin = os.path.join(venv_path, "bin")
+#         pip_path = os.path.join(venv_path, "bin", "pip")
 
-#     # Adjust the PATH to include the venv's bin directory
-#     # os.environ["PATH"] = venv_bin + os.pathsep + os.environ.get("PATH", "")
-#     # os.environ["VIRTUAL_ENV"] = venv_path
+#     # Construct the command
+#     cmd = [pip_path, "install", package_path]
+#     print(f"Installing controller package with command: {' '.join(cmd)}")
 
-#     # Ensure the correct Python executable is used
-#     sys.executable = os.path.join(venv_bin, "python")
-
-#     logger.info(f"Virtual environment activated at {venv_path}")
+#     # Execute the command
+#     result = subprocess.run(cmd, text=True, capture_output=True)
+#     print(f"Controller package installation result: Return code {result.returncode}")
+#     print(f"Output: {result.stdout}")
+#     print(f"Error: {result.stderr}")
 
 
 def deactivate_venv(venv_path):
@@ -390,7 +507,7 @@ def copy_files(ctrl_pkg_version, venv_path, requirements_file=None, script_file=
 
 
 def install_packages(venv_path, requirements_file_name):
-    install_ctrl_packages(venv_path)
+    install_ctrl_packages_in_venv(venv_path)
     install_requirements(venv_path, requirements_file_name)
 
 
@@ -430,7 +547,14 @@ def find_files(directory, pattern):
                 return os.path.join(root, file)
 
 
-def install_ctrl_packages(venv_path, ctrl_lib=True, ctrl_test=True):
+# def install_ctrl_packages_in_venv_pkg_obj(venv_path, ctrl_pkg_version_obj):
+#     pass
+
+
+def install_ctrl_packages_in_venv(
+    venv_path, ctrl_lib=True, ctrl_test=True, ctrl_repo_obj=False
+):
+    # Rename to "install_ctrl_package_in_venv"
     # Install from the user_files folder
     logger.info(f"Venv path is : {venv_path}")
     user_file_path = os.path.join(venv_path, "user_files")
@@ -477,8 +601,16 @@ def check_valid_venv(venv_name, user):
         return False
 
 
+# Define a wrapper function
+def block_copy_install_packages_to_venv_task(**kwargs):
+    # Call the Celery task asynchronously and block until the result is available
+    print(f"Kwargs block_copy_install_packages_to_venv_task are : {kwargs}")
+    result = copy_install_packages_to_venv_task.delay(**kwargs)
+    return result.get()  # This will block until the task is done
+
+
 @shared_task
-def copy_install_packages_to_venv(**kwargs):
+def copy_install_packages_to_venv_task(**kwargs):
     """
     Here, we copy and install the packages from the requirements.txt file to the virtual environment.
     We also copy the package version from server to the venv and install it.
@@ -492,48 +624,78 @@ def copy_install_packages_to_venv(**kwargs):
     Returns:
         _type_: _description_
     """
-    user = User.objects.get(id=kwargs.get("user"))
-    venv_name = kwargs.get("venv_name")
-    venv_obj = get_object_or_404(VirtualEnvironment, venv_name=venv_name, user=user)
-    logger.info(f"Venv object is {venv_obj}")
+    try:
+        with transaction.atomic():
+            logger.info(f"Inside Celery task to copy and install packages : {kwargs}")
+            # user = User.objects.get(id=int(kwargs.get("user")))
+            user = get_user_model().objects.get(id=int(kwargs.get("user")))
+            venv_name = kwargs.get("venv_name")
+            venv_obj = get_object_or_404(
+                VirtualEnvironment, venv_name=venv_name, user=user
+            )
+            logger.info(f"Venv object is {venv_obj}")
 
-    # Start the VENV
-    venv_path = activate_venv(venv_obj.path)
-    logger.info(f"Venv activated : {venv_path}")
+            # Start the VENV
+            venv_path = activate_venv(venv_obj.path)
+            logger.info(f"Venv activated : {venv_path}")
 
-    # Change Virtual Env status to in-use
-    venv_obj.status = "in-use"
-    venv_obj.assigned_at = timezone.now()
-    venv_obj.last_used_at = timezone.now()
-    venv_obj.save()
+            # Change Virtual Env status to in-use
+            venv_obj.status = "in-use"
+            venv_obj.assigned_at = timezone.now()
+            venv_obj.last_used_at = timezone.now()
+            venv_obj.save()
 
-    # Copy the requirements file, controller package
-    # Check if the requirements file exists
-    if venv_obj.requirements:
-        requirements_file_path = os.path.join(venv_obj.requirements.path)
-    else:
-        requirements_file_path = None  # or handle it as needed
-    logger.info(f"Requirements file is : {requirements_file_path}")
+            # Copy the requirements file, controller package
+            # Check if the requirements file exists
+            if venv_obj.requirements:
+                requirements_file_path = os.path.join(venv_obj.requirements.path)
+            else:
+                requirements_file_path = None  # or handle it as needed
+            logger.info(f"Requirements file is : {requirements_file_path}")
 
-    # Check if the script file exists
-    if venv_obj.script:
-        script_file_path = os.path.join(venv_obj.script.path)
-    else:
-        script_file_path = None  # or handle it as needed
-    logger.info(f"Scripts file is : {script_file_path}")
+            # Check if the script file exists
+            if venv_obj.script:
+                script_file_path = os.path.join(venv_obj.script.path)
+            else:
+                script_file_path = None  # or handle it as needed
+            logger.info(f"Scripts file is : {script_file_path}")
 
-    copy_files(
-        venv_obj.ctrl_package_version.repo_version,
-        venv_obj.path,
-        requirements_file_path,
-        script_file_path,
-    )
-    logger.info("All files copied successfully, installing packages now")
+            if kwargs.get("ctrl_package_version_id", False):
+                latest_repo_obj = get_latest_ctrl_repo_version()
+                repo_version_to_install = latest_repo_obj.repo_version
+            else:
+                repo_version_to_install = venv_obj.ctrl_package_version.repo_version
 
-    # Install the requirements
-    requirements_file_name = os.path.basename(venv_obj.requirements.name)
-    result = install_packages(venv_obj.path, requirements_file_name)
-    logger.info(f"Requirements installed : {result}")
+            logger.info(f"Repo version to install is : {repo_version_to_install}")
+
+            copy_files(
+                repo_version_to_install,
+                venv_obj.path,
+                requirements_file_path,
+                script_file_path,
+            )
+            logger.info("All files copied successfully, installing packages now")
+
+            # Install the requirements
+            requirements_file_name = os.path.basename(venv_obj.requirements.name)
+
+            # Check 2 things.
+            # If package asked for
+            result = install_packages(venv_obj.path, requirements_file_name)
+            logger.info(f"Requirements installed : {result}")
+
+            venv_obj.status = "free"
+            venv_obj.assigned_at = timezone.now()
+            venv_obj.last_used_at = timezone.now()
+            venv_obj.save()
+    except Exception as e:
+        logger.error(f"Error copying and installing packages: {e}")
+        # Set to error and then decide what to do next
+        venv_obj.status = "error"
+        venv_obj.assigned_at = timezone.now()
+        venv_obj.last_used_at = timezone.now()
+        venv_obj.save()
+        raise e
 
 
 # def save_config_to_venv(venv_id):

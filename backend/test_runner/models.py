@@ -123,7 +123,7 @@ class TestRun(models.Model):
     test_job = models.ForeignKey(
         "TestJob",
         on_delete=models.CASCADE,
-        related_name="test_runs",
+        related_name="test_job",
         blank=True,
         null=True,
     )

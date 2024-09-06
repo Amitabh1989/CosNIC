@@ -16,17 +16,18 @@ from pathlib import Path
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-# Repository settings
-REPO_URL = "/repo/"
-REPO_ROOT = BASE_DIR / "ctrl_repo"
-
-# Logs settings
-LOG_URL = "/logs/"
-LOGS_ROOT = BASE_DIR / "test_logs"
-
 # Media settings
 MEDIA_URL = "/media/"
 MEDIA_ROOT = BASE_DIR / "media"
+
+# Repository settings
+REPO_URL = "/repo/"
+REPO_ROOT = MEDIA_ROOT / "ctrl_repo"
+
+# Logs settings
+LOG_URL = "/logs/"
+LOGS_ROOT = MEDIA_ROOT / "test_logs"
+
 
 print(f"BASE DIR : {BASE_DIR}")
 print(f"REPO_PATH : {REPO_ROOT}")
@@ -302,4 +303,14 @@ CHANNEL_LAYERS = {
             "hosts": [("127.0.0.1", 6379)],
         },
     },
+}
+
+CACHES = {
+    "default": {
+        "BACKEND": "django_redis.cache.RedisCache",
+        "LOCATION": "redis://127.0.0.1:6379/1",
+        "OPTIONS": {
+            "CLIENT_CLASS": "django_redis.client.DefaultClient",
+        },
+    }
 }

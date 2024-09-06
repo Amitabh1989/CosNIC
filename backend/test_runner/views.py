@@ -30,7 +30,7 @@ from .serializers import (
     VirtualEnvironmentTestJobSerializer,
 )
 from .tasks.repo_jobs import scan_folder_and_update_cache
-from .tasks.test_jobs import run_test_job
+from .tasks.test_jobs import run_test_task
 from .tasks.testcases_jobs import update_testcase_subtests
 
 # from tasks.venv_manager import create_venv
@@ -288,7 +288,12 @@ class RunTestsView(APIView):
             # Here is where, we wil call the celery task and ask it to run all the JOBs.
             # Send the venv_name and user to the job.
             # Extract the venv and user objects, fetch all the test jobs and run them one by one
-            task = run_test_job.apply_async(args=[venv_name, user.id])
+            # task = run_test_task.apply_async(args=[venv_name, user.id])
+            data = {
+                "venv_name": venv_name,
+                "user_id": user.id,
+            }
+            task = run_test_task.apply_async(kwargs=data)
             print(f"Task ID : {task.id}")
             return Response(
                 {

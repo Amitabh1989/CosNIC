@@ -602,15 +602,15 @@ def check_valid_venv(venv_name, user):
 
 
 # Define a wrapper function
-def block_copy_install_packages_to_venv_task(**kwargs):
-    # Call the Celery task asynchronously and block until the result is available
-    print(f"Kwargs block_copy_install_packages_to_venv_task are : {kwargs}")
-    result = copy_install_packages_to_venv_task.delay(**kwargs)
-    return result.get()  # This will block until the task is done
+# def block_copy_install_packages_to_venv_task(**kwargs):
+#     # Call the Celery task asynchronously and block until the result is available
+#     print(f"Kwargs block_copy_install_packages_to_venv_task are : {kwargs}")
+#     result = copy_install_packages_to_venv_task.delay(**kwargs)
+#     return result.get()  # This will block until the task is done
 
 
-@shared_task
-def copy_install_packages_to_venv_task(**kwargs):
+@shared_task(bind=True)
+def copy_install_packages_to_venv_task(self, **kwargs):
     """
     Here, we copy and install the packages from the requirements.txt file to the virtual environment.
     We also copy the package version from server to the venv and install it.
@@ -626,9 +626,16 @@ def copy_install_packages_to_venv_task(**kwargs):
     """
     try:
         with transaction.atomic():
-            logger.info(f"Inside Celery task to copy and install packages : {kwargs}")
+            logger.info(
+                f"Inside Celery task to copy and install packages : {kwargs} : User : {kwargs['user_id']}"
+            )
+            # Check if 'user' exists in kwargs
+            user_id = kwargs.get("user_id")
+            if user_id is None:
+                logger.error("User ID is None! Cannot proceed with task.")
+                return
             # user = User.objects.get(id=int(kwargs.get("user")))
-            user = get_user_model().objects.get(id=int(kwargs.get("user")))
+            user = get_user_model().objects.get(id=int(user_id))
             venv_name = kwargs.get("venv_name")
             venv_obj = get_object_or_404(
                 VirtualEnvironment, venv_name=venv_name, user=user
@@ -683,11 +690,24 @@ def copy_install_packages_to_venv_task(**kwargs):
             # If package asked for
             result = install_packages(venv_obj.path, requirements_file_name)
             logger.info(f"Requirements installed : {result}")
+            logger.info(
+                f"repo_version_to_install installed : {repo_version_to_install}"
+            )
 
             venv_obj.status = "free"
             venv_obj.assigned_at = timezone.now()
             venv_obj.last_used_at = timezone.now()
+            venv_obj.ctrl_package_version = CtrlPackageRepo.objects.get(
+                repo_version=repo_version_to_install
+            )
             venv_obj.save()
+            result = {
+                "venv_name": kwargs.get("venv_name"),
+                "user_id": kwargs.get("user_id"),
+                "status": "success",
+            }
+            logger.info(f"copy_install_packages_to_venv_task result: {result}")
+            return result
     except Exception as e:
         logger.error(f"Error copying and installing packages: {e}")
         # Set to error and then decide what to do next
@@ -696,6 +716,20 @@ def copy_install_packages_to_venv_task(**kwargs):
         venv_obj.last_used_at = timezone.now()
         venv_obj.save()
         raise e
+    # Since this is chained with run_test_task, which expects the same inputs,
+    # we return these values
+    # return (kwargs.get("venv_name"), kwargs.get("user_id"))
+    # Perform operations
+    # result = {
+    #     "venv_name": kwargs.get("venv_name"),
+    #     "user_id": kwargs.get("user_id"),
+    # }
+    # logger.info(f"copy_install_packages_to_venv_task result: {result}")
+    # venv_name = kwargs.get("venv_name")
+    # user_id = kwargs.get("user_id")
+    # logger.info(
+    #     f"copy_install_packages_to_venv_task result: venv_name={venv_name}, user_id={user_id}"
+    # )
 
 
 # def save_config_to_venv(venv_id):

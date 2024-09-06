@@ -1,0 +1,5 @@
+INFO 2024-09-05 19:44:03,914 autoreload run_with_reloader 668 - Watching for file changes with StatReloader
+INFO 2024-09-05 19:44:37,598 basehttp log_message 213 - "POST /test_ops/run HTTP/1.1" 201 8080
+INFO 2024-09-05 19:47:00,352 autoreload trigger_reload 266 - C:\GitHub\CosNIC\backend\backend\settings.py changed, reloading.
+INFO 2024-09-05 19:47:04,815 autoreload run_with_reloader 668 - Watching for file changes with StatReloader
+INFO 2024-09-05 19:47:11,986 autoreload trigger_reload 266 - C:\GitHub\CosNIC\backend\backend\settings.py changed, reloading.

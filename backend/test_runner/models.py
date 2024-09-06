@@ -75,7 +75,7 @@ def create_path(instance, filename):
     base_dir = f"user_{instance.user.id}/{instance.test_case.tcid}/run_{instance.id}"
     date_dir = datetime.now().strftime("%Y-%m-%d")
     result_dir = f"result_{instance.status}"
-    path = os.path.join(settings.LOGS_PATH, base_dir, date_dir, result_dir)
+    path = os.path.join(settings.LOGS_ROOT, base_dir, date_dir, result_dir)
     print(f"Log and uploads path is : {path}")
     os.makedirs(path, exist_ok=True)
     return os.path.join(path, filename)
@@ -123,7 +123,7 @@ class TestRun(models.Model):
     test_job = models.ForeignKey(
         "TestJob",
         on_delete=models.CASCADE,
-        related_name="test_runs",
+        related_name="test_job",
         blank=True,
         null=True,
     )

@@ -26,7 +26,7 @@ urlpatterns = [
     path("configuration/", include("configfile.urls")),
     path("test_ops/", include("test_runner.urls")),
     path("pulse/", include("pulse.urls")),
-]
+] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 
 
 """

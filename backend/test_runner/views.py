@@ -191,8 +191,9 @@ class CreateVenvView(APIView):
 
 class TaskStatusView(APIView):
 
-    queryset = VirtualEnvironment.objects.all()
-    serializer_class = VirtualEnvironmentSerializer
+    # queryset = VirtualEnvironment.objects.all()
+    # serializer_class = VirtualEnvironmentSerializer
+    permission_classes = [AllowAny]
 
     def get(self, request, task_id):
         task = AsyncResult(task_id)

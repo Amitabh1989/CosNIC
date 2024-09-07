@@ -4,6 +4,7 @@ import os
 import subprocess
 import uuid
 
+import redis
 from celery import shared_task
 from celery.exceptions import Retry
 from django.conf import settings
@@ -98,7 +99,7 @@ def run_command(command):
             shell=False,
             check=True,
             text=True,
-            capture_output=True,
+            capture_output=False,
         )
         return result
     except subprocess.CalledProcessError as e:
@@ -242,41 +243,91 @@ def run_test_jobs(venv_obj, test_jobs, user_id):
 
 
 # 5. Helper to Check Venv Availability
-def ensure_venv_availability(venv_obj, test_jobs, self):
+# def ensure_venv_availability(venv_obj, test_jobs, self):
+#     while True:
+#         if venv_obj.status in ("free", "created") or not test_jobs.exists():
+#             venv_obj.status = "in-use"
+#             venv_obj.last_used_at = timezone.now()
+#             venv_obj.save()
+#             break
+#         elif venv_obj.status == "error":
+#             venv_obj.status = "in-use"
+#             venv_obj.ctrl_package_version = None
+#             venv_obj.last_used_at = timezone.now()
+#             venv_obj.save()
+#         else:
+#             logging.info(
+#                 f"Venv {venv_obj.venv_name} is in {venv_obj.status}. Retrying in 60 seconds..."
+#             )
+#             self.retry(countdown=60)
+
+
+# def ensure_venv_availability(venv_obj, test_jobs, self):
+def ensure_venv_availability(venv_obj, self):
+    # lock_name = f"venv_lock_{venv_obj.venv_name}"  # Unique lock name for each venv
+    # Try to acquire a Redis lock to prevent multiple workers from processing the same venv
+    # lock = redis_conn.lock(lock_name, timeout=600)  # Lock expires after 10 minutes
+    # redis_conn = get_redis_connection("default")
+    # lock = redis_conn.lock(lock_name, timeout=300)  # Timeout after 5 minutes
+
+    # redis_conn = get_redis_connection("default")
+    # task_key = f"run_test_task_{venv_obj.venv_name}_{venv_obj.user.id}"
+    # lock = redis_conn.lock(task_key, timeout=1)  # Timeout after 5 minutes
+
+    # # if not lock.acquire(blocking=False):
+    # #     # If the lock is already held, we skip this task
+    # #     logger.info(f"Task {task_key} is already running.")
+    # #     return
+
+    # try:
+    #     # Blocking=True makes it wait until the lock is available
+    #     if lock.acquire(blocking=True):
     while True:
-        if venv_obj.status in ("free", "created") or not test_jobs.exists():
+        if venv_obj.status in ("free", "created"):  # or not test_jobs.exists():
             venv_obj.status = "in-use"
             venv_obj.last_used_at = timezone.now()
             venv_obj.save()
+            logging.info(f"Venv {venv_obj.venv_name} is now in use.")
             break
+
         elif venv_obj.status == "error":
+            logging.info(f"Venv {venv_obj.venv_name} is in error state. Resetting...")
             venv_obj.status = "in-use"
             venv_obj.ctrl_package_version = None
             venv_obj.last_used_at = timezone.now()
             venv_obj.save()
+            break
+
         else:
             logging.info(
-                f"Venv {venv_obj.venv_name} is in {venv_obj.status}. Retrying in 60 seconds..."
+                f"Venv {venv_obj.venv_name} is currently {venv_obj.status}. Retrying in 60 seconds..."
             )
-            self.retry(countdown=60)
+            self.retry(countdown=60)  # Will retry after 60 seconds
+    # finally:
+    #     lock.release()  # Always release the lock when done
 
 
 # 6. Celery Task to Run Test Jobs
-@shared_task(
-    bind=True, max_retries=5, default_retry_delay=60, rate_limit="10/m"
-)  # Limit to 10 tasks per minute
+# @shared_task(
+# bind=True)
+# bind=True, max_retries=5, default_retry_delay=60, rate_limit="10/m"
+# Limit to 10 tasks per minute
 # def run_test_task(self, venv_name, user_id):
+
+
+# max_retries=None : ie try forever
+@shared_task(bind=True, max_retries=None, default_retry_delay=60, acks_late=False)
 def run_test_task(self, *args, **kwargs):
     # Perform test tasks
     # Use Redis-based distributed lock
-    redis_conn = get_redis_connection("default")
-    task_key = f"run_test_task_{kwargs['venv_name']}_{kwargs['user_id']}"
-    lock = redis_conn.lock(task_key, timeout=300)  # Timeout after 5 minutes
+    # redis_conn = get_redis_connection("default")
+    # task_key = f"run_test_task_{kwargs['venv_name']}_{kwargs['user_id']}"
+    # lock = redis_conn.lock(task_key, timeout=1)  # Timeout after 5 minutes
 
-    if not lock.acquire(blocking=False):
-        # If the lock is already held, we skip this task
-        logger.info(f"Task {task_key} is already running.")
-        return
+    # if not lock.acquire(blocking=False):
+    #     # If the lock is already held, we skip this task
+    #     logger.info(f"Task {task_key} is already running.")
+    #     return
 
     logger.info(
         f"Running tests for venv: {kwargs.get('venv_name')} and user: {kwargs.get('user_id')}"
@@ -286,10 +337,11 @@ def run_test_task(self, *args, **kwargs):
     try:
         user = get_user_model().objects.get(id=int(user_id))
         venv_obj = VirtualEnvironment.objects.get(venv_name=venv_name, user=user)
-        test_jobs = TestJob.objects.filter(venv=venv_obj, status="pending")
+        # test_jobs = TestJob.objects.filter(venv=venv_obj, status="pending")
 
         # Ensure venv availability before proceeding
-        ensure_venv_availability(venv_obj, test_jobs, self)
+        # ensure_venv_availability(venv_obj, test_jobs, self)
+        ensure_venv_availability(venv_obj, self)
 
         logger.info(
             f"Virtual env ctrl package : {venv_obj.ctrl_package_version}, venv status : {venv_obj.status}"
@@ -317,7 +369,9 @@ def run_test_task(self, *args, **kwargs):
             process_task_data(task_data)
     except Retry:
         # Re-raise the Retry exception
-        logger.info("Retrying the task...")
+        logging.info(
+            f"Venv {venv_name} status is {venv_obj.status}. Retrying the task..."
+        )
         raise
     except Exception as e:
         logging.error(f"Error in run_test_job task: {e}")
@@ -330,7 +384,10 @@ def run_test_task(self, *args, **kwargs):
         venv_obj.status = "free"
         venv_obj.last_used_at = timezone.now()
         venv_obj.save()
-        lock.release()  # Release the lock after the task completes
+        # try:
+        #     lock.release()  # Release the lock after the task completes
+        # except redis.exceptions.LockNotOwnedError:
+        #     pass
 
 
 def parse_json_report(file_path):

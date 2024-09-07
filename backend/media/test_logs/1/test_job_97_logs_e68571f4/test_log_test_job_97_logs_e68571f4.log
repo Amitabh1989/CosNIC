@@ -1,0 +1,4 @@
+2024-09-06 17:43:13 [DEBUG] controller.conftest:pytest_sessionstart:37: CHK1
+2024-09-06 17:43:14 [DEBUG] controller.conftest:process_post_run_options:156: Pytest post_run: command parameters for option_okta_id= guest, option_sms_submission= False, option_email= False
+2024-09-06 17:43:14 [DEBUG] controller.misc.sms.sms_tr_base:update_tms_database_node:334: sms_tr_base.py version = 1.0.7
+2024-09-06 17:43:15 [INFO] controller.misc.sms.sms_tr_base:get_sms_user_id:367: User OKTA ID: guest is mapped to SMS User ID: 3

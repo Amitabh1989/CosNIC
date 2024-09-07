@@ -1,0 +1,47 @@
+2024-09-06 17:46:29 [DEBUG] controller.conftest:pytest_sessionstart:37: CHK1
+2024-09-06 17:46:29 [INFO] controller.conftest:module_dir:102: /var/log//QA_Controller_56971_20240906174629
+2024-09-06 17:46:30 [DEBUG] controller.conftest:module_dir:106: in module_dir
+2024-09-06 17:46:30 [WARNING] controller.misc.sms.tc_data:parse_cli_args:77: C:\GitHub\CosNIC\backend\venvs\1\alpha_34\Lib\site-packages\controller\misc\sms\tc_data.py was not called directly by sms test runner. Ignoring the failure to parse command line arguments
+2024-09-06 17:46:30 [INFO] controller.cuw.test_script:start:223: Launched by pytest
+2024-09-06 17:46:30 [INFO] controller.cuw.test_script:start:223: Launched by pytest
+2024-09-06 17:46:30 [INFO] controller.cuw.test_script:start:244: Log folder: C:\var\log\QA_Controller_56971_20240906174629\run
+2024-09-06 17:46:30 [INFO] controller.cuw.test_script.tsl.common.pre_req.result_exchange:load_results:138: Validator script was not found. Defaulting value to True.
+2024-09-06 17:46:30 [INFO] controller.cuw.test_script:check_tc_preReq_result:161: >>> PreReq report for TC ID 56971 is True
+2024-09-06 17:46:30 [INFO] controller.cuw.test_script:start:256: Test Case Details = {'tms_testcase_id': 'QA-Controller-56971', 'tms_testcase_version': 3, 'name': 'MAXQ with reboot stress', 'id': '56971', 'version': '1.0.0'}
+2024-09-06 17:46:30 [INFO] controller.cuw.test_script.config:restore_config_files:115: Restoring config files... (only if config files are default config files)
+2024-09-06 17:46:30 [DEBUG] controller.cuw.test_script.config:__restore:108: Backup file for C:\GitHub\CosNIC\backend\venvs\1\alpha_34\Lib\site-packages\controller\cuw\test_script\config\sut_client_config.yml is empty
+2024-09-06 17:46:30 [DEBUG] controller.cuw.test_script.config:__restore:108: Backup file for C:\GitHub\CosNIC\backend\venvs\1\alpha_34\Lib\site-packages\controller\cuw\test_config\linux\dpdk_rfc2544.yml is empty
+2024-09-06 17:46:30 [DEBUG] controller.cuw.test_script.config:__restore:108: Backup file for C:\GitHub\CosNIC\backend\venvs\1\alpha_34\Lib\site-packages\controller\cuw\test_config\linux\performance_l2.yml is empty
+2024-09-06 17:46:32 [DEBUG] controller.cuw.test_script.config:__restore:108: Backup file for C:\GitHub\CosNIC\backend\venvs\1\alpha_34\Lib\site-packages\controller\cuw\test_config\linux\performance_roce.yml is empty
+2024-09-06 17:46:34 [DEBUG] controller.cuw.test_script.config:__restore:108: Backup file for C:\GitHub\CosNIC\backend\venvs\1\alpha_34\Lib\site-packages\controller\cuw\test_config\linux\performance_roce_l2.yml is empty
+2024-09-06 17:46:38 [DEBUG] controller.cuw.test_script.config:__restore:108: Backup file for C:\GitHub\CosNIC\backend\venvs\1\alpha_34\Lib\site-packages\controller\cuw\test_config\linux\performance_roce_mpi.yml is empty
+2024-09-06 17:46:38 [DEBUG] controller.cuw.test_script.config:__restore:108: Backup file for C:\GitHub\CosNIC\backend\venvs\1\alpha_34\Lib\site-packages\controller\cuw\test_config\linux\subtests_config.yml is empty
+2024-09-06 17:46:38 [DEBUG] controller.cuw.test_script.config:__restore:108: Backup file for C:\GitHub\CosNIC\backend\venvs\1\alpha_34\Lib\site-packages\controller\cuw\test_config\linux\__rmii_vector__.yml is empty
+2024-09-06 17:46:39 [DEBUG] controller.cuw.test_script.config:__restore:108: Backup file for C:\GitHub\CosNIC\backend\venvs\1\alpha_34\Lib\site-packages\controller\cuw\test_config\linux\__test_config__.yml is empty
+2024-09-06 17:46:39 [INFO] controller.cuw.test_script.config:backup_config_files:53: Saving the backup (Delta only) for config files...
+2024-09-06 17:46:39 [DEBUG] controller.cuw.test_script.config:backup_config_files:86: C:\GitHub\CosNIC\backend\venvs\1\alpha_34\Lib\site-packages\controller\cuw\test_script\config\sut_client_config.yml is backed up
+2024-09-06 17:46:39 [DEBUG] controller.cuw.test_script.config:backup_config_files:86: C:\GitHub\CosNIC\backend\venvs\1\alpha_34\Lib\site-packages\controller\cuw\test_config\linux\dpdk_rfc2544.yml is backed up
+2024-09-06 17:46:39 [DEBUG] controller.cuw.test_script.config:backup_config_files:86: C:\GitHub\CosNIC\backend\venvs\1\alpha_34\Lib\site-packages\controller\cuw\test_config\linux\performance_l2.yml is backed up
+2024-09-06 17:46:40 [INFO] controller.cuw.test_script:start:416: 
+####################################################
+########## RUN COMPLETE - START POST-TEST ##########
+####################################################
+2024-09-06 17:46:41 [DEBUG] controller.conftest:process_post_run_options:156: Pytest post_run: command parameters for option_okta_id= guest, option_sms_submission= False, option_email= False
+2024-09-06 17:46:41 [DEBUG] controller.misc.sms.sms_tr_base:update_tms_database_node:334: sms_tr_base.py version = 1.0.7
+2024-09-06 17:46:41 [INFO] controller.misc.sms.sms_tr_base:get_sms_user_id:367: User OKTA ID: guest is mapped to SMS User ID: 3
+2024-09-06 17:46:41 [INFO] controller.misc.sms.sms_tr_base:get_tc_verdicts:1246: script log folder: /var/log//QA_Controller_56971_20240906174629\run
+2024-09-06 17:46:41 [ERROR] controller.misc.sms.sms_tr_base:get_tc_verdicts:1256: Failed with exception at parse_sms_tc_data_file(). Message: tc_sms_data_file does not exist at /var/log//QA_Controller_56971_20240906174629\run/sms_data_local.json
+2024-09-06 17:46:41 [INFO] controller.conftest:process_post_run_options:191: 
+Summary for test suite controller.cuw.test_script.linux.basic_ethernet_functionality.QA_Controller_56971:
+Tested with SIT version= 229.1.125.0
+Start time= 2024-09-06T17:46:29
+End time= 2024-09-06T17:46:40
+Total test time= 0:00:11
+Total tests= 1
+Pass= 0
+Fail= 1
+
+2024-09-06 17:46:41 [INFO] controller.misc.sms.sms_tr_base:write_sms_data_file:1316: Creating file /var/log//QA_Controller_56971_20240906174629/sms_data.json
+2024-09-06 17:46:41 [INFO] controller.conftest:process_post_run_options:201: created sms data file in folder /var/log//QA_Controller_56971_20240906174629
+2024-09-06 17:46:41 [INFO] controller.conftest:process_post_run_options:208: Skip sms submission per user's request from pytest options.
+2024-09-06 17:46:41 [INFO] controller.conftest:process_post_run_options:215: Skip sending email per user's request from pytest options.

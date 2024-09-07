@@ -56,7 +56,9 @@ INSTALLED_APPS = [
     "test_runner.apps.TestRunnerConfig",
     "configfile.apps.ConfigfileConfig",
     "sutclient.apps.SutclientConfig",
+    "pulse.apps.PulseConfig",
     "django_celery_beat",
+    "django_celery_results",
     "rest_framework",
     "channels",
     "django.contrib.admin",
@@ -82,7 +84,7 @@ ROOT_URLCONF = "backend.urls"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [],
+        "DIRS": [os.path.join(BASE_DIR, "pulse", "templates")],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
@@ -200,12 +202,18 @@ REST_FRAMEWORK = {
 # Celery settings
 CELERY_BROKER_URL = "redis://localhost:6379/0"
 # CELERY_BROKER_URL = "redis://127.0.0.1:6379/0"
-CELERY_RESULT_BACKEND = "redis://localhost:6379/0"
+# CELERY_RESULT_BACKEND = "redis://localhost:6379/0"'
+CELERY_TASK_TRACK_STARTED = True
+CELERY_RESULT_BACKEND = "django-db"
 CELERY_TASK_SERIALIZER = "json"
 CELERY_RESULT_SERIALIZER = "json"
 CELERY_TIMEZONE = "UTC"
 CELERY_ACKS_LATE = True
 CELERY_TASK_REJECT_ON_WORKER_LOST = True
+CELERY_WORKER_CONCURRENCY = 10  # Number of worker processes
+CELERY_WORKER_POOL = "prefork"  # Use prefork pool algorithm
+CELERY_RESULT_EXTENDED = True
+
 # CELERY_BROKER_URL = "redis://172.17.21.179:6379/0"
 # CELERY_RESULT_BACKEND = "redis://172.17.21.179:6379/0"
 

@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.jsdelivr.net/npm/reconnecting-websocket@4.0.4/dist/ReconnectingWebSocket.min.js"></script>
+
+    <title>Real time app</title>
+</head>
+<body>
+    <h1>Live logs via websockets, awesome work CosNIC! </h1>
+    <h4 id="ct" style="font-family: 'Courier New', Courier, monospace;">
+
+    </h4>
+    <script>
+        //var ws = new WebSocket('ws://localhost:8001/ws/sc/');
+        // var ws = new WebSocket('ws://localhost:8001/ws/log/');
+        // const ws = new WebSocket('ws://localhost:8000/ws/livelogs/');
+        const ws = new ReconnectingWebSocket('ws://localhost:8000/ws/livelogs/');
+
+
+        ws.onopen = function() {
+            console.log('WebSocket is open now.');
+            ws.send(JSON.stringify({
+                message: "Hello from the client!",
+                // script_path : "C:\\GitHub\\Django-WebSockets\\dj_websockets_2\\app\\user_scripts\\test_logging.py"
+            }));
+        };
+        
+        
+        // Executes when the server responds
+        ws.onmessage = function(event) {
+            console.log('Raw message from server onmessage:', event.data);
+            try {
+                var data = JSON.parse(event.data);
+                document.getElementById('ct').innerText += data.logs + "\n";
+            } catch (error) {
+                console.error('Error parsing JSON:', error);
+            }
+        };
+
+        ws.onerror = function(event) {
+            console.log('WebSocket error: ', event);
+        };
+
+        ws.onclose = function(event) {
+            console.log('WebSocket is closed now.', event);
+        }; 
+
+    </script>
+<!-- 
+    <script>
+        const logContainer = document.getElementById('log-container');
+        const socket = new WebSocket('ws://localhost:8000/ws/livelogs/');
+
+        socket.onopen = function(e) {
+            console.log('WebSocket connection established.', e);
+        };
+
+
+        
+
+        socket.onmessage = function(event) {
+            
+            
+            var data = JSON.parse(event.data);
+            console.log('Received log message:', data);
+
+            document.getElementById('ct').innerText += data.logs + "\n";
+            
+            
+            
+        };
+
+        socket.onclose = function(e) {
+            console.log('WebSocket connection closed.');
+        };
+
+        socket.onerror = function(error) {
+            console.error('WebSocket error:', error);
+        };
+    </script>
+-->
+</body>
+</html>

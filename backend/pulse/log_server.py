@@ -208,10 +208,6 @@ class LogRecordStreamHandler(socketserver.StreamRequestHandler):
                     chunk += self.connection.recv(slen - len(chunk))
 
                 # # Deserialize the log record (using JSON instead of pickle)
-                # obj = json.loads(chunk.decode("utf-8"))
-                # record = logging.makeLogRecord(obj)
-                # asyncio.run(self.broadcast(record))
-                # Deserialize using jsonpickle
                 log_record = pickle.loads(chunk)
                 record = logging.makeLogRecord(log_record)
                 asyncio.run(self.broadcast(record))
@@ -223,9 +219,17 @@ class LogRecordStreamHandler(socketserver.StreamRequestHandler):
     def format(self, record):
         # Format the log record as a string
         formatter = logging.Formatter(
-            "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+            "TestRunID: %(test_run_id)s : %(asctime)s - %(name)s - %(levelname)s - %(message)s"
         )
         return formatter.format(record)
+
+    # async def broadcast(self, record):
+    #     """
+    #     Broadcast the log message to all connected WebSocket clients.
+    #     """
+    #     print(f"Broadcasting message: {record}")
+    #     message = self.format(record)
+    #     await broadcast_to_clients(message)
 
     async def broadcast(self, record):
         """
@@ -233,7 +237,9 @@ class LogRecordStreamHandler(socketserver.StreamRequestHandler):
         """
         print(f"Broadcasting message: {record}")
         message = self.format(record)
-        await broadcast_to_clients(message)
+        for client, test_run_id in self.clients:
+            if test_run_id is None or record.test_run_id == test_run_id:
+                await send_and_flush(client, message)
 
 
 async def broadcast_to_clients(message):
@@ -290,17 +296,30 @@ class LogRecordSocketReceiver(socketserver.ThreadingTCPServer):
         server_thread.daemon = True
         server_thread.start()
 
-    async def register_client(self, websocket):
+    async def register_client(self, websocket, test_run_id=None):
         """
         Registers a new WebSocket client.
         """
-        self.clients.add(websocket)
+        # self.clients.add(websocket)
+        self.clients.add((websocket, None))
         print(f"Client added to register_client : {websocket}")
         print(f"All websocket clients           : {self.clients}")
+
+        # try:
+        #     await websocket.wait_closed()
+        # finally:
+        #     self.clients.remove(websocket)
         try:
-            await websocket.wait_closed()
+            async for message in websocket:
+                data = json.loads(message)
+                if "test_run_id" in data:
+                    # Update the client with the test_run_id
+                    self.clients.remove((websocket, None))
+                    self.clients.add((websocket, data["test_run_id"]))
+        except Exception as e:
+            print(f"Error handling client message: {e}")
         finally:
-            self.clients.remove(websocket)
+            self.clients = {client for client in self.clients if client[0] != websocket}
 
 
 # Initialize the log server
@@ -309,7 +328,15 @@ log_server = LogRecordSocketReceiver()
 
 # Start WebSocket server
 async def websocket_handler(websocket, path):
-    await log_server.register_client(websocket)
+    # await log_server.register_client(websocket)
+    # Extract test_run_id from the path
+    print(f"Websocket handler path recevied : {path}")
+    path_parts = path.split("/")
+    if len(path_parts) > 2:
+        test_run_id = path_parts[2]
+        await log_server.register_client(websocket, test_run_id)
+    else:
+        await websocket.close()  # Close connection if path is invalid
 
 
 def start_servers():

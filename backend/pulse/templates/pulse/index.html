@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate, max-age=0"/>
+    <meta http-equiv="Pragma" content="no-cache"/>
+    <meta http-equiv="Expires" content="0"/>
+
+    <title>CosNIC-Pulse Test Run ID {{ test_run_id }} !</title>
+</head>
+<body>
+    <h1>Live logs via websockets, awesome work CosNIC buddy!</h1>
+    <h2>{{ title }}</h2>
+    <h4 id="ct" style="font-family: 'Courier New', Courier, monospace;"></h4>
+    <script src="/static/js/main.js?v={{ version }}"></script>
+    <script>
+        window.onload = function() {
+            var meta = document.createElement('meta');
+            meta.httpEquiv = 'Cache-Control';
+            meta.content = 'no-cache';
+            document.head.appendChild(meta);
+        };
+
+        // Safely escape testRunId to ensure it's properly parsed in JS
+        var testRunId = "{{ test_run_id|escapejs }}";
+        console.log('Test Run ID:', testRunId);
+
+        // Establish the WebSocket connection
+        const ws = new WebSocket('ws://localhost:8000/ws/livelogs/');
+
+        // Only send data once WebSocket is successfully opened
+        ws.onopen = function(event) {
+            console.log('WebSocket is open now.');
+            
+            // Sending message safely via WebSocket
+            const message = {
+                message: "Hello from the client!",
+                test_run_id: testRunId // Ensure this is properly parsed
+            };
+
+            console.log('Sending message:', message);
+
+            // Convert the message to JSON format
+            ws.send(JSON.stringify(message));
+        };
+
+        ws.onmessage = function(event) {
+            console.log('Raw message from server onmessage:', event.data);
+            try {
+                var data = JSON.parse(event.data);
+                document.getElementById('ct').innerText += data.logs + "\n";
+            } catch (error) {
+                console.error('Error parsing JSON:', error);
+            }
+        };
+
+        ws.onerror = function(event) {
+            console.log('WebSocket error: ', event);
+        };
+
+        ws.onclose = function(event) {
+            console.log('WebSocket is closed now.', event);
+        }; 
+    </script>
+</body>
+</html>

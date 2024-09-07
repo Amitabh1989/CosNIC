@@ -36,9 +36,39 @@ log = logging.getLogger(__name__)
 
 
 class LiveLogsConsumer(AsyncWebsocketConsumer):
-    async def connect(self):
+    # async def connect(self):
+    async def websocket_connect(self, event):
         await self.accept()
         self.log_server_uri = "ws://localhost:6789"  # Fixed the typo here
+        # data = await self.receive()  # receives the data from the client
+        # print("Data recevied from client is : ", data)
+        # data = event.get("text")
+        # # data_str = data.decode("utf-8")
+        # print("Data recevied from client is : ", data)
+        # self.test_run_id = data.get("test_run_id")
+        # self.message = data.get("message")
+        # print(
+        #     f"Connecting to log server : {self.message}... for test case : {self.test_run_id} "
+        # )
+
+        # try:
+        #     # Trying to connect to the log server
+        #     self.log_server_connection = await websockets.connect(self.log_server_uri)
+        #     print("Connected to log server successfully.")
+        #     asyncio.create_task(self.broadcast_logs())
+        # except Exception as e:
+        #     print(f"Error connecting to log server: {e}")
+        #     await self.close()  # Close the WebSocket if we can't connect to the log server
+
+    async def websocket_receive(self, message):
+        print("Data recevied from client is : ", message, type(message))
+        data = message.get("text")
+        data = json.loads(data)
+        self.test_run_id = data.get("test_run_id")
+        self.message = data.get("message")
+        print(
+            f"Connecting to log server : {self.message}... for test case : {self.test_run_id} "
+        )
 
         try:
             # Trying to connect to the log server
@@ -47,13 +77,13 @@ class LiveLogsConsumer(AsyncWebsocketConsumer):
             asyncio.create_task(self.broadcast_logs())
         except Exception as e:
             print(f"Error connecting to log server: {e}")
-            await self.close()  # Close the WebSocket if we can't connect to the log server
+            # await self.close()  # Close the WebSocket if we can't connect to the log server
 
     async def disconnect(self, code):
         # Cleanly close the connection to the log server
         if hasattr(self, "log_server_connection") and self.log_server_connection:
             await self.log_server_connection.close()
-        await self.close()
+        # await self.close()
 
     async def broadcast_logs(self):
         try:
@@ -64,3 +94,15 @@ class LiveLogsConsumer(AsyncWebsocketConsumer):
         except Exception as e:
             print(f"Error while broadcasting logs: {e}")
             # await self.close()
+
+
+# class LiveLogsConsumer(AsyncWebsocketConsumer):
+#     async def connect(self, scope):
+#         await self.accept()
+#         self.test_run_id = scope['path'].split('/')[-1]  # Extract test run ID from URL
+
+#     async def receive(self, text_data):
+#         data = json.loads(text_data)
+#         if data.get('test_run_id') == self.test_run_id:
+#             # Broadcast the log message to the client
+#             await self.send(text_data=json.dumps(data))

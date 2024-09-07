@@ -294,11 +294,14 @@ class RunTestsView(APIView):
                 "venv_name": venv_name,
                 "user_id": user.id,
             }
+            test_run_id = "test_run_123"  # This would be dynamically generated
+            live_log_url = f"ws://localhost:6789/livelogs/{test_run_id}"
             task = run_test_task.apply_async(kwargs=data)
             print(f"Task ID : {task.id}")
             return Response(
                 {
-                    "message": f"All test jobs have been created on Venv {venv_name} successfully"
+                    "message": f"All test jobs have been created on Venv {venv_name} successfully",
+                    "live_logs_url": live_log_url,
                 },
                 status=status.HTTP_201_CREATED,
             )

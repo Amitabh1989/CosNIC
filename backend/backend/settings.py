@@ -28,6 +28,8 @@ REPO_ROOT = MEDIA_ROOT / "ctrl_repo"
 LOG_URL = "/logs/"
 LOGS_ROOT = MEDIA_ROOT / "test_logs"
 
+STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
+
 
 print(f"BASE DIR : {BASE_DIR}")
 print(f"REPO_PATH : {REPO_ROOT}")
@@ -313,6 +315,7 @@ CHANNEL_LAYERS = {
     },
 }
 
+# Uncomment this section to use Django Redis cache
 CACHES = {
     "default": {
         "BACKEND": "django_redis.cache.RedisCache",
@@ -322,3 +325,6 @@ CACHES = {
         },
     }
 }
+
+
+CACHE_MIDDLEWARE_SECONDS = 0

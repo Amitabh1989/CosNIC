@@ -1,9 +1,8 @@
-import React from 'react'
+"use client";
+import React from "react";
 
 const UserHeader = () => {
-  return (
-    <div>UserHeader</div>
-  )
-}
+    return <div>UserHeader</div>;
+};
 
-export default UserHeader
+export default UserHeader;

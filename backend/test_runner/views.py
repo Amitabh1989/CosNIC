@@ -4,6 +4,7 @@ import os
 from celery.result import AsyncResult
 from django.conf import settings
 from django.contrib.auth import get_user_model
+from django.contrib.auth.models import User
 from django.core.files.storage import default_storage
 from rest_framework import status, viewsets
 from rest_framework.exceptions import NotAuthenticated
@@ -347,36 +348,77 @@ class GetUserVenvs(viewsets.ModelViewSet):
 # class VenvStatusView(APIView):
 class VenvStatusView(viewsets.ModelViewSet):
     queryset = VirtualEnvironment.objects.all()
-    # serializer_class = VirtualEnvironmentSerializer
     serializer_class = VenvsStatusJobsUsersSerializer
+    pagination_class = CustomLimitOffsetPagination
+    # permission_classes = [IsAuthenticated]
 
     def retrieve(self, request, *args, **kwargs):
-        user = get_user_model().objects.get(username=self.request.user.username)
-        # venv = VirtualEnvironment.objects.get(venv_name=venv_name, user=user)
-        # Filter queryset based on the user
-        venvs = self.queryset.filter(user=user)
+        # Get the username or user ID from the request
+        print(f"Request in the retreive : {request}")
+        print(f"Request in the kwargs : {kwargs}")
+        venv_name = kwargs.get("venv_name", None)
+        venv_id = kwargs.get("pk", None)
+        print(f"venv_id Id is : {venv_id}")
 
-        # Prepare data for response
-        venv_data = []
-        for venv in venvs:
-            venv_data.append(
+        # user = request.user
+        user = User.objects.get(username="root")
+        try:
+            if venv_id:
+                venv = VirtualEnvironment.objects.get(id=venv_id, user=user)
+            elif venv_name:
+                venv = VirtualEnvironment.objects.get(venv_name=venv_name, user=user)
+        except VirtualEnvironment.DoesNotExist:
+            return Response(
                 {
-                    "venv_name": venv.venv_name,
-                    "status": venv.status,
-                    "last_used_at": venv.last_used_at,
-                    "num_test_cases": venv.test_jobs.count(),
-                }
+                    "message": f"Venv {venv_name if venv_name else venv_id} not found under user {user.username}"
+                },
+                status=status.HTTP_404_NOT_FOUND,
             )
-
+        # Handle the case where the user doesn't exist
         return Response(
             {
-                "user": user.username,
-                "venvs": venv_data,
+                "venv_name": venv.venv_name,
+                "status": venv.status,
+                "last_used_at": venv.last_used_at,
+                "num_test_cases": venv.test_jobs.count(),
+                "nickname": venv.nickname,
+                "ctrl_package_version": venv.ctrl_package_version,
             },
-            status=status.HTTP_200_OK,
+            status=status.HTTP_404_NOT_FOUND,
         )
 
     def list(self, request):
-        queryset = self.get_queryset().order_by("user", "status")
+        print(f"Returning from list here : VenvStatusView : {request.data}")
+        # user = request.user
+        user = User.objects.get(username="root")
+        print(f"Returning from list here : user : {user}")
+        # queryset = self.get_queryset().order_by("user", "status")
+        queryset = VirtualEnvironment.objects.filter(user=user)
+        page = self.paginate_queryset(queryset)
+        if page is not None:
+            serializer = self.get_serializer(page, many=True)
+            return self.get_paginated_response(serializer.data)
+
+        # If no pagination is needed, return the whole queryset
         serializer = self.get_serializer(queryset, many=True)
-        return Response(serializer.data, status=status.HTTP_200_OK)
+        print(f"Serializer data : {serializer.data}")
+        return Response(serializer.data)
+
+        """
+        {
+            "count": 100,
+            "next": "http://localhost:8000/api/venvs/?limit=10&offset=10",
+            "previous": null,
+            "results": [
+                {
+                    "venv_name": "my-env",
+                    "status": "active",
+                    "last_used_at": "2023-09-01T12:00:00Z",
+                    "num_test_cases": 5,
+                    "nickname": "env-nickname",
+                    "ctrl_package_version": "1.0.0"
+                },
+                ...
+            ]
+        }
+        """

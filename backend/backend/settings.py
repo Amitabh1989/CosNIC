@@ -50,6 +50,9 @@ ALLOWED_HOSTS = []
 # CSRF_TRUSTED_ORIGINS = ["http://localhost:8000", "http://127.0.0.1:8000"]
 # CSRF_COOKIE_SECURE = False  # Not recommended for production
 
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:3000",  # Replace with the actual frontend origin
+]
 
 # Application definition
 
@@ -63,6 +66,7 @@ INSTALLED_APPS = [
     "django_celery_results",
     "rest_framework",
     "channels",
+    "corsheaders",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -79,6 +83,7 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    "corsheaders.middleware.CorsMiddleware",
 ]
 
 ROOT_URLCONF = "backend.urls"

@@ -37,4 +37,9 @@ urlpatterns = [
     ),
     path("run", RunTestsView.as_view(), name="test_run"),
     path("repo/scan", ManualScanCtrlRepoView.as_view(), name="repo_scan"),
+    # path(
+    #     "venv-status/<int:user_id>/",
+    #     VenvStatusView.as_view({"get": "retrieve"}),
+    #     name="venv-status-by-id",
+    # ),
 ] + router.urls

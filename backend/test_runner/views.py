@@ -358,7 +358,7 @@ class VenvStatusView(viewsets.ModelViewSet):
         print(f"Request in the kwargs : {kwargs}")
         venv_name = kwargs.get("venv_name", None)
         venv_id = kwargs.get("pk", None)
-        print(f"User Id is : {venv_id}")
+        print(f"venv_id Id is : {venv_id}")
 
         # user = request.user
         user = User.objects.get(username="root")
@@ -389,8 +389,9 @@ class VenvStatusView(viewsets.ModelViewSet):
 
     def list(self, request):
         print(f"Returning from list here : VenvStatusView : {request.data}")
-        user = request.user
-        print(f"Returning from list here : user : {request.user}")
+        # user = request.user
+        user = User.objects.get(username="root")
+        print(f"Returning from list here : user : {user}")
         # queryset = self.get_queryset().order_by("user", "status")
         queryset = VirtualEnvironment.objects.filter(user=user)
         page = self.paginate_queryset(queryset)

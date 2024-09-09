@@ -1,9 +1,7 @@
-import React from 'react'
+import React from "react";
 
-const TestRunByID = ({params}) => {
-  return (
-    <div>TestRunByID {params.id}</div>
-  )
-}
+const TestRunByID = ({ params }) => {
+    return <div>TestRunByID {params.id}</div>;
+};
 
-export default TestRunByID
+export default TestRunByID;

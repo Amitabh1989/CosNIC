@@ -1,3 +1,5 @@
+"use clilent";
+import React, { useEffect, useState } from "react";
 import {
     MagnifyingGlassIcon,
     ChevronUpDownIcon,
@@ -35,74 +37,45 @@ const TABS = [
     },
 ];
 
-// const TABS = [
-//   {
-//     label: "All",
-//     value: "all",
-//   },
-//   {
-//     label: "Monitored",
-//     value: "monitored",
-//   },
-//   {
-//     label: "Unmonitored",
-//     value: "unmonitored",
-//   },
-// ];
-
-// const TABLE_HEAD = ["Member", "Function", "Status", "Employed", ""];
-
-// const TABLE_ROWS = [
-//   {
-//     img: "https://demos.creative-tim.com/test/corporate-ui-dashboard/assets/img/team-3.jpg",
-//     name: "John Michael",
-//     email: "john@creative-tim.com",
-//     job: "Manager",
-//     org: "Organization",
-//     online: true,
-//     date: "23/04/18",
-//   },
-//   {
-//     img: "https://demos.creative-tim.com/test/corporate-ui-dashboard/assets/img/team-2.jpg",
-//     name: "Alexa Liras",
-//     email: "alexa@creative-tim.com",
-//     job: "Programator",
-//     org: "Developer",
-//     online: false,
-//     date: "23/04/18",
-//   },
-//   {
-//     img: "https://demos.creative-tim.com/test/corporate-ui-dashboard/assets/img/team-1.jpg",
-//     name: "Laurent Perrier",
-//     email: "laurent@creative-tim.com",
-//     job: "Executive",
-//     org: "Projects",
-//     online: false,
-//     date: "19/09/17",
-//   },
-//   {
-//     img: "https://demos.creative-tim.com/test/corporate-ui-dashboard/assets/img/team-4.jpg",
-//     name: "Michael Levi",
-//     email: "michael@creative-tim.com",
-//     job: "Programator",
-//     org: "Developer",
-//     online: true,
-//     date: "24/12/08",
-//   },
-//   {
-//     img: "https://demos.creative-tim.com/test/corporate-ui-dashboard/assets/img/team-5.jpg",
-//     name: "Richard Gran",
-//     email: "richard@creative-tim.com",
-//     job: "Manager",
-//     org: "Executive",
-//     online: false,
-//     date: "04/10/21",
-//   },
-// ];
-
-export const SortableTable = ({ columns, data }) => {
+export const SortableTable = ({
+    columns,
+    data,
+    count,
+    next,
+    previous,
+    onNext,
+    onPrevious,
+}) => {
     console.log("columns", columns);
     console.log("data", data);
+    const [currentPage, setCurrentPage] = useState(1);
+    const [totalPages, setTotalPages] = useState(0);
+
+    useEffect(() => {
+        // Calculate total pages based on total items and items per page
+        // const calculatedTotalPages = Math.ceil(count / data.length);
+        const calculatedTotalPages = Math.ceil(count / 10);
+        setTotalPages(calculatedTotalPages);
+    }, [data.length]);
+
+    const handleNext = async (e) => {
+        // e.preventDefault();
+        if (next) {
+            console.log("Next link is table:", next);
+            await onNext(next);
+            setCurrentPage((prev) => prev + 1);
+        }
+    };
+
+    const handlePrevious = async (e) => {
+        // e.preventDefault();
+        if (previous) {
+            console.log("Previous link is table :", previous);
+            await onPrevious(previous);
+            setCurrentPage((prev) => prev - 1);
+        }
+    };
+
     return (
         <Card className="h-full w-full">
             <CardHeader floated={false} shadow={false} className="rounded-none">
@@ -138,7 +111,7 @@ export const SortableTable = ({ columns, data }) => {
                                     <Typography
                                         variant="small"
                                         color="blue-gray"
-                                        className="flex items-center justify-between gap-2 font-normal leading-none opacity-70"
+                                        className="flex items-center justify-between gap-2 font-normal leading-none opacity-70 font-bold"
                                     >
                                         {head}{" "}
                                         {index !== columns.length - 1 && (
@@ -158,7 +131,7 @@ export const SortableTable = ({ columns, data }) => {
                                 {
                                     name,
                                     nickname,
-                                    ctrl_pkg_ver,
+                                    ctrl_pkg_version,
                                     status,
                                     user,
                                     num_tests,
@@ -167,14 +140,14 @@ export const SortableTable = ({ columns, data }) => {
                             ) => {
                                 const isLast = index === data.length - 1;
                                 const classes = isLast
-                                    ? "p-4"
-                                    : "p-4 border-b border-blue-gray-50";
+                                    ? "p-1"
+                                    : "p-1 border-b border-blue-gray-50";
 
                                 return (
                                     <tr key={name}>
                                         <td className={classes}>
-                                            <div className="flex items-center gap-3">
-                                                <div className="flex flex-col">
+                                            <div className="flex items-center gap-1">
+                                                <div className="flex flex-col ml-4">
                                                     <Typography
                                                         variant="small"
                                                         color="blue-gray"
@@ -186,7 +159,7 @@ export const SortableTable = ({ columns, data }) => {
                                             </div>
                                         </td>
                                         <td className={classes}>
-                                            <div className="flex flex-col">
+                                            <div className="flex flex-col ml-4">
                                                 <Typography
                                                     variant="small"
                                                     color="blue-gray"
@@ -197,29 +170,45 @@ export const SortableTable = ({ columns, data }) => {
                                             </div>
                                         </td>
                                         <td className={classes}>
-                                            <div className="flex flex-col">
+                                            <div className="flex flex-col ml-4">
                                                 <Typography
                                                     variant="small"
                                                     color="blue-gray"
                                                     className="font-normal"
                                                 >
-                                                    {ctrl_pkg_ver}
+                                                    {ctrl_pkg_version}
                                                 </Typography>
                                             </div>
                                         </td>
                                         <td className={classes}>
                                             <div className="flex flex-col">
-                                                <Typography
+                                                {/* <Typography
                                                     variant="small"
                                                     color="blue-gray"
                                                     className="font-normal"
                                                 >
                                                     {status}
-                                                </Typography>
+                                                </Typography> */}
+                                                <Chip
+                                                    size="sm"
+                                                    variant="ghost"
+                                                    value={status}
+                                                    color={
+                                                        status === "free"
+                                                            ? "green"
+                                                            : status ===
+                                                                "created"
+                                                              ? "gray"
+                                                              : status ===
+                                                                  "running"
+                                                                ? "amber"
+                                                                : "red"
+                                                    }
+                                                />
                                             </div>
                                         </td>
                                         <td className={classes}>
-                                            <div className="flex flex-col">
+                                            <div className="flex flex-col ml-4">
                                                 <Typography
                                                     variant="small"
                                                     color="blue-gray"
@@ -230,7 +219,7 @@ export const SortableTable = ({ columns, data }) => {
                                             </div>
                                         </td>
                                         <td className={classes}>
-                                            <div className="flex flex-col">
+                                            <div className="flex flex-col ml-4">
                                                 <Typography
                                                     variant="small"
                                                     color="blue-gray"
@@ -240,15 +229,6 @@ export const SortableTable = ({ columns, data }) => {
                                                 </Typography>
                                             </div>
                                         </td>
-                                        {/* <td className={classes}>
-                                            <Typography
-                                                variant="small"
-                                                color="blue-gray"
-                                                className="font-normal"
-                                            >
-                                                {date}
-                                            </Typography>
-                                        </td> */}
                                         <td className={classes}>
                                             <Tooltip content="Edit User">
                                                 <IconButton variant="text">
@@ -269,13 +249,23 @@ export const SortableTable = ({ columns, data }) => {
                     color="blue-gray"
                     className="font-normal"
                 >
-                    Page 1 of 10
+                    Page {currentPage} of {totalPages}
                 </Typography>
                 <div className="flex gap-2">
-                    <Button variant="outlined" size="sm">
+                    <Button
+                        variant="outlined"
+                        size="sm"
+                        disabled={!previous}
+                        onClick={handlePrevious}
+                    >
                         Previous
                     </Button>
-                    <Button variant="outlined" size="sm">
+                    <Button
+                        variant="outlined"
+                        size="sm"
+                        disabled={!next}
+                        onClick={handleNext}
+                    >
                         Next
                     </Button>
                 </div>

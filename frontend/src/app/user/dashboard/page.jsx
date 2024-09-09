@@ -6,7 +6,7 @@ const UserDashBoard = () => {
     return (
         <>
             <div>UserDashBoard</div>
-            <Link href="/user/dashboard/venv_status">
+            <Link href="/user/dashboard/">
                 <div>
                     <VenvStatusComponent />
                 </div>

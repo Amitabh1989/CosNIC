@@ -1,11 +1,11 @@
 # Create your models here.
 from django.contrib.auth.models import (
-    BaseUserManager,
     AbstractBaseUser,
+    BaseUserManager,
     PermissionsMixin,
+    User,
 )
 from django.db import models
-from django.contrib.auth.models import User
 
 
 class UserManager(BaseUserManager):
@@ -92,18 +92,16 @@ class User(AbstractBaseUser, PermissionsMixin):
     REQUIRED_FIELDS = ["first_name", "last_name"]
 
     def __str__(self):
-        # return (
-        #     f"{self.email} with username {self.username} created on {self.date_joined}"
-        # )
         return f"{self.username}"
 
 
 class UserProfile(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name="profile")
     bio = models.TextField(blank=True)
+    nickname = models.CharField(max_length=30, blank=True)
     location = models.CharField(max_length=30, blank=True)
     birth_date = models.DateField(null=True, blank=True)
-    picture = models.ImageField(upload_to="profile_pic", blank=True, null=True)
+    avatar = models.ImageField(upload_to="profile_pic", blank=True, null=True)
 
     def __str__(self):
         return f"{self.user.email}'s profile"

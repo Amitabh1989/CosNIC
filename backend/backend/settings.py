@@ -53,6 +53,7 @@ ALLOWED_HOSTS = []
 
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",  # Replace with the actual frontend origin
+    "http://127.0.0.1:3000",
 ]
 
 # Application definition

@@ -1,5 +1,6 @@
 # from .models import User
 from django.contrib.auth import authenticate, get_user_model, login, logout
+from django.db import IntegrityError
 from django.shortcuts import get_object_or_404, render
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
@@ -62,6 +63,7 @@ class LoginView(APIView):
     queryset = User.objects.all()
     permission_classes = [AllowAny]
     serializer_class = LoginSerializer
+    authentication_classes = [SessionAuthentication, TokenAuthentication]
 
     def post(self, request, *args, **kwargs):
         serializer = LoginSerializer(data=request.data)
@@ -88,12 +90,24 @@ class RegisterView(APIView):
     serializer_class = RegisterSerializer
 
     def post(self, request, *args, **kwargs):
+        print("Data in request is : ", request.data)
         serializer = RegisterSerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
+        try:
+            if serializer.is_valid():
+                serializer.save()
+                print("User is valid")
+                try:
+                    print(f"Serilaized data : {serializer.data}")
+                except Exception as e:
+                    print(f"Error is : {str(e)}")
+                return Response(
+                    {"message": "User registered successfully"},
+                    status=status.HTTP_201_CREATED,
+                )
+        except IntegrityError:
             return Response(
-                {"message": f"User {serializer.data['user']} registered successfully"},
-                status=status.HTTP_201_CREATED,
+                {"message": "User with this email already exists, try logging in"},
+                status=status.HTTP_409_CONFLICT,
             )
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 

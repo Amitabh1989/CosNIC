@@ -1,6 +1,6 @@
 "use client";
 import React, { Component, useEffect, useState } from "react";
-import { getVenvStatusAPI } from "@/api/base_api";
+import { getVenvStatusAPI } from "@/api/venv_apis";
 import { CustomTable, SortableTable } from "@/components/tables/SortableTable";
 // import { Tab } from "@material-tailwind/react";
 

@@ -11,6 +11,11 @@ export const baseBackendApi = axios.create({
     baseURL: BACKEND_BASE_URL, // Set your base URL here
 });
 
+// You called this URL via POST, but the URL doesn't end in a slash and you have APPEND_SLASH set.
+//  Django can't redirect to the slash URL while maintaining POST data.
+//  Change your form to point to 127.0.0.1: 8000 / user / register / (note the trailing slash),
+//  or set APPEND_SLASH = False in your Django settings.
+
 // Intercept request to include access token
 baseBackendApi.interceptors.request.use(
     (config) => {
@@ -50,7 +55,7 @@ baseBackendApi.interceptors.response.use(
 // Function to refresh access token
 const refreshAccessToken = async () => {
     return baseBackendApi.post(
-        "/auth/jwt/refresh/",
+        "api/token/refresh/",
         {},
         {
             withCredentials: true, // Allows sending cookies (refresh token)
@@ -59,23 +64,3 @@ const refreshAccessToken = async () => {
 };
 
 export default baseBackendApi;
-
-// export const getVenvStatusAPI = async (userId = null, url = null) => {
-//     // export const getVenvStatusAPI = async (url = null, userId = null) => {
-//     try {
-//         if (url) {
-//             console.log("Came to URL logic : ", url);
-//             const response = await baseBackendApi.get(url);
-//             console.log("Response from URL logic is:", response);
-//             return response.data;
-//         }
-
-//         // var user_id = parseInt(userId);
-//         console.log("Came to userId logic : ", userId);
-//         // const response = await baseBackendApi.get(`test_ops/venv-status/`);
-//         const response = await baseBackendApi.get(`test_ops/user/venvs`);
-//         return response.data;
-//     } catch (error) {
-//         console.error(error);
-//     }
-// };

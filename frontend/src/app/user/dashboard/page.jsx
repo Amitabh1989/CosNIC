@@ -1,3 +1,4 @@
+"use client";
 import React from "react";
 import VenvStatusComponent from "./VenvStatus";
 import Link from "next/link";

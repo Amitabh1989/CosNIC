@@ -1,20 +1,21 @@
-from django.shortcuts import render
-from rest_framework.views import APIView
-from rest_framework import viewsets
-from rest_framework.response import Response
-from rest_framework import status
-from rest_framework.decorators import action
-
 # from .models import User
-from django.contrib.auth import get_user_model
-from rest_framework import permissions
-from django.shortcuts import get_object_or_404
-from rest_framework_simplejwt.tokens import RefreshToken
-from django.contrib.auth import authenticate, login, logout
-from .serializers import LoginSerializer, RegisterSerializer
-
-from django.views.decorators.csrf import csrf_exempt
+from django.contrib.auth import authenticate, get_user_model, login, logout
+from django.db import IntegrityError
+from django.shortcuts import get_object_or_404, render
 from django.utils.decorators import method_decorator
+from django.views.decorators.csrf import csrf_exempt
+from rest_framework import permissions, status, viewsets
+from rest_framework.authentication import SessionAuthentication, TokenAuthentication
+from rest_framework.authtoken.models import Token
+from rest_framework.decorators import action
+from rest_framework.permissions import AllowAny, IsAuthenticated
+from rest_framework.response import Response
+from rest_framework.views import APIView
+from rest_framework_simplejwt.tokens import RefreshToken
+
+from .serializers import LoginSerializer, ProfileSerializer, RegisterSerializer
+
+# from .views import UserProfile
 
 # # Create your views here.
 # class CheckUsernameAvailability(APIView):
@@ -33,18 +34,6 @@ class IsAuthenticatedOrReadOnly(permissions.BasePermission):
 
 
 User = get_user_model()
-
-# class CheckUsernameAvailability(viewsets.ViewSet):
-#     # @action(detail=False, methods=['get'])
-#     permission_classes = [IsAuthenticatedOrReadOnly]
-#     # def retrieve(self, request, username):
-#     #     username = request.query_params.get('username')
-#     #     if User.objects.filter(username=username).exists():
-#     #         return Response({'available': False})
-#     #     return Response({'available': True})
-#     def retrieve(self, request, username):
-#         user = get_object_or_404(User, username=username)
-#         return Response({'available': False if user else True})
 
 
 class CheckUsernameAvailability(APIView):
@@ -72,7 +61,9 @@ class CheckUsernameAvailability(APIView):
 # @method_decorator(csrf_exempt, name="dispatch")
 class LoginView(APIView):
     queryset = User.objects.all()
-    permission_classes = []
+    permission_classes = [AllowAny]
+    serializer_class = LoginSerializer
+    authentication_classes = [SessionAuthentication, TokenAuthentication]
 
     def post(self, request, *args, **kwargs):
         serializer = LoginSerializer(data=request.data)
@@ -83,35 +74,84 @@ class LoginView(APIView):
             )
             if user:
                 login(request, user)
-                # refresh = RefreshToken.for_user(user)
-                # return Response({'refresh': str(refresh), 'access': str(refresh.access_token)}, status=status.HTTP_200_OK)
-                return Response({"msg": "User logged in"}, status=status.HTTP_200_OK)
-            return Response(
-                {"error": "Invalid credentials"}, status=status.HTTP_401_UNAUTHORIZED
-            )
+                refresh = RefreshToken.for_user(user)
+                return Response(
+                    {"refresh": str(refresh), "access": str(refresh.access_token)},
+                    status=status.HTTP_200_OK,
+                )
+            else:
+                return Response(serializer.errors, status=status.HTTP_401_UNAUTHORIZED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 class RegisterView(APIView):
-    permission_classes = []
+    queryset = User.objects.all()
+    permission_classes = [AllowAny]
+    serializer_class = RegisterSerializer
 
     def post(self, request, *args, **kwargs):
+        print("Data in request is : ", request.data)
         serializer = RegisterSerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
+        try:
+            if serializer.is_valid():
+                serializer.save()
+                print("User is valid")
+                try:
+                    print(f"Serilaized data : {serializer.data}")
+                except Exception as e:
+                    print(f"Error is : {str(e)}")
+                return Response(
+                    {"message": "User registered successfully"},
+                    status=status.HTTP_201_CREATED,
+                )
+        except IntegrityError:
             return Response(
-                {"message": "User registered successfully"},
-                status=status.HTTP_201_CREATED,
+                {"message": "User with this email already exists, try logging in"},
+                status=status.HTTP_409_CONFLICT,
             )
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 # LogoutView with CSRF exemption
 # The `@method_decorator(csrf_exempt, name="dispatch")` decorator is used in Django to exempt a specific method from CSRF verification. In this case, it is applied to the `LoginView` class to exempt the `dispatch` method from CSRF protection. This means that the `dispatch` method of the `LoginView` class will not require CSRF tokens for protection against Cross-Site Request Forgery (CSRF) attacks.
-@method_decorator(csrf_exempt, name="dispatch")
+# @method_decorator(csrf_exempt, name="dispatch")
 class LogoutView(APIView):
     permission_classes = [permissions.IsAuthenticated]
 
     def post(self, request):
-        logout(request)
-        return Response({"message": "User logged out"}, status=status.HTTP_200_OK)
+        try:
+            logout(request)
+            refresh_token = request.data["refresh"]
+            token = RefreshToken(refresh_token)
+            token.blacklist()  # Blacklist the refresh token
+            return Response({"message": "User logged out"}, status=status.HTTP_200_OK)
+        except Exception as e:
+            return Response(
+                {"message": f"Error logging out user: {str(e)}"},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+
+@method_decorator(csrf_exempt, name="dispatch")
+# @csrf_exempt
+class ProfileView(APIView):
+    # https://api.multiavatar.com/
+    # https://multiavatar.com/
+    """
+    let avatarId = 'Binx Bond'
+    fetch('https://api.multiavatar.com/'
+    +JSON.stringify(avatarId))
+      .then(res => res.text())
+      .then(svg => console.log(svg))
+    """
+    # queryset = User.objects.all()
+    # serializer_class = ProfileSerializer
+    authentication_classes = [SessionAuthentication, TokenAuthentication]
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+
+        print(f"Request in ProfileView : {request.user}")
+        user = get_object_or_404(User, id=request.user.id)
+        serializer = ProfileSerializer(user.profile)
+        return Response(serializer.data, status=status.HTTP_200_OK)

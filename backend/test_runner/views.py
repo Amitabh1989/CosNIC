@@ -334,6 +334,7 @@ class GetUserVenvs(viewsets.ModelViewSet):
     queryset = VirtualEnvironment.objects.all()
     serializer_class = VirtualEnvironmentSerializer
     permission_classes = [IsAuthenticated]
+    pagination_class = CustomLimitOffsetPagination
 
     def get_queryset(self):
         try:
@@ -343,6 +344,15 @@ class GetUserVenvs(viewsets.ModelViewSet):
             return VirtualEnvironment.objects.filter(user=user)
         except Exception as e:
             return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
+
+    def retrieve(self, request, *args, **kwargs):
+        if not request.user.is_authenticated:
+            # return Response(
+            #     {"error": "Authentication required"},
+            #     status=status.HTTP_401_UNAUTHORIZED,
+            # )
+            user = User.objects.get(username="root")
+        return VirtualEnvironment.objects.filter(user=user)
 
 
 # class VenvStatusView(APIView):

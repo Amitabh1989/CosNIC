@@ -1,11 +1,11 @@
 # Create your models here.
 from django.contrib.auth.models import (
-    BaseUserManager,
     AbstractBaseUser,
+    BaseUserManager,
     PermissionsMixin,
+    User,
 )
 from django.db import models
-from django.contrib.auth.models import User
 
 
 class UserManager(BaseUserManager):
@@ -39,8 +39,8 @@ class UserManager(BaseUserManager):
 class User(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField(unique=True)
     username = models.CharField(max_length=30, unique=True)
-    first_name = models.CharField(max_length=30, blank=True)
-    last_name = models.CharField(max_length=30, blank=True)
+    first_name = models.CharField(max_length=50, blank=True)
+    last_name = models.CharField(max_length=50, blank=True)
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
     date_joined = models.DateTimeField(auto_now_add=True)
@@ -92,18 +92,16 @@ class User(AbstractBaseUser, PermissionsMixin):
     REQUIRED_FIELDS = ["first_name", "last_name"]
 
     def __str__(self):
-        # return (
-        #     f"{self.email} with username {self.username} created on {self.date_joined}"
-        # )
         return f"{self.username}"
 
 
 class UserProfile(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name="profile")
     bio = models.TextField(blank=True)
+    nickname = models.CharField(max_length=30, blank=True)
     location = models.CharField(max_length=30, blank=True)
     birth_date = models.DateField(null=True, blank=True)
-    picture = models.ImageField(upload_to="profile_pic", blank=True, null=True)
+    avatar = models.ImageField(upload_to="profile_pic", blank=True, null=True)
 
     def __str__(self):
         return f"{self.user.email}'s profile"

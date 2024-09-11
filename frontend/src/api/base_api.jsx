@@ -11,6 +11,13 @@ export const baseBackendApi = axios.create({
     baseURL: BACKEND_BASE_URL, // Set your base URL here
 });
 
+function isValidRedirectUrl(url) {
+    // Define allowed paths
+    const allowedPaths = ["/user/dashboard", "/profile", "/settings"];
+    // Check if URL is within allowed paths
+    return allowedPaths.includes(url) || url === "/";
+}
+
 // You called this URL via POST, but the URL doesn't end in a slash and you have APPEND_SLASH set.
 //  Django can't redirect to the slash URL while maintaining POST data.
 //  Change your form to point to 127.0.0.1: 8000 / user / register / (note the trailing slash),
@@ -20,6 +27,7 @@ export const baseBackendApi = axios.create({
 baseBackendApi.interceptors.request.use(
     (config) => {
         const accessToken = sessionStorage.getItem("access_token"); // Store in memory (e.g., sessionStorage)
+        console.log("Access token is in request interceptors :", accessToken);
         if (accessToken) {
             config.headers.Authorization = `Bearer ${accessToken}`;
         }
@@ -35,6 +43,7 @@ baseBackendApi.interceptors.response.use(
         // If there's an error: If something goes wrong, like we don’t have permission, this part kicks in.
         // It's an async function because it might need to wait for something to finish (like getting a new token).
         const originalRequest = error.config;
+        console.log("Error in response interceptors:", error);
 
         if (error.response.status === 401 && !originalRequest._retry) {
             originalRequest._retry = true;
@@ -45,6 +54,12 @@ baseBackendApi.interceptors.response.use(
                 return baseBackendApi(originalRequest); // Retry the original request with new token
             } catch (refreshError) {
                 console.log("Token refresh failed", refreshError);
+                // Store the current URL before redirecting
+                sessionStorage.removeItem("redirect_after_login");
+                let redirectUrl = isValidRedirectUrl(window.location.pathname);
+                console.log("Redirecting URL in baseAPI :", redirectUrl);
+                sessionStorage.setItem("redirect_after_login", redirectUrl);
+                window.location.href = "/login"; // Redirect to login page
                 return Promise.reject(error);
             }
         }

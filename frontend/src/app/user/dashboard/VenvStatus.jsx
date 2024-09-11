@@ -1,11 +1,10 @@
 "use client";
 import React, { Component, useEffect, useState } from "react";
-import { getVenvStatusAPI } from "@/api/venv_apis";
+import { getVenvStatusAPI_v2 } from "@/api/venv_apis";
 import { CustomTable, SortableTable } from "@/components/tables/SortableTable";
 // import { Tab } from "@material-tailwind/react";
 
 const VenvStatusComponent = () => {
-    // const [venvStatus, setVenvStatus] = useState(null); // Renamed to avoid conflict with API function
     const [error, setError] = useState(null);
     const [rowData, setRowData] = useState([]); // Store row data separately
     const [totalCount, setTotalCount] = useState(0);
@@ -16,23 +15,22 @@ const VenvStatusComponent = () => {
         "Nickname",
         "Ctrl Pkg Version",
         "Status",
-        "User",
-        "Test Cases",
+        "Config File",
+        "Modified At",
     ]; // Define columns here
 
-    // const fetchData = async (url = null) => {
     const fetchData = async (url = null) => {
         try {
             // // Await the API call to get the URL or data
             console.log("URL is:", url);
             let apiUrl;
             let response;
+            let venvId = null;
             if (url) {
                 apiUrl = url; // Use the passed pagination URL if available
-                response = await getVenvStatusAPI(null, url);
+                response = await getVenvStatusAPI_v2(null, url);
             } else {
-                let userId = 1;
-                response = await getVenvStatusAPI(userId);
+                response = await getVenvStatusAPI_v2(venvId);
             }
 
             // Fetch the data from the constructed URL
@@ -42,18 +40,19 @@ const VenvStatusComponent = () => {
             // const data = response.data;
             console.log("Data for venv is from URL : ", url, " is : ", data);
             // Process the data for the table once venvStatus is available
-            // setTotalCount(data.results.length);
             setTotalCount(data.count);
             setPrevLink(data.previous);
             setNextLink(data.next);
             const apiData = data.results;
             const rows = apiData.map((venv) => ({
+                id: venv.id,
                 name: venv.venv_name,
                 nickname: venv.nickname,
-                ctrl_pkg_version: venv.ctrl_pkg_version,
+                ctrl_package_version: venv.ctrl_package_version,
                 status: venv.status,
                 user: venv.user,
-                num_tests: venv.num_test_cases,
+                config_file: venv.config_file,
+                modified_at: venv.modified_at,
             }));
             setRowData(rows); // Set the row data for the table
             console.log("Row data is:", rows);
@@ -77,16 +76,6 @@ const VenvStatusComponent = () => {
         fetchData();
     }, []);
 
-    // useEffect(() => {
-    //     if (prevLink) {
-    //         console.log("Prev link is useEffect :", prevLink);
-    //         fetchData(prevLink); // Data load for pagination
-    //     } else if (nextLink) {
-    //         console.log("Next link is useEffect :", nextLink);
-    //         fetchData(nextLink); // Data load for pagination
-    //     }
-    // }, [prevLink, nextLink]); // URL change triggers data fetch
-
     if (error) {
         return <div>Error fetching data</div>;
     }
@@ -96,9 +85,7 @@ const VenvStatusComponent = () => {
             <h1>Venv Status</h1>
             {/* <pre>{JSON.stringify(rowData, null, 2)}</pre> */}
             {rowData ? (
-                // <pre>{JSON.stringify(venvStatus, null, 2)}</pre>
                 <>
-                    {/* <CustomTable columns={columns} data={rowData} /> */}
                     <SortableTable
                         columns={columns}
                         data={rowData}

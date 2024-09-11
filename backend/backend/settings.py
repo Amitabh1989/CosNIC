@@ -55,6 +55,7 @@ CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",  # Replace with the actual frontend origin
     "http://127.0.0.1:3000",
 ]
+CORS_ALLOW_CREDENTIALS = True
 
 # Application definition
 
@@ -225,7 +226,7 @@ SIMPLE_JWT = {
     "REFRESH_TOKEN_LIFETIME": timedelta(days=50),
     "ROTATE_REFRESH_TOKENS": True,
     "BLACKLIST_AFTER_ROTATION": True,
-    "UPDATE_LAST_LOGIN": False,
+    "UPDATE_LAST_LOGIN": True,
     "ALGORITHM": "HS256",
     "VERIFYING_KEY": None,
     "AUDIENCE": None,
@@ -373,3 +374,10 @@ CACHES = {
 
 
 CACHE_MIDDLEWARE_SECONDS = 0
+
+
+# When we want to authentication using email instead of username, we need custom EmailBackend
+AUTHENTICATION_BACKENDS = [
+    "users.authentication.EmailBackend",
+    "django.contrib.auth.backends.ModelBackend",
+]

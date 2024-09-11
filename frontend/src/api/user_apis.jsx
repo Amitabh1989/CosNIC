@@ -3,13 +3,15 @@ import Cookies from "js-cookie";
 
 export const loginUserApi = async (credentials) => {
     try {
-        const response = await baseBackendApi.post("api/token/", credentials);
+        // const response = await baseBackendApi.post("api/token/", credentials);
+        console.log("Credentials are:", credentials);
+        const response = await baseBackendApi.post("user/login/", credentials);
         sessionStorage.setItem("access_token", response.data.access); // Store access token in memory
         Cookies.set("refresh_token", response.data.refresh, {
             secure: true,
             httpOnly: true,
         }); // Secure cookie
-        return response.data;
+        return response;
     } catch (error) {
         console.log("Login failed", error);
         throw error;

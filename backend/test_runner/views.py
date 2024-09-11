@@ -1,5 +1,6 @@
 # from django.shortcuts import render
 import os
+import time
 
 from celery.result import AsyncResult
 from django.conf import settings
@@ -316,6 +317,8 @@ class ManualScanCtrlRepoView(APIView):
     permission_classes = [IsAuthenticated]  # Adjust based on your needs
 
     def post(self, request):
+        # time.sleep(30)
+        print(f"Post request is {request.data}")
         scan_folder_and_update_cache.delay()  # Use delay() to run it asynchronously
         return Response({"status": "Scan started"})
 
@@ -329,6 +332,15 @@ class CtrlRepoListView(viewsets.ModelViewSet):
     serializer_class = CtrlPackageRepoSerializer
     permission_classes = [AllowAny]
 
+    # def get_queryset(self):
+    #     try:
+    #         user = self.request.user
+    #         if not user.is_authenticated:
+    #             raise NotAuthenticated("User is not authenticated")
+    #         return VirtualEnvironment.objects.filter(user=user)
+    #     except Exception as e:
+    #         return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
+
 
 class GetUserVenvs(viewsets.ModelViewSet):
     queryset = VirtualEnvironment.objects.all()
@@ -336,23 +348,59 @@ class GetUserVenvs(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated]
     pagination_class = CustomLimitOffsetPagination
 
-    def get_queryset(self):
-        try:
-            user = self.request.user
-            if not user.is_authenticated:
-                raise NotAuthenticated("User is not authenticated")
-            return VirtualEnvironment.objects.filter(user=user)
-        except Exception as e:
-            return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
+    def retrieve(self, request, pk=None, *args, **kwargs):
+        print(f"Request in the retreive : {request} and data is {request.data}")
+        if request.user.is_authenticated:
+            user = User.objects.get(username=request.user.username)
+            venv_data = VirtualEnvironment.objects.get(id=pk, user=user)
+            print(f"Venv data : {venv_data}")
+            # data=venv_data has not been used here as data=venv_data would have been used on incoming data. Sanitize that data
+            # Since data= keyword has not been used, we do not need to user serializer.is_valid as well
 
-    def retrieve(self, request, *args, **kwargs):
-        if not request.user.is_authenticated:
-            # return Response(
-            #     {"error": "Authentication required"},
-            #     status=status.HTTP_401_UNAUTHORIZED,
-            # )
-            user = User.objects.get(username="root")
-        return VirtualEnvironment.objects.filter(user=user)
+            serializer = self.serializer_class(venv_data)
+            print(f"Serializer data : {serializer.data}")
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        return Response(
+            {"error": "Authentication required"},
+            status=status.HTTP_401_UNAUTHORIZED,
+        )
+
+    def list(self, request, *args, **kwargs):
+        print(f"Request in the list : {request}")
+        if request.user.is_authenticated:
+            user = User.objects.get(username=request.user.username)
+            queryset = VirtualEnvironment.objects.filter(user=user).order_by(
+                "ctrl_package_version"
+            )
+            page = self.paginate_queryset(queryset)
+            if page is not None:
+                serializer = self.get_serializer(page, many=True)
+                print("Serialized data is : ", serializer.data)
+                return self.get_paginated_response(serializer.data)
+            return Response(
+                {"message": "No Venvs found"}, status=status.HTTP_404_NOT_FOUND
+            )
+        return Response(
+            {"message": "Authentication required"}, status=status.HTTP_401_UNAUTHORIZED
+        )
+        """
+            def list(self, request):
+        print(f"Returning from list here : VenvStatusView : {request.data}")
+        # user = request.user
+        user = User.objects.get(username="root")
+        print(f"Returning from list here : user : {user}")
+        # queryset = self.get_queryset().order_by("user", "status")
+        queryset = VirtualEnvironment.objects.filter(user=user)
+        page = self.paginate_queryset(queryset)
+        if page is not None:
+            serializer = self.get_serializer(page, many=True)
+            return self.get_paginated_response(serializer.data)
+
+        # If no pagination is needed, return the whole queryset
+        serializer = self.get_serializer(queryset, many=True)
+        print(f"Serializer data : {serializer.data}")
+        return Response(serializer.data)
+        """
 
 
 # class VenvStatusView(APIView):
@@ -371,7 +419,7 @@ class VenvStatusView(viewsets.ModelViewSet):
         print(f"venv_id Id is : {venv_id}")
 
         # user = request.user
-        user = User.objects.get(username="root")
+        user = User.objects.get(username=request.user.username)
         try:
             if venv_id:
                 venv = VirtualEnvironment.objects.get(id=venv_id, user=user)
@@ -400,7 +448,7 @@ class VenvStatusView(viewsets.ModelViewSet):
     def list(self, request):
         print(f"Returning from list here : VenvStatusView : {request.data}")
         # user = request.user
-        user = User.objects.get(username="root")
+        user = User.objects.get(username=request.user.username)
         print(f"Returning from list here : user : {user}")
         # queryset = self.get_queryset().order_by("user", "status")
         queryset = VirtualEnvironment.objects.filter(user=user)

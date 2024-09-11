@@ -60,21 +60,46 @@ class CheckUsernameAvailability(APIView):
 
 # @method_decorator(csrf_exempt, name="dispatch")
 class LoginView(APIView):
-    queryset = User.objects.all()
+    # queryset = User.objects.all()
     permission_classes = [AllowAny]
-    serializer_class = LoginSerializer
-    authentication_classes = [SessionAuthentication, TokenAuthentication]
+
+    """
+    Since you're using email for authentication, but relying on the default ModelBackend,
+    you'll need to override the default behavior to authenticate users by their email instead of their username.
+
+    Steps to Implement Solution 1 with Minimal Changes:
+    Custom Authentication Backend: Create a custom backend where authentication is performed
+    using the email field instead of username.
+
+    Custom Backend Path: Add the custom backend in the AUTHENTICATION_BACKENDS list.
+
+    Custom Backend Code
+    Create a new file for the custom backend, e.g., authentication.py inside one of your apps (like users):
+    """
 
     def post(self, request, *args, **kwargs):
-        serializer = LoginSerializer(data=request.data)
+        print("Data in request is : ", request.data)
+        email = request.data.get("email")
+        serializer = LoginSerializer(
+            data={
+                "email": email,
+                "password": request.data.get("password"),
+            }
+        )
+        print(f"Serialized data is {serializer}")
         if serializer.is_valid():
+            print(f"Serializer is valid : {serializer.validated_data}")
             user = authenticate(
-                username=serializer.validated_data["username"],
+                email=serializer.validated_data["email"],
                 password=serializer.validated_data["password"],
             )
+            print(f"Serialized data user  is {user}")
             if user:
+                print(f"User is : {user}")
                 login(request, user)
                 refresh = RefreshToken.for_user(user)
+                print(f"Refresh token is : {refresh}")
+                print(f"Access token is : {refresh.access_token}")
                 return Response(
                     {"refresh": str(refresh), "access": str(refresh.access_token)},
                     status=status.HTTP_200_OK,

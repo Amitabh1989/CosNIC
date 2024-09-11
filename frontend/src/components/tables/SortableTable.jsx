@@ -5,6 +5,10 @@ import {
     ChevronUpDownIcon,
 } from "@heroicons/react/24/outline";
 import { PencilIcon, UserPlusIcon } from "@heroicons/react/24/solid";
+import { MdModeEditOutline } from "react-icons/md";
+import { IoEyeOutline } from "react-icons/io5";
+import { MdDeleteForever } from "react-icons/md";
+import moment from "moment";
 import {
     Card,
     CardHeader,
@@ -22,21 +26,6 @@ import {
     Tooltip,
 } from "@material-tailwind/react";
 
-const TABS = [
-    {
-        label: "All",
-        value: "all",
-    },
-    {
-        label: "Monitored",
-        value: "monitored",
-    },
-    {
-        label: "Unmonitored",
-        value: "unmonitored",
-    },
-];
-
 export const SortableTable = ({
     columns,
     data,
@@ -46,6 +35,7 @@ export const SortableTable = ({
     onNext,
     onPrevious,
 }) => {
+    columns = [...columns, "Actions"];
     console.log("columns", columns);
     console.log("data", data);
     const [currentPage, setCurrentPage] = useState(1);
@@ -126,120 +116,135 @@ export const SortableTable = ({
                         </tr>
                     </thead>
                     <tbody>
-                        {data.map(
-                            (
-                                {
-                                    name,
-                                    nickname,
-                                    ctrl_pkg_version,
-                                    status,
-                                    user,
-                                    num_tests,
-                                },
-                                index
-                            ) => {
-                                const isLast = index === data.length - 1;
-                                const classes = isLast
-                                    ? "p-1"
-                                    : "p-1 border-b border-blue-gray-50";
+                        {data.map((item, index) => {
+                            const isLast = index === data.length - 1;
+                            const classes = isLast
+                                ? "p-1"
+                                : "p-1 border-b border-blue-gray-50";
 
-                                return (
-                                    <tr key={name}>
-                                        <td className={classes}>
-                                            <div className="flex items-center gap-1">
-                                                <div className="flex flex-col ml-4">
-                                                    <Typography
-                                                        variant="small"
-                                                        color="blue-gray"
-                                                        className="font-normal"
-                                                    >
-                                                        {name}
-                                                    </Typography>
-                                                </div>
-                                            </div>
-                                        </td>
-                                        <td className={classes}>
+                            return (
+                                <tr key={item.id}>
+                                    <td className={classes}>
+                                        <div className="flex items-center gap-1">
                                             <div className="flex flex-col ml-4">
                                                 <Typography
                                                     variant="small"
                                                     color="blue-gray"
                                                     className="font-normal"
                                                 >
-                                                    {nickname}
+                                                    {item.name}
                                                 </Typography>
                                             </div>
-                                        </td>
-                                        <td className={classes}>
-                                            <div className="flex flex-col ml-4">
-                                                <Typography
-                                                    variant="small"
-                                                    color="blue-gray"
-                                                    className="font-normal"
-                                                >
-                                                    {ctrl_pkg_version}
-                                                </Typography>
-                                            </div>
-                                        </td>
-                                        <td className={classes}>
-                                            <div className="flex flex-col">
-                                                {/* <Typography
+                                        </div>
+                                    </td>
+                                    <td className={classes}>
+                                        <div className="flex flex-col ml-4">
+                                            <Typography
+                                                variant="small"
+                                                color="blue-gray"
+                                                className="font-normal"
+                                            >
+                                                {item.nickname}
+                                            </Typography>
+                                        </div>
+                                    </td>
+                                    <td className={classes}>
+                                        <div className="flex flex-col ml-4">
+                                            <Typography
+                                                variant="small"
+                                                color="blue-gray"
+                                                className="font-normal"
+                                            >
+                                                {item.ctrl_package_version}
+                                            </Typography>
+                                        </div>
+                                    </td>
+                                    <td className={classes}>
+                                        <div className="flex flex-col">
+                                            {/* <Typography
                                                     variant="small"
                                                     color="blue-gray"
                                                     className="font-normal"
                                                 >
                                                     {status}
                                                 </Typography> */}
-                                                <Chip
-                                                    size="sm"
-                                                    variant="ghost"
-                                                    value={status}
-                                                    color={
-                                                        status === "free"
-                                                            ? "green"
-                                                            : status ===
-                                                                "created"
-                                                              ? "gray"
-                                                              : status ===
-                                                                  "running"
-                                                                ? "amber"
-                                                                : "red"
-                                                    }
-                                                />
+                                            <Chip
+                                                size="sm"
+                                                variant="ghost"
+                                                value={item.status}
+                                                color={
+                                                    item.status === "free"
+                                                        ? "green"
+                                                        : item.status ===
+                                                            "created"
+                                                          ? "gray"
+                                                          : item.status ===
+                                                              "running"
+                                                            ? "amber"
+                                                            : "red"
+                                                }
+                                            />
+                                        </div>
+                                    </td>
+                                    <td className={classes}>
+                                        <div className="flex flex-col ml-4">
+                                            <Typography
+                                                variant="small"
+                                                color="blue-gray"
+                                                className="font-normal"
+                                            >
+                                                {item.config_file
+                                                    ? item.config_file
+                                                    : "NA"}
+                                            </Typography>
+                                        </div>
+                                    </td>
+                                    <td className={classes}>
+                                        <div className="flex flex-col ml-4">
+                                            <Typography
+                                                variant="small"
+                                                color="blue-gray"
+                                                className="font-normal"
+                                            >
+                                                {moment(
+                                                    item.modified_at
+                                                ).format("MMM DD/YY, hh:MM A")}
+                                            </Typography>
+                                        </div>
+                                    </td>
+                                    <td className={classes}>
+                                        <div className="flex flex-col ml-4">
+                                            <div>
+                                                <Tooltip content="Edit Venv">
+                                                    <IconButton variant="text">
+                                                        <MdModeEditOutline
+                                                            className="h-5 w-5"
+                                                            value={item.id}
+                                                        />
+                                                    </IconButton>
+                                                </Tooltip>
+                                                <Tooltip content="View details">
+                                                    <IconButton variant="text">
+                                                        <IoEyeOutline
+                                                            className="h-5 w-5"
+                                                            value={item.id}
+                                                        />
+                                                    </IconButton>
+                                                </Tooltip>
+                                                <Tooltip content="Delete Venv">
+                                                    <IconButton variant="text">
+                                                        <MdDeleteForever
+                                                            className="h-5 w-5"
+                                                            value={item.id}
+                                                        />
+                                                    </IconButton>
+                                                </Tooltip>
                                             </div>
-                                        </td>
-                                        <td className={classes}>
-                                            <div className="flex flex-col ml-4">
-                                                <Typography
-                                                    variant="small"
-                                                    color="blue-gray"
-                                                    className="font-normal"
-                                                >
-                                                    {user}
-                                                </Typography>
-                                            </div>
-                                        </td>
-                                        <td className={classes}>
-                                            <div className="flex flex-col ml-4">
-                                                <Typography
-                                                    variant="small"
-                                                    color="blue-gray"
-                                                    className="font-normal"
-                                                >
-                                                    {num_tests}
-                                                </Typography>
-                                            </div>
-                                        </td>
-                                        <td className={classes}>
-                                            <Tooltip content="Edit User">
-                                                <IconButton variant="text">
-                                                    <PencilIcon className="h-4 w-4" />
-                                                </IconButton>
-                                            </Tooltip>
-                                        </td>
-                                    </tr>
-                                );
-                            }
-                        )}
+                                        </div>
+                                    </td>
+                                </tr>
+                            );
+                        })}
                     </tbody>
                 </table>
             </CardBody>

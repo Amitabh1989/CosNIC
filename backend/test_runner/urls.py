@@ -20,6 +20,7 @@ router = DefaultRouter()
 router.register(r"testcase", TestCaseView, "testcase")
 router.register(r"testrun", TestRunView, "testrun")
 router.register(r"ctrl_repo", CtrlRepoListView, "ctrl_repo")
+router.register(r"user/venvs", GetUserVenvs, "user_venvs")
 router.register(r"venv-status", VenvStatusView, "venv-status")
 
 urlpatterns = [
@@ -30,7 +31,7 @@ urlpatterns = [
         UpdateTestCaseSubtestsAPI.as_view(),
         name="test_subtest_update",
     ),
-    path("user/venvs", GetUserVenvs.as_view({"get": "list"}), name="user_venvs"),
+    # path("user/venvs", GetUserVenvs.as_view({"get": "list"}), name="user_venvs"),
     path("venv/create", CreateVenvView.as_view(), name="venv_create"),
     path(
         "venv/activate", ActivateVenvCopyInstallPackages.as_view(), name="venv_activate"

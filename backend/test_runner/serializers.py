@@ -86,11 +86,13 @@ class RunTestSerializer(serializers.Serializer):
 class VirtualEnvironmentSerializer(serializers.ModelSerializer):
     # test_jobs = TestJobSerializer(many=True)
     # ctrl_package_version = serializers.SerializerMethodField()
+    status = serializers.CharField(read_only=True)
+    # test_jobs = serializers.StringRelatedField(many=True, read_only=True)
 
     class Meta:
         model = VirtualEnvironment
         exclude = [
-            "status",  # Exclude because this is managed internally or by task
+            # "status",  # Exclude because this is managed internally or by task
             "last_used_at",  # Exclude because it is updated based on usage
             "user",  # Exclude because it is set based on the current logged-in user
             "lease_duration",  # Exclude because it is set based on the current logged-in user
@@ -111,6 +113,13 @@ class VirtualEnvironmentSerializer(serializers.ModelSerializer):
                 f'{validated_data["nickname"]}_{timezone.now().strftime("%Y-%m-%d-%H%M%S")}'
             )
         return super().create(validated_data)
+
+    def to_representation(self, instance):
+        data = super().to_representation(instance)
+        print("Ctrl pkg version in to_representation: ", instance.ctrl_package_version)
+        if data["ctrl_package_version"]:
+            data["ctrl_package_version"] = instance.ctrl_package_version.repo_version
+        return data
 
 
 class VirtualEnvironmentInitSerializer(serializers.ModelSerializer):

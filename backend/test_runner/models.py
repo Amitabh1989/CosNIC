@@ -11,6 +11,7 @@ from sutclient.models import Config
 # from django.db.postgresql.fields import ArrayField
 
 # Create your models here.
+# MAX_VENVS_PER_USER = 10  # Set the desired maximum resource count
 
 
 class TestCase(models.Model):
@@ -190,6 +191,12 @@ class Server(models.Model):
         return self.name
 
 
+def requirements_bucket_upload_path(instance, filename):
+    # args here is automatically passed by django once file is uploaded
+    # This function will generate the path dynamically
+    return f"requirements/{instance.user.id}/stored_requirements/{filename}"
+
+
 def requirements_upload_path(instance, filename):
     # args here is automatically passed by django once file is uploaded
     # This function will generate the path dynamically
@@ -261,6 +268,12 @@ class VirtualEnvironment(models.Model):
         null=True,
     )
     nickname = models.CharField(max_length=100, blank=True, null=True)
+    requirement_file = models.ForeignKey(
+        "RequirementsModel",
+        on_delete=models.DO_NOTHING,
+        blank=True,
+        null=True,
+    )
     venv_name = models.CharField(max_length=255)
     created_at = models.DateTimeField(auto_now_add=True)
     modified_at = models.DateTimeField(auto_now=True)
@@ -294,15 +307,19 @@ class VirtualEnvironment(models.Model):
     )
     script = models.FileField(upload_to=scripts_upload_path, blank=True, null=True)
 
-    class Meta:
-        constraints = [
-            models.UniqueConstraint(
-                fields=["user", "venv_name"], name="unique_venv_name_per_user"
-            )
-        ]
+    # class Meta:
+    #     constraints = [
+    #         models.UniqueConstraint(
+    #             fields=["user", "venv_name"], name="unique_venv_name_per_user"
+    #         )
+    #     ]
 
     def __str__(self):
         return f"{self.venv_name} at path {self.path}"
+
+    def save(self, *args, **kwargs):
+        self.modified_at = timezone.now()
+        super(VirtualEnvironment, self).save(*args, **kwargs)
 
 
 # class TestCaseCart(models.Model):
@@ -315,3 +332,33 @@ class VirtualEnvironment(models.Model):
 
 #     def __str__(self):
 #         return f"Cart for {self.user.username}"
+
+
+class RequirementsModel(models.Model):
+    user = models.ForeignKey(
+        User, on_delete=models.CASCADE, related_name="requirements"
+    )
+    nickname = models.CharField(max_length=100, blank=True, null=True)
+    requirements = models.TextField(blank=True, null=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    modified_at = models.DateTimeField(auto_now=True)
+    version = models.CharField(max_length=100, default="1")
+    description = models.TextField(blank=True, null=True)
+
+    def __str__(self):
+        return f"Requirements file version {self.version} for {self.user.username}"
+
+    def save(self, *args, **kwargs):
+        self.modified_at = timezone.now()
+        if not self.pk:
+            super(RequirementsModel, self).save(*args, **kwargs)
+
+        if not (self.nickname.strip(" ") or self.nickname is None):
+            self.nickname = f"requirements_v{int(self.pk) + 1}"
+
+        self.version = f"requirements_v{int(self.pk) + 1}"
+
+        super(RequirementsModel, self).save(*args, **kwargs)
+
+
+# class RpycPortsModel(models.Model)

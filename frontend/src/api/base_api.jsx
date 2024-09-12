@@ -26,11 +26,25 @@ function isValidRedirectUrl(url) {
 // Intercept request to include access token
 baseBackendApi.interceptors.request.use(
     (config) => {
-        const accessToken = sessionStorage.getItem("access_token"); // Store in memory (e.g., sessionStorage)
+        const accessToken = sessionStorage.getItem("access_token");
+        const refreshToken = sessionStorage.getItem("refresh_token");
+
+        // Check if the request URL is for login or refresh token
+        if (
+            config.url.includes("/login") ||
+            config.url.includes("/token/refresh")
+        ) {
+            // Skip adding the token for login and refresh requests
+            return config;
+        }
+
         console.log("Access token is in request interceptors :", accessToken);
+        console.log("Refresh token is in request interceptors :", refreshToken);
+
         if (accessToken) {
             config.headers.Authorization = `Bearer ${accessToken}`;
         }
+
         return config;
     },
     (error) => Promise.reject(error)
@@ -43,6 +57,10 @@ baseBackendApi.interceptors.response.use(
         // If there's an error: If something goes wrong, like we don’t have permission, this part kicks in.
         // It's an async function because it might need to wait for something to finish (like getting a new token).
         const originalRequest = error.config;
+        console.log(
+            "Original request in response interceptor is : ",
+            originalRequest
+        );
         console.log("Error in response interceptors:", error);
 
         if (error.response.status === 401 && !originalRequest._retry) {
@@ -50,6 +68,7 @@ baseBackendApi.interceptors.response.use(
             try {
                 const response = await refreshAccessToken();
                 sessionStorage.setItem("access_token", response.data.access); // Store new access token
+                // sessionStorage.setItem("refresh_token", response.data.refresh); // Store new access token
                 originalRequest.headers.Authorization = `Bearer ${response.data.access}`;
                 return baseBackendApi(originalRequest); // Retry the original request with new token
             } catch (refreshError) {
@@ -59,7 +78,7 @@ baseBackendApi.interceptors.response.use(
                 let redirectUrl = isValidRedirectUrl(window.location.pathname);
                 console.log("Redirecting URL in baseAPI :", redirectUrl);
                 sessionStorage.setItem("redirect_after_login", redirectUrl);
-                window.location.href = "/login"; // Redirect to login page
+                window.location.href = "/user/login"; // Redirect to login page
                 return Promise.reject(error);
             }
         }
@@ -67,15 +86,45 @@ baseBackendApi.interceptors.response.use(
     }
 );
 
-// Function to refresh access token
 const refreshAccessToken = async () => {
-    return baseBackendApi.post(
-        "api/token/refresh/",
-        {},
-        {
-            withCredentials: true, // Allows sending cookies (refresh token)
-        }
-    );
+    const refreshToken = sessionStorage.getItem("refresh_token");
+
+    if (!refreshToken) {
+        console.log("No refresh token available.");
+        throw new Error("Refresh token missing");
+    }
+
+    try {
+        const response = await baseBackendApi.post(
+            "api/token/refresh/",
+            { refresh: refreshToken }, // Send the refresh token in the body
+            {
+                withCredentials: false, // Not using cookies, since tokens are stored in sessionStorage
+            }
+        );
+        sessionStorage.setItem("access_token", response.data.access);
+        return response.data.access;
+    } catch (error) {
+        console.error("Failed to refresh token", error);
+        throw error; // Let it propagate to the interceptor
+    }
 };
+
+// Function to refresh access token
+// const refreshAccessToken = async () => {
+//     try {
+//         const response = await baseBackendApi.post(
+//             "api/token/refresh/", // Adjust this to your API route
+//             {},
+//             {
+//                 withCredentials: true, // Ensures the refresh token cookie is sent
+//             }
+//         );
+//         return response; // Return the response, if successful
+//     } catch (error) {
+//         console.error("Failed to refresh token", error);
+//         throw error; // Throw error so it can be caught in the interceptor
+//     }
+// };
 
 export default baseBackendApi;

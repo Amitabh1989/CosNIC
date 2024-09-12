@@ -78,7 +78,7 @@ class LoginView(APIView):
     """
 
     def post(self, request, *args, **kwargs):
-        print("Data in request is : ", request.data)
+        print("Data in login request is : ", request.data)
         email = request.data.get("email")
         serializer = LoginSerializer(
             data={

@@ -35,6 +35,8 @@ STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
 print(f"BASE DIR : {BASE_DIR}")
 print(f"REPO_PATH : {REPO_ROOT}")
 
+MAX_VENVS_PER_USER = 20
+
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/

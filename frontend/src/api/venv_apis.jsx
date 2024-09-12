@@ -30,11 +30,12 @@ export const getVenvStatusAPI_v2 = async (venvId = null, url = null) => {
             return response.data;
         }
 
-        console.log("Came to venvID logic : ", venvId);
         if (venvId) {
+            console.log("Came to venvID logic : ", venvId);
             const response = await baseBackendApi.get(
                 `test_ops/user/venvs/${venvId}/`
             );
+            console.log("Response from venvID logic is:", response);
             return response.data;
         }
 
@@ -44,6 +45,20 @@ export const getVenvStatusAPI_v2 = async (venvId = null, url = null) => {
             return response.data;
         }
         throw new Error("Venv ID is required");
+    } catch (error) {
+        console.error(error);
+        throw error;
+    }
+};
+
+export const getCtrlRepoVersionsAPI = async () => {
+    try {
+        const response = await baseBackendApi.get(
+            `test_ops/ctrl-repo/repo-versions/`
+        );
+        if (response.status === 200) {
+            return response.data;
+        }
     } catch (error) {
         console.error(error);
         throw error;

@@ -3,6 +3,7 @@ import React, { Component, useEffect, useState } from "react";
 import { getVenvStatusAPI_v2 } from "@/api/venv_apis";
 import { CustomTable, SortableTable } from "@/components/tables/SortableTable";
 // import { Tab } from "@material-tailwind/react";
+import VenvCRUDForm from "./VenvCRUDForm";
 
 const VenvStatusComponent = () => {
     const [error, setError] = useState(null);
@@ -53,6 +54,7 @@ const VenvStatusComponent = () => {
                 user: venv.user,
                 config_file: venv.config_file,
                 modified_at: venv.modified_at,
+                python_version: venv.python_version,
             }));
             setRowData(rows); // Set the row data for the table
             console.log("Row data is:", rows);

@@ -7,7 +7,9 @@ from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import User
 from django.core.files.storage import default_storage
+from django.urls import reverse
 from rest_framework import status, viewsets
+from rest_framework.decorators import action
 from rest_framework.exceptions import NotAuthenticated
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
@@ -15,6 +17,7 @@ from rest_framework.views import APIView
 
 from .models import (
     CtrlPackageRepo,
+    RequirementsModel,
     TestCase,
     TestCaseResult,
     TestRun,
@@ -23,6 +26,7 @@ from .models import (
 from .paginations import CustomLimitOffsetPagination
 from .serializers import (
     CtrlPackageRepoSerializer,
+    RequirementsModelSerializer,
     TestCaseResultSerializer,
     TestCaseSerializer,
     TestRunSerializer,
@@ -107,11 +111,16 @@ class CreateVenvView(APIView):
 
     def post(self, request):
         print("Request data: ", request.data)
-        user = get_user_model().objects.get(username=self.request.user.username)
+        # user = get_user_model().objects.get(username=self.request.user.username)
+        user = request.user
 
-        venv_name = request.data.get("venv_name", None)
-        venv_name = sanitize_venv_name(venv_name)
-        print("venv_name name : ", venv_name)
+        if self.queryset.filter(user=user).count() >= settings.MAX_VENVS_PER_USER:
+            return Response(
+                {
+                    "message": f"Maximum number of Venvs ({settings.MAX_VENVS_PER_USER}/user) allocated. Kindly reuse / reset existing Venvs"
+                },
+                status=status.HTTP_400_BAD_REQUEST,
+            )
 
         ctrl_package_version_id = request.data.get("ctrl_package_version", None)
         # venv_name = sanitize_venv_name(venv_name)
@@ -120,32 +129,23 @@ class CreateVenvView(APIView):
         config_file = request.data.get("config_file", None)
         print("Config file : ", config_file)
         config_file = config_file[0] if config_file else None
-        # Check if name is unique
-        if VirtualEnvironment.objects.filter(user=user, venv_name=venv_name).exists():
-            return Response(
-                {"message": "Venv name already exists, use a unique name"},
-                status=status.HTTP_400_BAD_REQUEST,
-            )
-
-        if not venv_name:
-            return Response(
-                {"message": "Venv name cannot be empty"},
-                status=status.HTTP_400_BAD_REQUEST,
-            )
 
         # Handle file uploads
         if "requirements" in request.FILES:
             requirements_file = request.FILES.get("requirements")
+            print(f"Requirements file : {requirements_file}")
+        else:
+            requirements_file = None
 
         if "script" in request.FILES:
             script_file = request.FILES.get("script")
-
-        print(f"Requirements file : {requirements_file}")
-        print(f"Script file : {script_file}")
+            print(f"Script file : {script_file}")
+        else:
+            script_file = None
 
         # Prepare data for the serializer
         data = {
-            "venv_name": venv_name,
+            # "venv_name": venv_name,
             "python_version": request.data.get("python_version"),
             "nickname": request.data.get("nickname"),
             "requirements": requirements_file,
@@ -157,16 +157,18 @@ class CreateVenvView(APIView):
         print(f"Processed data is : {data}")
 
         # Send to serializer :
-        serializer = self.serializer_class(data=data)
+        serializer = self.serializer_class(data=data, context={"request": request})
         # Save the files to the VirtualEnvironment object
         if serializer.is_valid():
+            # Save the object to get the pk
+            instance = serializer.save()
             print(
-                f"Virtual environment {venv_name} instance creation in "
+                f"Virtual environment myPytestVenv_{instance.pk} instance creation in "
                 "progress for user {user.username}. Spwanning VENV"
             )
 
             task = create_venv_task.delay(
-                venv_name=venv_name,
+                venv_name=f"myPytestVenv_{instance.pk}",
                 python_version=data["python_version"],
                 nickname=data["nickname"],
                 user_id=user.id,
@@ -176,10 +178,16 @@ class CreateVenvView(APIView):
                 script_file=script_file.read() if script_file else None,
                 config_file_id=config_file,
             )
+
+            # Generate the task status URL
+            relative_url = reverse("task_status", kwargs={"task_id": task.id})
+            status_url = request.build_absolute_uri(relative_url)
             return Response(
                 {
                     "task_id": task.id,
+                    "venv_name": f"myPytestVenv_{instance.pk}",
                     "message": "Virtual environment creation initiated.",
+                    "status_url": status_url,
                 },
                 status=status.HTTP_202_ACCEPTED,
             )
@@ -327,19 +335,14 @@ class CtrlRepoListView(viewsets.ModelViewSet):
     # ModelView set is used here inspite of the fact its more suited for CRUD operation
     # This is because we are using the default methods of the ModelViewSet and same url can
     # be used for get and list operations
-    # class CtrlRepoListView(APIView):
     queryset = CtrlPackageRepo.objects.all()
     serializer_class = CtrlPackageRepoSerializer
     permission_classes = [AllowAny]
 
-    # def get_queryset(self):
-    #     try:
-    #         user = self.request.user
-    #         if not user.is_authenticated:
-    #             raise NotAuthenticated("User is not authenticated")
-    #         return VirtualEnvironment.objects.filter(user=user)
-    #     except Exception as e:
-    #         return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
+    @action(detail=False, methods=["get"], url_path="repo-versions")
+    def get_all_available_repos(self, request):
+        versions = self.queryset.values_list("repo_version", flat=True).distinct()
+        return Response({"repo_versions": list(versions)}, status=status.HTTP_200_OK)
 
 
 class GetUserVenvs(viewsets.ModelViewSet):
@@ -383,24 +386,6 @@ class GetUserVenvs(viewsets.ModelViewSet):
         return Response(
             {"message": "Authentication required"}, status=status.HTTP_401_UNAUTHORIZED
         )
-        """
-            def list(self, request):
-        print(f"Returning from list here : VenvStatusView : {request.data}")
-        # user = request.user
-        user = User.objects.get(username="root")
-        print(f"Returning from list here : user : {user}")
-        # queryset = self.get_queryset().order_by("user", "status")
-        queryset = VirtualEnvironment.objects.filter(user=user)
-        page = self.paginate_queryset(queryset)
-        if page is not None:
-            serializer = self.get_serializer(page, many=True)
-            return self.get_paginated_response(serializer.data)
-
-        # If no pagination is needed, return the whole queryset
-        serializer = self.get_serializer(queryset, many=True)
-        print(f"Serializer data : {serializer.data}")
-        return Response(serializer.data)
-        """
 
 
 # class VenvStatusView(APIView):
@@ -435,12 +420,13 @@ class VenvStatusView(viewsets.ModelViewSet):
         # Handle the case where the user doesn't exist
         return Response(
             {
+                "user": venv.user.username,
                 "venv_name": venv.venv_name,
                 "status": venv.status,
-                "last_used_at": venv.last_used_at,
+                "modified_at": venv.modified_at,
                 "num_test_cases": venv.test_jobs.count(),
                 "nickname": venv.nickname,
-                "ctrl_package_version": venv.ctrl_package_version,
+                "ctrl_package_version": venv.ctrl_package_version.repo_version,
             },
             status=status.HTTP_404_NOT_FOUND,
         )
@@ -462,21 +448,13 @@ class VenvStatusView(viewsets.ModelViewSet):
         print(f"Serializer data : {serializer.data}")
         return Response(serializer.data)
 
-        """
-        {
-            "count": 100,
-            "next": "http://localhost:8000/api/venvs/?limit=10&offset=10",
-            "previous": null,
-            "results": [
-                {
-                    "venv_name": "my-env",
-                    "status": "active",
-                    "last_used_at": "2023-09-01T12:00:00Z",
-                    "num_test_cases": 5,
-                    "nickname": "env-nickname",
-                    "ctrl_package_version": "1.0.0"
-                },
-                ...
-            ]
-        }
-        """
+
+class RequirementsModelView(viewsets.ModelViewSet):
+    queryset = RequirementsModel.objects.all()
+    serializer_class = RequirementsModelSerializer
+    permission_classes = [AllowAny]
+
+    def list(self, request):
+        queryset = self.get_queryset()
+        serializer = self.serializer_class(queryset, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)

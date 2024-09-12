@@ -43,6 +43,16 @@ export const SortableTable = ({
     const [totalPages, setTotalPages] = useState(0);
     const [selectedVenvId, setSelectedVenvId] = useState(null);
 
+    const [dialogOpen, setDialogOpen] = useState(true);
+
+    const handleOpen = () => {
+        setDialogOpen(true);
+    };
+
+    const handleClose = () => {
+        setDialogOpen(false);
+    };
+
     useEffect(() => {
         // Calculate total pages based on total items and items per page
         // const calculatedTotalPages = Math.ceil(count / data.length);
@@ -306,7 +316,9 @@ export const SortableTable = ({
                     </div>
                 </CardFooter>
             </Card>
-            {selectedVenvId && <VenvCRUDForm venvID={selectedVenvId} />}
+            {selectedVenvId && (
+                <VenvCRUDForm venvID={selectedVenvId} onClose={handleClose} />
+            )}
         </div>
     );
 };

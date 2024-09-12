@@ -339,7 +339,7 @@ class CtrlRepoListView(viewsets.ModelViewSet):
     serializer_class = CtrlPackageRepoSerializer
     permission_classes = [AllowAny]
 
-    @action(detail=False, methods=["get"], url_path="repo-versions")
+    @action(detail=False, methods=["get"], url_path="repo_versions")
     def get_all_available_repos(self, request):
         versions = self.queryset.values_list("repo_version", flat=True).distinct()
         return Response({"repo_versions": list(versions)}, status=status.HTTP_200_OK)

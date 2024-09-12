@@ -54,7 +54,7 @@ export const getVenvStatusAPI_v2 = async (venvId = null, url = null) => {
 export const getCtrlRepoVersionsAPI = async () => {
     try {
         const response = await baseBackendApi.get(
-            `test_ops/ctrl-repo/repo-versions/`
+            `test_ops/ctrl_repo/repo_versions/`
         );
         if (response.status === 200) {
             return response.data;

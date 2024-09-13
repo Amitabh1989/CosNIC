@@ -268,11 +268,14 @@ class VirtualEnvironment(models.Model):
         null=True,
     )
     nickname = models.CharField(max_length=100, blank=True, null=True)
-    requirement_file = models.ForeignKey(
+    requirements_text = models.ForeignKey(
         "RequirementsModel",
-        on_delete=models.DO_NOTHING,
+        on_delete=models.SET_NULL,
         blank=True,
         null=True,
+    )
+    requirements = models.FileField(
+        upload_to=requirements_upload_path, blank=True, null=True
     )
     venv_name = models.CharField(max_length=255)
     created_at = models.DateTimeField(auto_now_add=True)
@@ -302,9 +305,7 @@ class VirtualEnvironment(models.Model):
     lease_duration = models.DurationField(blank=True, null=True)
     assigned_at = models.DateTimeField(blank=True, null=True)
     last_used_at = models.DateTimeField(blank=True, null=True)
-    requirements = models.FileField(
-        upload_to=requirements_upload_path, blank=True, null=True
-    )
+
     script = models.FileField(upload_to=scripts_upload_path, blank=True, null=True)
 
     # class Meta:
@@ -346,7 +347,7 @@ class RequirementsModel(models.Model):
     description = models.TextField(blank=True, null=True)
 
     def __str__(self):
-        return f"Requirements file version {self.version} for {self.user.username}"
+        return f"Requirements text version {self.version} for {self.user.username}"
 
     def save(self, *args, **kwargs):
         self.modified_at = timezone.now()

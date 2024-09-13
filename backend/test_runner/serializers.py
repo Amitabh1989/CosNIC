@@ -114,6 +114,17 @@ class VirtualEnvironmentSerializer(serializers.ModelSerializer):
         # Get the user from context or pass it through some means
         user = self.context["request"].user  # Get the user from the context
         validated_data["user"] = user  # Manually set the user field
+        venv_name = validated_data["venv_name"]  # Manually set the user field
+        print("Venv name in VirtualEnvironmentSerializer is : ", venv_name)
+        if venv_name.strip() == "" or not venv_name:
+            # Save the instance partially to generate the primary key
+            instance = super().create(
+                validated_data
+            )  # Create the initial instance without venv_name
+
+            venv_name = f"myPytestVenv_{instance.pk}"
+            print("New unique venv name is : ", venv_name)
+            validated_data["venv_name"] = venv_name
         return super().create(validated_data)
 
     def to_representation(self, instance):

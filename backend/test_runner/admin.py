@@ -2,6 +2,7 @@ from django.contrib import admin
 
 from .models import (
     CtrlPackageRepo,
+    RequirementsModel,
     SubTests,
     TestCase,
     TestCaseResult,
@@ -9,6 +10,11 @@ from .models import (
     TestRun,
     VirtualEnvironment,
 )
+
+
+class RequirementsModelAdmin(admin.ModelAdmin):
+    list_display = ("id", "name", "requirements", "created_at")
+    list_display_links = ("id", "name")
 
 
 # Register your models here.
@@ -76,6 +82,21 @@ class VirtualEnvironmentAdmin(admin.ModelAdmin):
     list_display = ("id", "venv_name", "user", "created_at")
     list_display_links = ("id", "venv_name")
 
+    def get_form(self, request, obj=None, **kwargs):
+        form = super().get_form(request, obj, **kwargs)
+        form.base_fields["venv_name"].required = False  # Mark as non-required
+        form.base_fields["status"].required = False  # Mark as non-required
+        return form
+
+    def save_model(self, request, obj, form, change):
+        # Save the object to generate the primary key
+        super().save_model(request, obj, form, change)
+
+        # Now generate the unique venv_name if not provided
+        if not obj.venv_name:
+            obj.venv_name = f"myPytestVenv_{obj.pk}"
+            obj.save()  # Save the object again with the new venv_name
+
 
 class VirtualEnvironmentAdminInline(admin.TabularInline):
     model = VirtualEnvironment
@@ -103,3 +124,4 @@ admin.site.register(TestCase, TestCaseAdmin)
 admin.site.register(TestRun, TestRunAdmin)
 admin.site.register(TestCaseResult, TestCaseResultAdmin)
 admin.site.register(VirtualEnvironment, VirtualEnvironmentAdmin)
+admin.site.register(RequirementsModel, RequirementsModelAdmin)

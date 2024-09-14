@@ -64,6 +64,7 @@ export const SortableTable = ({
         console.log("CRUD Clicked for Venv ID:", venvId);
         // return <VenvCRUDForm venvID={venvId} />;
         setSelectedVenvId(venvId);
+        handleOpen();
     };
 
     const handleNext = async (e) => {
@@ -317,7 +318,11 @@ export const SortableTable = ({
                 </CardFooter>
             </Card>
             {selectedVenvId && (
-                <VenvCRUDForm venvID={selectedVenvId} onClose={handleClose} />
+                <VenvCRUDForm
+                    venvID={selectedVenvId}
+                    onClose={handleClose}
+                    dialogOpen={dialogOpen}
+                />
             )}
         </div>
     );

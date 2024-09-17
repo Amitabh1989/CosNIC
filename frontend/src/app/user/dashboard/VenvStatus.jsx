@@ -1,9 +1,14 @@
 "use client";
 import React, { Component, useEffect, useState } from "react";
 import { getVenvStatusAPI_v2 } from "@/api/venv_apis";
-import { CustomTable, SortableTable } from "@/components/tables/SortableTable";
+import { SortableTable } from "@/components/tables/SortableTable";
+import { useSelector, useDispatch } from "react-redux";
+// import { setVenvs } from "./slice"; // import the action to store data in Redux
+import { setVenvs } from "@/reduxToolkit/slice";
+import { Button } from "@material-tailwind/react";
+
 // import { Tab } from "@material-tailwind/react";
-import VenvCRUDForm from "./VenvCRUDForm";
+// import VenvCRUDForm from "./VenvCRUDForm";
 
 const VenvStatusComponent = () => {
     const [error, setError] = useState(null);
@@ -11,6 +16,9 @@ const VenvStatusComponent = () => {
     const [totalCount, setTotalCount] = useState(0);
     const [prevLink, setPrevLink] = useState(null);
     const [nextLink, setNextLink] = useState(null);
+    const dispatch = useDispatch();
+    const venvs = useSelector((state) => state.venv.venvs); // venv is the slice name
+
     const columns = [
         "Venv Name",
         "Nickname",
@@ -20,7 +28,15 @@ const VenvStatusComponent = () => {
         "Modified At",
     ]; // Define columns here
 
-    const fetchData = async (url = null) => {
+    const fetchData = async (url = null, forceUpdate = false) => {
+        console.log("Venvs from redux is : ", venvs);
+        if (!forceUpdate && venvs.length > 0) {
+            // If data exists in Redux, use that
+            console.log("Using cached data from Redux");
+            setRowData(venvs);
+            return;
+        }
+
         try {
             // // Await the API call to get the URL or data
             console.log("URL is:", url);
@@ -57,6 +73,7 @@ const VenvStatusComponent = () => {
                 python_version: venv.python_version,
             }));
             setRowData(rows); // Set the row data for the table
+            dispatch(setVenvs(rows)); // Store the fetched data in Redux
             console.log("Row data is:", rows);
             console.log("Next URL data is:", data.next);
             console.log("Prev URL data is:", data.previous);
@@ -76,7 +93,7 @@ const VenvStatusComponent = () => {
 
     useEffect(() => {
         fetchData();
-    }, []);
+    }, [venvs]);
 
     if (error) {
         return <div>Error fetching data</div>;
@@ -101,6 +118,9 @@ const VenvStatusComponent = () => {
             ) : (
                 <p>Loading...</p>
             )}
+            <Button color="blue" onClick={() => fetchData(null, true)}>
+                Refresh from backend
+            </Button>
         </div>
     );
 };

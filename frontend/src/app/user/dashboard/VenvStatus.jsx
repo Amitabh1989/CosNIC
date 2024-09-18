@@ -17,7 +17,8 @@ const VenvStatusComponent = () => {
     const [prevLink, setPrevLink] = useState(null);
     const [nextLink, setNextLink] = useState(null);
     const dispatch = useDispatch();
-    const venvs = useSelector((state) => state.venv.venvs); // venv is the slice name
+    // const venvs = useSelector((state) => state.venv.venvs); // venv is the slice name
+    const venvsStore = useSelector((state) => state.venv); // Access the Redux store
 
     const columns = [
         "Venv Name",
@@ -28,72 +29,194 @@ const VenvStatusComponent = () => {
         "Modified At",
     ]; // Define columns here
 
+    // const fetchData = async (url = null, forceUpdate = false) => {
+    //     console.log("Venvs from redux is : ", venvs);
+    //     let apiUrl,
+    //         response,
+    //         offset = 0,
+    //         limit = 10;
+
+    //     // if (!forceUpdate && venvs.length > 0) {
+    //     //     // If data exists in Redux, use that
+    //     //     console.log("Using cached data from Redux");
+    //     //     setRowData(venvs);
+    //     //     return;
+    //     // }
+
+    //     try {
+    //         if (url && !forceUpdate) {
+    //             // Extract offset and limit from URL (use default if absent)
+    //             const urlParams = new URLSearchParams(new URL(url).search);
+    //             offset = urlParams.get("offset") || 0;
+    //             limit = urlParams.get("limit") || 10;
+
+    //             // Check if the page (offset) is already in Redux store
+    //             const pageKey = `${offset}-${limit}`;
+    //             if (venvsStore.pages[pageKey]) {
+    //                 console.log(
+    //                     "Fetching page from Redux store, no API call needed"
+    //                 );
+    //                 setRowData(venvsStore.pages[pageKey]); // Load the stored page
+    //                 return;
+    //             }
+    //         } //     apiUrl = url;
+    //         //     offset = new URL(url).searchParams.get("offset");
+    //         //     console.log("Offset is:", offset);
+
+    //         //     if (venvs.length >= offset) {
+    //         //         // If data exists in Redux, use that
+    //         //         console.log("Using cached data from Redux");
+    //         //         setRowData(venvs);
+    //         //         return;
+    //         //     }
+    //         // }
+
+    //         // Await the API call to get the URL or data
+    //         console.log("URL is:", url);
+    //         // let apiUrl, response, offset;
+    //         // let venvId = null;
+    //         if (url) {
+    //             apiUrl = url; // Use the passed pagination URL if available
+    //             response = await getVenvStatusAPI_v2(null, url);
+    //         } else {
+    //             response = await getVenvStatusAPI_v2(null); // first api call
+    //         }
+
+    //         // Fetch the data from the constructed URL
+    //         // const response = await fetch(apiUrl);
+
+    //         const data = response; // Parse the JSON data
+    //         const pageKey = `${offset}-${limit}`; // Create unique key for this page
+    //         // const data = response.data;
+    //         console.log("Data for venv is from URL : ", url, " is : ", data);
+    //         // Process the data for the table once venvStatus is available
+    //         setTotalCount(data.count);
+    //         setPrevLink(data.previous);
+    //         setNextLink(data.next);
+    //         const apiData = data.results;
+    //         const rows = apiData.map((venv) => ({
+    //             id: venv.id,
+    //             user: venv.user,
+    //             status: venv.status,
+    //             name: venv.venv_name,
+    //             nickname: venv.nickname,
+    //             config_file: venv.config_file,
+    //             modified_at: venv.modified_at,
+    //             python_version: venv.python_version,
+    //             ctrl_package_version: venv.ctrl_package_version,
+    //         }));
+    //         setRowData(rows); // Set the row data for the table
+    //         dispatch(
+    //             setVenvs({
+    //                 newVenvs: data.results, // Add results to Redux
+    //                 next: data.next,
+    //                 previous: data.previous,
+    //                 total: data.count,
+    //                 pageKey: pageKey,
+    //             })
+    //         );
+    //         console.log("Row data is:", rows);
+    //         console.log("Next URL data is:", data.next);
+    //         console.log("Prev URL data is:", data.previous);
+    //     } catch (error) {
+    //         console.error("Error in useEffect:", error);
+    //         setError(error);
+    //     }
+    // };
     const fetchData = async (url = null, forceUpdate = false) => {
-        console.log("Venvs from redux is : ", venvs);
-        if (!forceUpdate && venvs.length > 0) {
-            // If data exists in Redux, use that
-            console.log("Using cached data from Redux");
-            setRowData(venvs);
-            return;
-        }
+        console.log("Venvs from redux is : ", venvsStore.venvs); // Access the venvs array from the store
+
+        let apiUrl,
+            response,
+            offset = 0,
+            limit = 10;
 
         try {
-            // // Await the API call to get the URL or data
-            console.log("URL is:", url);
-            let apiUrl;
-            let response;
-            let venvId = null;
+            if (url && !forceUpdate) {
+                // Extract offset and limit from URL (use default if absent)
+                const urlParams = new URLSearchParams(new URL(url).search);
+                offset = urlParams.get("offset") || 0;
+                limit = urlParams.get("limit") || 10;
+
+                // Check if the page (offset) is already in Redux store
+                const pageKey = `${offset}-${limit}`;
+                if (venvsStore.pages[pageKey]) {
+                    console.log(
+                        "Fetching page from Redux store, no API call needed"
+                    );
+                    setRowData(venvsStore.pages[pageKey]); // Load the stored page
+                    return;
+                }
+            }
+
+            // Make API call if no data found in Redux store
             if (url) {
                 apiUrl = url; // Use the passed pagination URL if available
                 response = await getVenvStatusAPI_v2(null, url);
             } else {
-                response = await getVenvStatusAPI_v2(venvId);
+                response = await getVenvStatusAPI_v2(null); // First API call
             }
 
-            // Fetch the data from the constructed URL
-            // const response = await fetch(apiUrl);
-
-            const data = response; // Parse the JSON data
-            // const data = response.data;
+            const data = response;
+            const pageKey = `${offset}-${limit}`; // Create unique key for this page
             console.log("Data for venv is from URL : ", url, " is : ", data);
-            // Process the data for the table once venvStatus is available
+
+            // Process and set data
             setTotalCount(data.count);
             setPrevLink(data.previous);
             setNextLink(data.next);
-            const apiData = data.results;
-            const rows = apiData.map((venv) => ({
+
+            const rows = data.results.map((venv) => ({
                 id: venv.id,
+                user: venv.user,
+                status: venv.status,
                 name: venv.venv_name,
                 nickname: venv.nickname,
-                ctrl_package_version: venv.ctrl_package_version,
-                status: venv.status,
-                user: venv.user,
                 config_file: venv.config_file,
                 modified_at: venv.modified_at,
                 python_version: venv.python_version,
+                ctrl_package_version: venv.ctrl_package_version,
             }));
+
             setRowData(rows); // Set the row data for the table
-            dispatch(setVenvs(rows)); // Store the fetched data in Redux
-            console.log("Row data is:", rows);
-            console.log("Next URL data is:", data.next);
-            console.log("Prev URL data is:", data.previous);
+
+            // Dispatch to Redux store
+            dispatch(
+                setVenvs({
+                    newVenvs: data.results, // Add results to Redux
+                    next: data.next,
+                    previous: data.previous,
+                    total: data.count,
+                    pageKey: pageKey,
+                })
+            );
         } catch (error) {
-            console.error("Error in useEffect:", error);
+            console.error("Error in fetchData:", error);
             setError(error);
         }
     };
 
     // Handle pagination
-    const handlePagination = async (url) => {
-        console.log("handlePagination URL is:", url);
+    const handlePagination = (url, direction) => {
+        // `url` is either the next or previous link, based on direction
+        console.log(
+            "handlePagination URL is:",
+            url,
+            "   drrection is : ",
+            direction
+        );
         if (url) {
-            await fetchData(url);
+            fetchData(url); // Fetch the page using the `url`
+        } else if (direction === "next" && !venvsStore.nextLink) {
+            console.log("No more pages available to fetch.");
+        } else if (direction === "prev" && !venvsStore.prevLink) {
+            console.log("No previous pages available.");
         }
     };
 
     useEffect(() => {
         fetchData();
-    }, [venvs]);
+    }, [venvsStore]);
 
     if (error) {
         return <div>Error fetching data</div>;
@@ -111,8 +234,10 @@ const VenvStatusComponent = () => {
                         count={totalCount}
                         next={nextLink}
                         previous={prevLink}
-                        onNext={() => handlePagination(nextLink)}
-                        onPrevious={() => handlePagination(prevLink)}
+                        // onNext={() => handlePagination(nextLink)}
+                        // onPrevious={() => handlePagination(prevLink)}
+                        onNext={() => handlePagination(nextLink, "next")}
+                        onPrevious={() => handlePagination(prevLink, "prev")}
                     />
                 </>
             ) : (

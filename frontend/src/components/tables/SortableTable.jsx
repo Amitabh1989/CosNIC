@@ -71,7 +71,7 @@ export const SortableTable = ({
         // e.preventDefault();
         if (next) {
             console.log("Next link is table:", next);
-            await onNext(next);
+            await onNext(next, "next");
             setCurrentPage((prev) => prev + 1);
         }
     };
@@ -80,7 +80,7 @@ export const SortableTable = ({
         // e.preventDefault();
         if (previous) {
             console.log("Previous link is table :", previous);
-            await onPrevious(previous);
+            await onPrevious(previous, "prev");
             setCurrentPage((prev) => prev - 1);
         }
     };

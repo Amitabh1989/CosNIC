@@ -4,6 +4,10 @@ import { createSlice, nanoid } from "@reduxjs/toolkit"; // Use import, not requi
 
 const initialState = {
     venvs: [],
+    next: null,
+    prev: null,
+    total: 0, // Total count from API
+    pages: {}, // Track pages with offsets and limit
 };
 
 const venvSlice = createSlice({
@@ -12,7 +16,17 @@ const venvSlice = createSlice({
     reducers: {
         setVenvs: (state, action) => {
             console.log("Adding Venv:", action);
-            state.venvs = action.payload;
+            const { newVenvs, next, previous, count, pageKey } = action.payload;
+
+            // Add new data only for the specified pageKey (offset)
+            if (!state.pages[pageKey]) {
+                state.venvs.push(...newVenvs); // Add only new data
+                state.pages[pageKey] = newVenvs; // Map offset page to venvs
+            }
+            // Update pagination links and total
+            state.nextLink = next;
+            state.prevLink = previous;
+            state.total = count;
         },
     },
 });

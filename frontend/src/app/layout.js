@@ -1,6 +1,9 @@
+// import { persistor } from "./store";
 import localFont from "next/font/local";
 import "./globals.css";
 import { Providers } from "@/reduxToolkit/provider";
+// import { PersistGate } from "redux-persist/integration/react";
+// import { persistor } from "@/reduxToolkit/store";
 
 const geistSans = localFont({
     src: "./fonts/GeistVF.woff",
@@ -24,8 +27,11 @@ export default function RootLayout({ children }) {
             <body
                 className={`${geistSans.variable} ${geistMono.variable} antialiased`}
             >
-                <Providers>{children}</Providers>
-                {/* {children} */}
+                <Providers>
+                    {/* <PersistGate loading={null} persistor={persistor}> */}
+                    {children}
+                    {/* </PersistGate> */}
+                </Providers>
             </body>
         </html>
     );

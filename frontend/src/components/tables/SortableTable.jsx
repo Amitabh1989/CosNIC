@@ -31,8 +31,8 @@ export const SortableTable = ({
     columns,
     data,
     count,
-    next,
-    previous,
+    nextLink,
+    prevLink,
     onNext,
     onPrevious,
 }) => {
@@ -58,32 +58,42 @@ export const SortableTable = ({
         // const calculatedTotalPages = Math.ceil(count / data.length);
         const calculatedTotalPages = Math.ceil(count / 10);
         setTotalPages(calculatedTotalPages);
-    }, [data.length]);
+    }, [count]);
 
     const handleCRUDClick = (venvId) => {
         console.log("CRUD Clicked for Venv ID:", venvId);
-        // return <VenvCRUDForm venvID={venvId} />;
         setSelectedVenvId(venvId);
         handleOpen();
     };
 
-    const handleNext = async (e) => {
-        // e.preventDefault();
-        if (next) {
-            console.log("Next link is table:", next);
-            await onNext(next, "next");
-            setCurrentPage((prev) => prev + 1);
+    const handleNext = async () => {
+        if (nextLink && currentPage < totalPages) {
+            await onNext(nextLink, "next");
+            console.log("Next pages print 1: ", currentPage, totalPages);
+
+            setCurrentPage((next) => next + 1);
+            console.log("Next pages print 2: ", currentPage, totalPages);
+
+            // setPrevLink(venvsStore.previous); // Ensure previous link is set
+        } else {
+            console.log("No more next pages available.");
         }
     };
 
-    const handlePrevious = async (e) => {
-        // e.preventDefault();
-        if (previous) {
-            console.log("Previous link is table :", previous);
-            await onPrevious(previous, "prev");
+    const handlePrevious = async () => {
+        if (prevLink && currentPage > 1) {
+            await onPrevious(prevLink, "prev");
             setCurrentPage((prev) => prev - 1);
+            console.log("Previous pages print : ", currentPage, totalPages);
+        } else {
+            console.log("No more previous pages available.");
         }
     };
+
+    useEffect(() => {
+        console.log("Previous Link Updated:", prevLink);
+        console.log("Next Link Updated:", nextLink);
+    }, [prevLink]);
 
     return (
         <div>
@@ -301,7 +311,7 @@ export const SortableTable = ({
                         <Button
                             variant="outlined"
                             size="sm"
-                            disabled={!previous}
+                            disabled={currentPage === 1 || !prevLink}
                             onClick={handlePrevious}
                         >
                             Previous
@@ -309,7 +319,7 @@ export const SortableTable = ({
                         <Button
                             variant="outlined"
                             size="sm"
-                            disabled={!next}
+                            disabled={currentPage >= totalPages || !nextLink}
                             onClick={handleNext}
                         >
                             Next

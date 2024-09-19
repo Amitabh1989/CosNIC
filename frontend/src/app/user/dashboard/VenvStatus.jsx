@@ -205,11 +205,39 @@ const VenvStatusComponent = () => {
             "   drrection is : ",
             direction
         );
+        // Determine the offset and limit from the URL
+        let offset = 0,
+            limit = 10;
+        if (url) {
+            const urlParams = new URLSearchParams(new URL(url).search);
+            offset = urlParams.get("offset") || 0;
+            limit = urlParams.get("limit") || 10;
+        }
+
+        // Construct the page key to check Redux store
+        const pageKey = `${offset}-${limit}`;
+
+        // Check if the requested page is already in Redux store
+        console.log("Page key is:", pageKey);
+        console.log("Pages in Redux are:", venvsStore.pages);
+        if (venvsStore.pages[pageKey]) {
+            console.log("Page exists in Redux, no API call needed");
+            const pageData = venvsStore.pages[pageKey];
+
+            setRowData(venvsStore.pages[pageKey]);
+            // Set the next and previous links from the Redux store
+            setNextLink(pageData.next || null);
+            setPrevLink(pageData.previous || null);
+            return;
+        }
+
         if (url) {
             fetchData(url); // Fetch the page using the `url`
         } else if (direction === "next" && !venvsStore.nextLink) {
+            setPrevLink(venvsStore.previous); // Ensure previous link is set
             console.log("No more pages available to fetch.");
         } else if (direction === "prev" && !venvsStore.prevLink) {
+            setPrevLink(venvsStore.previous); // Ensure this gets set correctly
             console.log("No previous pages available.");
         }
     };
@@ -232,10 +260,8 @@ const VenvStatusComponent = () => {
                         columns={columns}
                         data={rowData}
                         count={totalCount}
-                        next={nextLink}
-                        previous={prevLink}
-                        // onNext={() => handlePagination(nextLink)}
-                        // onPrevious={() => handlePagination(prevLink)}
+                        nextLink={nextLink}
+                        prevLink={prevLink}
                         onNext={() => handlePagination(nextLink, "next")}
                         onPrevious={() => handlePagination(prevLink, "prev")}
                     />
@@ -251,3 +277,6 @@ const VenvStatusComponent = () => {
 };
 
 export default VenvStatusComponent;
+
+// onNext={() => handlePagination(nextLink)}
+// onPrevious={() => handlePagination(prevLink)}

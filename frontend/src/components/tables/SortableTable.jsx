@@ -26,26 +26,118 @@ import {
     IconButton,
     Tooltip,
 } from "@material-tailwind/react";
+import { useSelector, useDispatch } from "react-redux";
+import { setVenvs } from "@/reduxToolkit/slice";
 
-export const SortableTable = ({
-    columns,
-    data,
-    count,
-    nextLink,
-    prevLink,
-    onNext,
-    onPrevious,
-}) => {
+// export const SortableTable = ({
+//     columns,
+//     data,
+//     count,
+//     nextLink,
+//     prevLink,
+//     onNext,
+//     onPrevious,
+// }) => {
+//     columns = [...columns, "Actions"];
+//     console.log("columns", columns);
+//     console.log("data", data);
+//     const [currentPage, setCurrentPage] = useState(1);
+//     const [totalPages, setTotalPages] = useState(0);
+//     const [selectedVenvId, setSelectedVenvId] = useState(null);
+//     const [prevLinkLocal, setPrevLink] = useState(prevLink);
+//     const [nextLinkLocal, setNextLink] = useState(nextLink);
+
+//     const [dialogOpen, setDialogOpen] = useState(true);
+
+//     const handleOpen = () => {
+//         setDialogOpen(true);
+//     };
+
+//     const handleClose = () => {
+//         setDialogOpen(false);
+//     };
+
+//     useEffect(() => {
+//         // Calculate total pages based on total items and items per page
+//         // const calculatedTotalPages = Math.ceil(count / data.length);
+//         const calculatedTotalPages = Math.ceil(count / 10);
+//         setTotalPages(calculatedTotalPages);
+//     }, [count]);
+
+//     const handleCRUDClick = (venvId) => {
+//         console.log("CRUD Clicked for Venv ID:", venvId);
+//         setSelectedVenvId(venvId);
+//         handleOpen();
+//     };
+
+//     const handleNext = async () => {
+//         if (nextLink && currentPage < totalPages) {
+//             await onNext(nextLink, "next");
+//             console.log("Next pages print 1: ", currentPage, totalPages);
+
+//             // setCurrentPage((next) => next + 1);
+//             // Update current page correctly using a functional update
+//             setCurrentPage((prevPage) => prevPage + 1);
+//             console.log("Next pages print 2: ", currentPage, totalPages);
+//             handlePrevious();
+
+//             setPrevLink(venvsStore.prevLink); // Ensure previous link is set
+//             setNextLink(venvsStore.nextLink); // Ensure next link is set
+//         } else {
+//             console.log("No more next pages available.");
+//         }
+//     };
+
+//     const handlePrevious = async () => {
+//         console.log(
+//             "CurrentPage from previous comp : ",
+//             currentPage,
+//             totalPages
+//         );
+//         if (prevLink && currentPage > 1) {
+//             await onPrevious(prevLink, "prev");
+//             setCurrentPage((prev) => prev - 1);
+//             console.log("Previous pages print : ", currentPage, totalPages);
+//             setPrevLink(venvsStore.prevLink); // Ensure previous link is set
+//             setNextLink(venvsStore.nextLink); // Ensure next link is set
+//         } else {
+//             console.log("No more previous pages available.");
+//         }
+//     };
+
+//     useEffect(() => {
+//         // console.log("Previous Link Updated:", prevLink);
+//         // console.log("Next Link Updated:", nextLink);
+//         // }, [prevLink]);
+//         console.log("Updated currentPage:", currentPage);
+//         handlePrevious();
+//         handleNext();
+//     }, [currentPage]);
+
+export const SortableTable = ({ columns, data, count, onNext, onPrevious }) => {
+    // Combine columns with Actions
     columns = [...columns, "Actions"];
-    console.log("columns", columns);
-    console.log("data", data);
+    const dispatch = useDispatch();
+
+    // Local state for current page, dialog, and selected venv
     const [currentPage, setCurrentPage] = useState(1);
     const [totalPages, setTotalPages] = useState(0);
     const [selectedVenvId, setSelectedVenvId] = useState(null);
-
     const [dialogOpen, setDialogOpen] = useState(true);
 
-    const handleOpen = () => {
+    // Access next and previous links from Redux store
+    const nextLink = useSelector((state) => state.venv.nextLink);
+    const prevLink = useSelector((state) => state.venv.prevLink);
+
+    // Update totalPages when count or data changes
+    useEffect(() => {
+        const calculatedTotalPages = Math.ceil(count / 10); // Assuming 10 items per page
+        setTotalPages(calculatedTotalPages);
+    }, [count]);
+
+    // CRUD Dialog Handlers
+    const handleCRUDClick = (venvId) => {
+        setSelectedVenvId(venvId);
         setDialogOpen(true);
     };
 
@@ -53,47 +145,58 @@ export const SortableTable = ({
         setDialogOpen(false);
     };
 
-    useEffect(() => {
-        // Calculate total pages based on total items and items per page
-        // const calculatedTotalPages = Math.ceil(count / data.length);
-        const calculatedTotalPages = Math.ceil(count / 10);
-        setTotalPages(calculatedTotalPages);
-    }, [count]);
-
-    const handleCRUDClick = (venvId) => {
-        console.log("CRUD Clicked for Venv ID:", venvId);
-        setSelectedVenvId(venvId);
-        handleOpen();
-    };
-
+    // Next Page Handler
     const handleNext = async () => {
         if (nextLink && currentPage < totalPages) {
-            await onNext(nextLink, "next");
-            console.log("Next pages print 1: ", currentPage, totalPages);
+            // Fetch the next page data from the API or your next function
+            const data = await onNext(nextLink, "next");
+            console.log("Data is : ", data);
 
-            setCurrentPage((next) => next + 1);
-            console.log("Next pages print 2: ", currentPage, totalPages);
+            // Dispatch the fetched data to Redux store
+            dispatch(
+                setVenvs({
+                    newVenvs: data.results,
+                    next: data.next,
+                    previous: data.previous,
+                    count: data.count,
+                    pageKey: currentPage + 1,
+                })
+            );
 
-            // setPrevLink(venvsStore.previous); // Ensure previous link is set
+            setCurrentPage((prevPage) => prevPage + 1); // Use functional update for state
         } else {
             console.log("No more next pages available.");
         }
     };
 
+    // Previous Page Handler
     const handlePrevious = async () => {
         if (prevLink && currentPage > 1) {
-            await onPrevious(prevLink, "prev");
-            setCurrentPage((prev) => prev - 1);
-            console.log("Previous pages print : ", currentPage, totalPages);
+            // Fetch the previous page data from the API or your previous function
+            const data = await onPrevious(prevLink, "prev");
+
+            // Dispatch the fetched data to Redux store
+            dispatch(
+                setVenvs({
+                    newVenvs: data.results,
+                    next: data.next,
+                    previous: data.previous,
+                    count: data.count,
+                    pageKey: currentPage - 1,
+                })
+            );
+
+            setCurrentPage((prevPage) => prevPage - 1); // Use functional update for state
         } else {
             console.log("No more previous pages available.");
         }
     };
 
+    // useEffect to log the updated current page
     useEffect(() => {
-        console.log("Previous Link Updated:", prevLink);
-        console.log("Next Link Updated:", nextLink);
-    }, [prevLink]);
+        console.log("Updated currentPage:", currentPage);
+        handlePrevious();
+    }, [currentPage]);
 
     return (
         <div>

@@ -202,7 +202,7 @@ const VenvStatusComponent = () => {
         console.log(
             "handlePagination URL is:",
             url,
-            "   drrection is : ",
+            "   direction is : ",
             direction
         );
         // Determine the offset and limit from the URL
@@ -260,8 +260,8 @@ const VenvStatusComponent = () => {
                         columns={columns}
                         data={rowData}
                         count={totalCount}
-                        nextLink={nextLink}
-                        prevLink={prevLink}
+                        // nextLink={nextLink}
+                        // prevLink={prevLink}
                         onNext={() => handlePagination(nextLink, "next")}
                         onPrevious={() => handlePagination(prevLink, "prev")}
                     />

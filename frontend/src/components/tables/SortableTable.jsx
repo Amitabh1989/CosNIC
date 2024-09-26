@@ -114,10 +114,19 @@ import { setVenvs } from "@/reduxToolkit/slice";
 //         handleNext();
 //     }, [currentPage]);
 
-export const SortableTable = ({ columns, data, count, onNext, onPrevious }) => {
+export const SortableTable = ({
+    columns,
+    data,
+    count,
+    nextLink,
+    prevLink,
+    onNext,
+    onPrevious,
+}) => {
     // Combine columns with Actions
     columns = [...columns, "Actions"];
-    const dispatch = useDispatch();
+    console.log("Columns:", columns);
+    // const dispatch = useDispatch();
 
     // Local state for current page, dialog, and selected venv
     const [currentPage, setCurrentPage] = useState(1);
@@ -125,9 +134,7 @@ export const SortableTable = ({ columns, data, count, onNext, onPrevious }) => {
     const [selectedVenvId, setSelectedVenvId] = useState(null);
     const [dialogOpen, setDialogOpen] = useState(true);
 
-    // Access next and previous links from Redux store
-    const nextLink = useSelector((state) => state.venv.nextLink);
-    const prevLink = useSelector((state) => state.venv.prevLink);
+    const venvsStore = useSelector((state) => state.venv);
 
     // Update totalPages when count or data changes
     useEffect(() => {
@@ -145,48 +152,19 @@ export const SortableTable = ({ columns, data, count, onNext, onPrevious }) => {
         setDialogOpen(false);
     };
 
-    // Next Page Handler
     const handleNext = async () => {
         if (nextLink && currentPage < totalPages) {
-            // Fetch the next page data from the API or your next function
-            const data = await onNext(nextLink, "next");
-            console.log("Data is : ", data);
-
-            // Dispatch the fetched data to Redux store
-            dispatch(
-                setVenvs({
-                    newVenvs: data.results,
-                    next: data.next,
-                    previous: data.previous,
-                    count: data.count,
-                    pageKey: currentPage + 1,
-                })
-            );
-
-            setCurrentPage((prevPage) => prevPage + 1); // Use functional update for state
+            await onNext();
+            setCurrentPage((prevPage) => prevPage + 1); // Correct state update
         } else {
             console.log("No more next pages available.");
         }
     };
 
-    // Previous Page Handler
     const handlePrevious = async () => {
         if (prevLink && currentPage > 1) {
-            // Fetch the previous page data from the API or your previous function
-            const data = await onPrevious(prevLink, "prev");
-
-            // Dispatch the fetched data to Redux store
-            dispatch(
-                setVenvs({
-                    newVenvs: data.results,
-                    next: data.next,
-                    previous: data.previous,
-                    count: data.count,
-                    pageKey: currentPage - 1,
-                })
-            );
-
-            setCurrentPage((prevPage) => prevPage - 1); // Use functional update for state
+            await onPrevious();
+            setCurrentPage((prevPage) => prevPage - 1); // Correct state update
         } else {
             console.log("No more previous pages available.");
         }
@@ -195,8 +173,10 @@ export const SortableTable = ({ columns, data, count, onNext, onPrevious }) => {
     // useEffect to log the updated current page
     useEffect(() => {
         console.log("Updated currentPage:", currentPage);
-        handlePrevious();
-    }, [currentPage]);
+        console.log("Next Link in useEffect :", nextLink);
+        console.log("Previous Link in useEffect :", prevLink);
+        console.log("Data is :", data);
+    }, [nextLink, prevLink, currentPage]);
 
     return (
         <div>
@@ -469,3 +449,60 @@ export const CustomTable = ({ columns, data }) => {
 };
 
 // export default CustomTable;
+
+// const handleNext = async () => {
+//     if (currentPage < totalPages) {
+//         const pageKey = currentPage + 1;
+
+//         // Check if next page data exists in Redux
+//         const cachedPage = venvsStore.pages[pageKey];
+//         if (cachedPage) {
+//             setRowData(cachedPage); // Serve cached data
+//             setCurrentPage(pageKey); // Update page
+//         } else {
+//             // Fetch next page data
+//             const data = await onNext(nextLink, "next");
+//             console.log("Next pages data is : ", data, totalPages);
+//             // dispatch(
+//             //     setVenvs({
+//             //         newVenvs: data.results,
+//             //         next: data.next,
+//             //         previous: data.previous,
+//             //         count: data.count,
+//             //         pageKey: pageKey, // Store data with page key
+//             //     })
+//             // );
+//             setCurrentPage(pageKey); // Update page
+//         }
+//     } else {
+//         console.log("No more next pages available.");
+//     }
+// };
+
+// const handlePrevious = async () => {
+//     if (currentPage > 1) {
+//         const pageKey = currentPage - 1;
+
+//         // Check if previous page data exists in Redux
+//         const cachedPage = venvsStore.pages[pageKey];
+//         if (cachedPage) {
+//             setRowData(cachedPage); // Serve cached data
+//             setCurrentPage(pageKey); // Update page
+//         } else {
+//             // Fetch previous page data
+//             const data = await onPrevious(prevLink, "prev");
+//             dispatch(
+//                 setVenvs({
+//                     newVenvs: data.results,
+//                     next: data.next,
+//                     previous: data.previous,
+//                     count: data.count,
+//                     pageKey: pageKey, // Store data with page key
+//                 })
+//             );
+//             setCurrentPage(pageKey); // Update page
+//         }
+//     } else {
+//         console.log("No more previous pages available.");
+//     }
+// };

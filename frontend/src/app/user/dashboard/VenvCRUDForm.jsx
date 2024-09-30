@@ -568,9 +568,6 @@ const VenvCRUDForm = ({ venvID, onClose, dialogOpen }) => {
                                         Prepare
                                     </Button>
                                 )}
-                                {/* <Button className="mt-6" color="green">
-                                    Prepare
-                                </Button> */}
                                 <Button
                                     className="mt-6"
                                     color="red"

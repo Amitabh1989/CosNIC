@@ -380,6 +380,35 @@ const VenvStatusComponent = () => {
                         setPrevLink(venvsStore.pages[pageKey].previous);
                         return;
                     }
+
+                    // // Fetch the total count from Redux and compare
+                    // const totalStoredVenvs =
+                    //     Object.keys(venvsStore.pages).length * limit;
+
+                    // if (totalStoredVenvs >= venvsStore.total) {
+                    //     // Set row data directly from Redux if all data is stored
+                    //     setRowData(venvsStore.pages[pageKey].results);
+                    //     setNextLink(venvsStore.pages[pageKey].next);
+                    //     setPrevLink(venvsStore.pages[pageKey].previous);
+                    //     return;
+                    // } else {
+                    //     // If the next or prev links are missing, fall back to API call
+                    //     console.log(
+                    //         "Pagination links or data missing, fetching from API..."
+                    //     );
+                    //     response = await getVenvStatusAPI_v2(null, url);
+
+                    //     // Dispatch updated data to Redux
+                    //     dispatch(
+                    //         setVenvs({
+                    //             newVenvs: response.results,
+                    //             next: response.next,
+                    //             previous: response.previous,
+                    //             total: response.count,
+                    //             pageKey: pageKey,
+                    //         })
+                    //     );
+                    // }
                 }
             }
 

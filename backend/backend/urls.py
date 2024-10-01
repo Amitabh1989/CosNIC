@@ -36,7 +36,7 @@ urlpatterns = [
     # User
     path("user/", include("users.urls")),
     path("configuration/", include("configfile.urls")),
-    path("test_ops/", include("test_runner.urls")),
+    path("testops/", include("test_runner.urls")),
     path("pulse/", include("pulse.urls")),
     # ===================== #
     # DRF session-based authentication endpoints for browsable API

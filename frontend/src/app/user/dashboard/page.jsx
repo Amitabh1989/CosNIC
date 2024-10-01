@@ -1,6 +1,6 @@
 "use client";
 import React from "react";
-import VenvStatusComponent from "./VenvStatus";
+import VenvStatusComponent from "../../../components/env/VenvStatus";
 // import VenvCRUDForm from "./VenvCRUDForm";
 import Link from "next/link";
 

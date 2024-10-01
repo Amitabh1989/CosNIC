@@ -4,7 +4,9 @@ import axios from "axios";
 // Update with your actual API base URL
 
 // const BACKEND_BASE_URL = process.env.DJANGO_BACKEND_BASE_URL;
-const BACKEND_BASE_URL = "http://127.0.0.1:8000";
+// const BACKEND_BASE_URL = "http://127.0.0.1:8000";
+const BACKEND_BASE_URL = process.env.NEXT_PUBLIC_BACKEND_BASE_URL;
+console.log("Backend base URL is :", BACKEND_BASE_URL);
 
 // Create an Axios instance with a base URL
 export const baseBackendApi = axios.create({
@@ -26,6 +28,8 @@ function isValidRedirectUrl(url) {
 // Intercept request to include access token
 baseBackendApi.interceptors.request.use(
     (config) => {
+        console.log("Backend base URL is :", baseBackendApi);
+
         const accessToken = sessionStorage.getItem("access_token");
         const refreshToken = sessionStorage.getItem("refresh_token");
 

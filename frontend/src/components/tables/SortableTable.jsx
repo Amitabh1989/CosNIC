@@ -9,7 +9,7 @@ import { MdModeEditOutline } from "react-icons/md";
 import { IoEyeOutline } from "react-icons/io5";
 import { MdDeleteForever } from "react-icons/md";
 import moment from "moment";
-import VenvCRUDForm from "@/app/user/dashboard/VenvCRUDForm";
+import VenvCRUDForm from "@/components/env/VenvCRUDForm";
 import {
     Card,
     CardHeader,
@@ -28,91 +28,6 @@ import {
 } from "@material-tailwind/react";
 import { useSelector, useDispatch } from "react-redux";
 import { setVenvs } from "@/reduxToolkit/slice";
-
-// export const SortableTable = ({
-//     columns,
-//     data,
-//     count,
-//     nextLink,
-//     prevLink,
-//     onNext,
-//     onPrevious,
-// }) => {
-//     columns = [...columns, "Actions"];
-//     console.log("columns", columns);
-//     console.log("data", data);
-//     const [currentPage, setCurrentPage] = useState(1);
-//     const [totalPages, setTotalPages] = useState(0);
-//     const [selectedVenvId, setSelectedVenvId] = useState(null);
-//     const [prevLinkLocal, setPrevLink] = useState(prevLink);
-//     const [nextLinkLocal, setNextLink] = useState(nextLink);
-
-//     const [dialogOpen, setDialogOpen] = useState(true);
-
-//     const handleOpen = () => {
-//         setDialogOpen(true);
-//     };
-
-//     const handleClose = () => {
-//         setDialogOpen(false);
-//     };
-
-//     useEffect(() => {
-//         // Calculate total pages based on total items and items per page
-//         // const calculatedTotalPages = Math.ceil(count / data.length);
-//         const calculatedTotalPages = Math.ceil(count / 10);
-//         setTotalPages(calculatedTotalPages);
-//     }, [count]);
-
-//     const handleCRUDClick = (venvId) => {
-//         console.log("CRUD Clicked for Venv ID:", venvId);
-//         setSelectedVenvId(venvId);
-//         handleOpen();
-//     };
-
-//     const handleNext = async () => {
-//         if (nextLink && currentPage < totalPages) {
-//             await onNext(nextLink, "next");
-//             console.log("Next pages print 1: ", currentPage, totalPages);
-
-//             // setCurrentPage((next) => next + 1);
-//             // Update current page correctly using a functional update
-//             setCurrentPage((prevPage) => prevPage + 1);
-//             console.log("Next pages print 2: ", currentPage, totalPages);
-//             handlePrevious();
-
-//             setPrevLink(venvsStore.prevLink); // Ensure previous link is set
-//             setNextLink(venvsStore.nextLink); // Ensure next link is set
-//         } else {
-//             console.log("No more next pages available.");
-//         }
-//     };
-
-//     const handlePrevious = async () => {
-//         console.log(
-//             "CurrentPage from previous comp : ",
-//             currentPage,
-//             totalPages
-//         );
-//         if (prevLink && currentPage > 1) {
-//             await onPrevious(prevLink, "prev");
-//             setCurrentPage((prev) => prev - 1);
-//             console.log("Previous pages print : ", currentPage, totalPages);
-//             setPrevLink(venvsStore.prevLink); // Ensure previous link is set
-//             setNextLink(venvsStore.nextLink); // Ensure next link is set
-//         } else {
-//             console.log("No more previous pages available.");
-//         }
-//     };
-
-//     useEffect(() => {
-//         // console.log("Previous Link Updated:", prevLink);
-//         // console.log("Next Link Updated:", nextLink);
-//         // }, [prevLink]);
-//         console.log("Updated currentPage:", currentPage);
-//         handlePrevious();
-//         handleNext();
-//     }, [currentPage]);
 
 export const SortableTable = ({
     columns,
@@ -179,7 +94,7 @@ export const SortableTable = ({
     }, [nextLink, prevLink, currentPage]);
 
     return (
-        <div>
+        <div className="container w-5/6 ml-10 p-5">
             <Card className="h-full w-full">
                 <CardHeader
                     floated={false}

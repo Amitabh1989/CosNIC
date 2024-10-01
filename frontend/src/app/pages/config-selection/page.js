@@ -3,13 +3,12 @@ import React from "react";
 import UserLoginForm from "../../../components/login/UserLogin";
 // import Link from "next/link";
 
-const UserLogin = () => {
+const ConfigSelection = () => {
     return (
         <>
-            <div>User Login</div>;
-            <UserLoginForm />
+            <div>ConfigSelection</div>;{/* <UserLoginForm /> */}
         </>
     );
 };
 
-export default UserLogin;
+export default ConfigSelection;

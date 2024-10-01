@@ -1,5 +1,5 @@
 // import { persistor } from "./store";
-import localFont from "next/font/local";
+// import localFont from "next/font/local";
 import "./globals.css";
 import { Providers } from "@/reduxToolkit/provider";
 // import { PersistGate } from "redux-persist/integration/react";

@@ -102,7 +102,8 @@ export default function UserLoginForm() {
 
     return (
         <div className="flex flex-grow w-1/2 items-center justify-center bg-gray-100 h-screen">
-            <Card className="absolute shadow-lg w-1/4 items-center h-1/2">
+            {/* <Card className="absolute shadow-lg w-96 items-center h-1/2"> */}
+            <Card className="relative shadow-lg w-96 items-center h-1/2">
                 {/* Card Header */}
                 <CardHeader
                     variant="solid"

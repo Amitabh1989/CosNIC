@@ -1,10 +1,8 @@
-'use client'
-import React from 'react'
+"use client";
+import React from "react";
 
 const TestRunner = () => {
-  return (
-    <div>Test Runner</div>
-  )
-}
+    return <div>Test Runner</div>;
+};
 
-export default TestRunner
+export default TestRunner;

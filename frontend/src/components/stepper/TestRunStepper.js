@@ -9,7 +9,8 @@ import { FaPython } from "react-icons/fa";
 import { GrDocumentConfig } from "react-icons/gr";
 import { ImList2 } from "react-icons/im";
 import { VscPreview } from "react-icons/vsc";
-import EnvSelection from "./EnvSelection";
+import EnvSelection from "../env/EnvSelector";
+import TestCasesListAndSelection from "../test/TestCasesListAndSelection";
 
 export default function TestRunStepper({ step }) {
     const [activeStep, setActiveStep] = React.useState(0);
@@ -22,20 +23,30 @@ export default function TestRunStepper({ step }) {
             component: <EnvSelection />,
         },
         {
-            step_name: "Config Selection",
-            icon: <GrDocumentConfig />,
-            component: <ConfigSelection />,
+            step_name: "Test Case Selection",
+            icon: <FaPython />,
+            component: <TestCasesListAndSelection />,
         },
         {
-            step_name: "Test Selection",
-            icon: <ImList2 />,
-            component: <TestSelection />,
+            step_name: "Env Selection",
+            icon: <FaPython />,
+            component: <EnvSelection />,
         },
-        {
-            step_name: "Review & Run",
-            icon: <VscPreview />,
-            component: <ReviewRun />,
-        },
+        // {
+        //     step_name: "Config Selection",
+        //     icon: <GrDocumentConfig />,
+        //     component: <ConfigSelection />,
+        // },
+        // {
+        //     step_name: "Test Selection",
+        //     icon: <ImList2 />,
+        //     component: <TestSelection />,
+        // },
+        // {
+        //     step_name: "Review & Run",
+        //     icon: <VscPreview />,
+        //     component: <ReviewRun />,
+        // },
     ];
 
     useEffect(() => {
@@ -47,9 +58,9 @@ export default function TestRunStepper({ step }) {
     const handlePrev = () => !isFirstStep && setActiveStep((cur) => cur - 1);
 
     return (
-        <div className="w-full px-24 py-4">
+        <div className="w-full px-24 py-24">
             {/* Stepper Component */}
-            <Stepper activeStep={activeStep}>
+            <Stepper activeStep={activeStep} className="w-full h-24">
                 {steps.map((step, index) => (
                     <Step key={index} onClick={() => setActiveStep(index)}>
                         <div className="flex items-center">
@@ -71,7 +82,7 @@ export default function TestRunStepper({ step }) {
                                             ? "blue-gray"
                                             : "gray"
                                     }
-                                    className="font-normal"
+                                    className="font-normal mb-10"
                                 >
                                     {step.step_name}
                                 </Typography>
@@ -82,7 +93,9 @@ export default function TestRunStepper({ step }) {
             </Stepper>
 
             {/* Render the active component dynamically */}
-            <div className="mt-8">{steps[activeStep].component}</div>
+            <div className="mt-8 p-10 w-full h-2/3">
+                {steps[activeStep].component}
+            </div>
 
             {/* Navigation Buttons */}
             <div className="mt-32 flex justify-between">

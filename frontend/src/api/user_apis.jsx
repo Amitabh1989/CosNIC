@@ -8,6 +8,7 @@ export const loginUserApi = async (credentials) => {
         console.log(
             "Backend base URL is login :",
             process.env.NEXT_PUBLIC_BACKEND_BASE_URL
+            // process.env.BACKEND_BASE_URL
         );
 
         console.log("Credentials are:", credentials);

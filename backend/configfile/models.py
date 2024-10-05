@@ -1,5 +1,7 @@
-from django.db import models
+from django.contrib.auth.models import User
 from django.contrib.postgres.fields import ArrayField
+from django.db import models
+from django.utils import timezone
 
 # https://testdriven.io/blog/drf-serializers/
 
@@ -218,3 +220,33 @@ class ConfigurationModel(models.Model):
 
     def __str__(self):
         return f"Configuration: {self.name if self.name else 'Unnamed Configuration'}"
+
+
+class YamlFormatConfigFileModel(models.Model):
+    user = models.ForeignKey(
+        User, on_delete=models.CASCADE, related_name="sutClientyml"
+    )
+    name = models.CharField(max_length=250, null=True, blank=False)
+    content = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    modified_at = models.DateTimeField(auto_now=True)
+    version = models.CharField(max_length=100)
+    description = models.TextField(blank=True, null=True)
+
+    def __str__(self):
+        return (
+            f"sutClientConfigFile text version {self.version} for {self.user.username}"
+        )
+
+    def save(self, *args, **kwargs):
+        self.modified_at = timezone.now()
+
+        # Only update version and name if this is the first save
+        if not self.pk:
+            self.version = (
+                f"sutClientConfigFile_v{int(self.pk) + 1}" if self.pk else "1"
+            )
+
+        super(YamlFormatConfigFileModel, self).save(
+            *args, **kwargs
+        )  # Final save with updated values

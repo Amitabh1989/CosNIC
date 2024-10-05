@@ -13,8 +13,8 @@ from .models import (
 
 
 class RequirementsModelAdmin(admin.ModelAdmin):
-    list_display = ("id", "name", "requirements", "created_at")
-    list_display_links = ("id", "name")
+    list_display = ("id", "nickname", "requirements", "created_at")
+    list_display_links = ("id", "nickname")
 
 
 # Register your models here.

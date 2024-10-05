@@ -1,5 +1,6 @@
-from .models import Switches, SwitchConfig
 from rest_framework import serializers
+
+from .models import SwitchConfig, Switches, YamlConfigFile
 
 
 class SwitchesSerializer(serializers.ModelSerializer):
@@ -35,4 +36,10 @@ class SwitchConfigSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = SwitchConfig
+        fields = "__all__"
+
+
+class YamlConfigFileSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = YamlConfigFile
         fields = "__all__"

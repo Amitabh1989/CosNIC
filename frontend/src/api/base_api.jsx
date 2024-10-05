@@ -5,8 +5,9 @@ import axios from "axios";
 
 // const BACKEND_BASE_URL = process.env.DJANGO_BACKEND_BASE_URL;
 // const BACKEND_BASE_URL = "http://127.0.0.1:8000";
+// const BACKEND_BASE_URL = process.env.NEXT_PUBLIC_BACKEND_BASE_URL;
 const BACKEND_BASE_URL = process.env.NEXT_PUBLIC_BACKEND_BASE_URL;
-console.log("Backend base URL is :", BACKEND_BASE_URL);
+console.log("Backend base URL is in baseAPI :", BACKEND_BASE_URL);
 
 // Create an Axios instance with a base URL
 export const baseBackendApi = axios.create({

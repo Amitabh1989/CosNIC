@@ -1,7 +1,7 @@
 "use client";
 import React from "react";
 // import ConfigFileForm from "./UserLogin";
-import SUTClientConfigFile from "@/components/configfile/SUTClientConfigFile";
+import SUTClientConfigFile from "@/components/configfile/SUTClientConfigFile_Experiment";
 // import Link from "next/link";
 
 const ConfigFileSelector = () => {

@@ -89,6 +89,7 @@ class YamlConfigFileViewSet(viewsets.ModelViewSet):
         serializer.save()
         data_to_send = {
             **serializer.data,
+            "id": serializer.instance.id,
             "version": serializer.instance.version,
             "modified_at": serializer.instance.modified_at,
         }
@@ -98,6 +99,7 @@ class YamlConfigFileViewSet(viewsets.ModelViewSet):
         # user = request.user
         queryset = self.get_queryset()
         serializer = self.get_serializer(queryset, many=True)
+        print("Config file serializer data is ", serializer.data)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     def retrieve(self, request, pk=None, *args, **kwargs):

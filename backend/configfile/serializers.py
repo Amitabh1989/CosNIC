@@ -483,7 +483,8 @@ class ConfigurationSerializer(serializers.ModelSerializer):
 class YamlFormatConfigFileModelSerializer(serializers.ModelSerializer):
     class Meta:
         model = YamlFormatConfigFileModel
-        fields = ["name", "content", "description"]
+        fields = ["name", "content", "description", "id", "modified_at"]
+        read_only_fields = ["id", "modified_at"]
 
     def create(self, validated_data):
         # user = validated_data.pop("user")

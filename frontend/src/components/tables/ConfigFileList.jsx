@@ -1,6 +1,5 @@
 "use client";
 import React, { useState, useEffect } from "react";
-import { DocumentIcon } from "@heroicons/react/24/solid";
 import { ArrowDownTrayIcon } from "@heroicons/react/24/outline";
 import { MagnifyingGlassIcon } from "@heroicons/react/24/outline";
 import {
@@ -13,46 +12,23 @@ import {
     Typography,
 } from "@material-tailwind/react";
 import { AiFillEdit } from "react-icons/ai";
-
 import moment from "moment";
 import YamlEditor from "../editor/YamlEditor";
 
-import { getSutClientYmlConfigFilesListAPI } from "../../api/configFile_apis";
-
 const TABLE_HEAD = ["ID", "Name", "Description", "Modified At", "Actions"];
 
-const ConfigFileList = () => {
-    const [configFiles, setConfigFiles] = useState([]); // List of YAML config files
-    const [yamlContent, setYamlContent] = useState(""); // YAML content
-    const [errorMessage, setErrorMessage] = useState(null); // To store YAML error message
+const ConfigFileList = ({ configFilesList }) => {
+    const [configFiles, setConfigFiles] = useState(configFilesList); // List of YAML config files
+    const [yamlRecord, setYamlRecord] = useState(""); // YAML content
     const [selected, setSelectedItem] = useState(null);
     const [isEditorOpen, setIsEditorOpen] = React.useState(false); // Controls dialog visibility
-
-    // Get the list and content of YAML config files : DONE
-    // Display in table and editor : DONE
-
-    // Fetch YAML config files
-    const fetchConfigFiles = async () => {
-        try {
-            const response = await getSutClientYmlConfigFilesListAPI();
-            console.log(`Config files: ${JSON.stringify(response[0])}`);
-            const rawYaml = response[0].content.replace(/\\r\\n/g, "\n"); // Normalize newlines
-            // setYamlContent(rawYaml);
-            setConfigFiles(response);
-        } catch (error) {
-            console.error(error);
-        }
-    };
 
     const handleEdit = (id) => {
         console.log("Edit file : ", id);
         const record = configFiles.find((file) => file.id === id);
-        // console.log(`Record : ${JSON.stringify(record)}`);
+        console.log(`Record : ${JSON.stringify(record)}`);
         if (record) {
-            // Assuming record.content holds the YAML content
-            // console.log(`Record content : ${record.content}`);
-            const rawYaml = record.content.replace(/\\r\\n/g, "\n"); // Normalize newlines
-            setYamlContent(rawYaml);
+            setYamlRecord(record);
             setIsEditorOpen(true); // Open the dialog
         } else {
             console.log("Record not found");
@@ -63,28 +39,15 @@ const ConfigFileList = () => {
         setIsEditorOpen(false); // Close the editor dialog
     };
 
-    // Handle changes in YAML editor
-    const handleYamlChange = (newValue) => {
-        setYamlContent(newValue);
-        try {
-            jsYAML.load(newValue); // Validate YAML using js-yaml
-            setErrorMessage(null); // Clear error if no issues
-        } catch (e) {
-            setErrorMessage(`YAML Error: ${e.message}`); // Show YAML errors
-        }
-    };
-
     const handleRowClick = (id) => {
         setSelectedItem(id); // Set the selected ID
         console.log(`Selected ID: ${id}`);
     };
 
     useEffect(() => {
-        fetchConfigFiles();
-    }, []);
+        setConfigFiles(configFilesList);
+    }, [configFilesList]);
 
-    // className="flex items-center gap-4 p-4 border border-gray-300 rounded-md cursor-pointer hover:bg-gray-100 transition duration-200 ease-in-out"
-    // className={`cursor-pointer hover:bg-gray-400 transition duration-200 ease-in-out ${selected === id ? "bg-gray-400" : ""}`}
     return (
         <>
             <Card className="h-full w-1/3 overflow-scroll">
@@ -222,8 +185,7 @@ const ConfigFileList = () => {
             {/* Conditionally render YamlEditor */}
             {isEditorOpen && (
                 <YamlEditor
-                    yamlContent={yamlContent}
-                    handleYamlChange={handleYamlChange}
+                    yamlRecord={yamlRecord}
                     closeEditor={closeEditor} // Pass a callback to close the editor
                 />
             )}

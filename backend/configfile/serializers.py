@@ -481,6 +481,7 @@ class ConfigurationSerializer(serializers.ModelSerializer):
 
 
 class YamlFormatConfigFileModelSerializer(serializers.ModelSerializer):
+
     class Meta:
         model = YamlFormatConfigFileModel
         fields = ["name", "content", "description", "id", "modified_at"]

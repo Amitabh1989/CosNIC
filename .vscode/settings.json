@@ -1,4 +1,11 @@
 {
-  "cSpell.words": ["browsable", "messgae", "testops"],
+  "cSpell.words": [
+    "browsable",
+    "messgae",
+    "monokai",
+    "sutclientyml",
+    "testcase",
+    "testops"
+],
   "java.format.settings.url": "formatter"
 }

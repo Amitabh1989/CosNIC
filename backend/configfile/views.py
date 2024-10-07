@@ -2,6 +2,7 @@ from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, render
 from rest_framework import permissions, status, viewsets
 from rest_framework.authentication import BasicAuthentication, SessionAuthentication
+from rest_framework.exceptions import ValidationError
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
@@ -71,7 +72,7 @@ class YamlConfigFileViewSet(viewsets.ModelViewSet):
     serializer_class = YamlFormatConfigFileModelSerializer
     permission_classes = [IsAuthenticatedOrReadOnly]
     # authentication_classes = [SessionAuthentication, BasicAuthentication]
-    authentication_classes = [SessionAuthentication]
+    # authentication_classes = [SessionAuthentication, BasicAuthentication]
 
     def create(self, request, *args, **kwargs):
         user = request.user
@@ -103,15 +104,22 @@ class YamlConfigFileViewSet(viewsets.ModelViewSet):
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     def retrieve(self, request, pk=None, *args, **kwargs):
-        print("requet is ", request)
+        print("request is ", request)
         record = self.get_object()
         serializer = self.get_serializer(record)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     def update(self, request, pk=None, *args, **kwargs):
+        print("request is ", request.data)
+        print("request user ", request.user)
         record = self.get_object()
         serializer = self.get_serializer(record, data=request.data)
-        serializer.is_valid(raise_exception=True)
+        # serializer.is_valid(raise_exception=True)
+        try:
+            serializer.is_valid(raise_exception=True)
+        except ValidationError as e:
+            print("Validation errors: ", e.detail)  # Print the validation errors
+            return Response(e.detail, status=status.HTTP_400_BAD_REQUEST)
         serializer.save()
         return Response(serializer.data, status=status.HTTP_200_OK)
 

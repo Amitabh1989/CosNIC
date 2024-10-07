@@ -1,5 +1,3 @@
-// apiEndpoints.js
-// NEXT_PUBLIC_BACKEND_BASE_URL=http://127.0.0.1:8000
 const BASE_URL = process.env.NEXT_PUBLIC_BACKEND_BASE_URL;
 console.log("Base URL is :", BASE_URL);
 
@@ -16,7 +14,10 @@ const apiEndpoints = {
     getUserVenvsByID: (id) => `${BASE_URL}/testops/user/venvs/${id}`,
     // Config File APIS
     getSutClientYmlConfigFilesList: `${BASE_URL}/configuration/sutclientyml/`,
+    // getSutClientYmlConfigFilesList: `/configuration/sutclientyml/`,
     getSutClientYmlConfigFileByID: (id) =>
+        `${BASE_URL}/configuration/sutclientyml/${id}/`,
+    saveSutClientYmlConfigFile: (id) =>
         `${BASE_URL}/configuration/sutclientyml/${id}/`,
 };
 

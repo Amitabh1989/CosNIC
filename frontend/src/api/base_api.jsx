@@ -1,13 +1,12 @@
 import axios from "axios";
-// import { BASE_URL } from "../uilts/appURLS";
-// export const API_BASE_URL = "http://127.0.0.1:8000";
-// Update with your actual API base URL
 
-// const BACKEND_BASE_URL = process.env.DJANGO_BACKEND_BASE_URL;
-// const BACKEND_BASE_URL = "http://127.0.0.1:8000";
-// const BACKEND_BASE_URL = process.env.NEXT_PUBLIC_BACKEND_BASE_URL;
 const BACKEND_BASE_URL = process.env.NEXT_PUBLIC_BACKEND_BASE_URL;
 console.log("Backend base URL is in baseAPI :", BACKEND_BASE_URL);
+
+// You called this URL via POST, but the URL doesn't end in a slash and you have APPEND_SLASH set.
+//  Django can't redirect to the slash URL while maintaining POST data.
+//  Change your form to point to 127.0.0.1: 8000 / user / register / (note the trailing slash),
+//  or set APPEND_SLASH = False in your Django settings.
 
 // Create an Axios instance with a base URL
 export const baseBackendApi = axios.create({
@@ -20,11 +19,6 @@ function isValidRedirectUrl(url) {
     // Check if URL is within allowed paths
     return allowedPaths.includes(url) || url === "/";
 }
-
-// You called this URL via POST, but the URL doesn't end in a slash and you have APPEND_SLASH set.
-//  Django can't redirect to the slash URL while maintaining POST data.
-//  Change your form to point to 127.0.0.1: 8000 / user / register / (note the trailing slash),
-//  or set APPEND_SLASH = False in your Django settings.
 
 // Intercept request to include access token
 baseBackendApi.interceptors.request.use(
@@ -86,6 +80,13 @@ baseBackendApi.interceptors.response.use(
                 window.location.href = "/user/login"; // Redirect to login page
                 return Promise.reject(error);
             }
+        } else if (error.response.status === 403) {
+            // Handle 403 specifically (e.g., show an error message, log out the user, etc.)
+            console.error(
+                "Access denied: You do not have permission to perform this action."
+            );
+            // Optionally redirect or display a specific error message to the user
+            return Promise.reject(error); // You may choose to reject or handle differently
         }
         return Promise.reject(error);
     }
@@ -115,21 +116,13 @@ const refreshAccessToken = async () => {
     }
 };
 
-// Function to refresh access token
-// const refreshAccessToken = async () => {
-//     try {
-//         const response = await baseBackendApi.post(
-//             "api/token/refresh/", // Adjust this to your API route
-//             {},
-//             {
-//                 withCredentials: true, // Ensures the refresh token cookie is sent
-//             }
-//         );
-//         return response; // Return the response, if successful
-//     } catch (error) {
-//         console.error("Failed to refresh token", error);
-//         throw error; // Throw error so it can be caught in the interceptor
-//     }
-// };
+// Redirect to login function
+const redirectToLogin = () => {
+    sessionStorage.removeItem("redirect_after_login");
+    let redirectUrl = isValidRedirectUrl(window.location.pathname);
+    console.log("Redirecting URL in baseAPI :", redirectUrl);
+    sessionStorage.setItem("redirect_after_login", redirectUrl);
+    window.location.href = "/user/login"; // Redirect to login page
+};
 
 export default baseBackendApi;

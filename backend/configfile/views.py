@@ -117,10 +117,10 @@ class YamlConfigFileViewSet(viewsets.ModelViewSet):
         # serializer.is_valid(raise_exception=True)
         try:
             serializer.is_valid(raise_exception=True)
+            serializer.save()
         except ValidationError as e:
             print("Validation errors: ", e.detail)  # Print the validation errors
             return Response(e.detail, status=status.HTTP_400_BAD_REQUEST)
-        serializer.save()
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     def destroy(self, request, pk=None, *args, **kwargs):

@@ -46,7 +46,7 @@ const ConfigFileList = ({ configFilesList }) => {
 
     useEffect(() => {
         setConfigFiles(configFilesList);
-    }, [configFilesList]);
+    }, [configFilesList, configFiles]);
 
     return (
         <>
@@ -187,6 +187,7 @@ const ConfigFileList = ({ configFilesList }) => {
                 <YamlEditor
                     yamlRecord={yamlRecord}
                     closeEditor={closeEditor} // Pass a callback to close the editor
+                    setConfigFiles={setConfigFiles}
                 />
             )}
         </>

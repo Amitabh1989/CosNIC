@@ -39,10 +39,12 @@ export const getSutClientYmlConfigFileByIDAPI = async (id) => {
     }
 };
 
-/* That part of the code is specifying the headers to be included in the HTTP request when saving the SUT Client YML config file. In this case, it is setting the "Content-Type" header to "application/json", indicating that the content being sent in the request body is in JSON format. This is a common practice when sending JSON data to APIs to inform the server about the type of data being sent. */
+/* That part of the code is specifying the headers to be included in the HTTP request
+// when saving the SUT Client YML config file. In this case, it is setting the
+// "Content-Type" header to "application/json", indicating that the content
+// being sent in the request body is in JSON format. This is a common practice
+// when sending JSON data to APIs to inform the server about the type of data being sent. */
 export const saveSutClientYmlConfigFileAPI = async (id, data) => {
-    // const jsonData = yaml.dump(data);
-    // console.log("JSON data:", jsonData);
     try {
         const response = await baseBackendApi.patch(
             apiEndpoints.saveSutClientYmlConfigFile(id),

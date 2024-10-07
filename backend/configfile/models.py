@@ -239,7 +239,7 @@ class YamlFormatConfigFileModel(models.Model):
         )
 
     def save(self, *args, **kwargs):
-        self.modified_at = timezone.now()
+        # self.modified_at = timezone.now()
 
         # Only update version and name if this is the first save
         if not self.pk:

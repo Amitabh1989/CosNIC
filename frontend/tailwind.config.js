@@ -5,17 +5,17 @@ const withMT = require("@material-tailwind/react/utils/withMT");
 module.exports = withMT({
     content: ["./pages/**/*.{js,ts,jsx,tsx}"],
     theme: {
-    extend: {
-        fontFamily: {
-            poppins: ['Poppins', 'sans-serif'],
-            nunito: ['Nunito', 'sans-serif'],
-            quicksand: ['Quicksand', 'sans-serif'],
+        extend: {
+            fontFamily: {
+                sans: ["Roboto", "sans-serif"],
+                poppins: ["Poppins", "sans-serif"],
+                nunito: ["Nunito", "sans-serif"],
+                quicksand: ["Quicksand", "sans-serif"],
             },
         },
     },
     plugins: [],
 });
-
 
 // module.exports = {
 //   content: [

@@ -219,6 +219,7 @@
 #             instance.save()
 #         return instance
 from django.db import transaction
+from django.utils import timezone
 from rest_framework import serializers
 
 from .models import *
@@ -498,6 +499,7 @@ class YamlFormatConfigFileModelSerializer(serializers.ModelSerializer):
         with transaction.atomic():
             instance.name = validated_data.get("name", instance.name)
             instance.content = validated_data.get("content", instance.content)
+            # instance.modified_at = timezone.now()
             instance.description = validated_data.get(
                 "description", instance.description
             )

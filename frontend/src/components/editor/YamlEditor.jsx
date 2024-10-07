@@ -1,6 +1,8 @@
 "use client";
 import React, { useState, useEffect, useLayoutEffect, useRef } from "react";
 import {
+    Input,
+    Spinner,
     Button,
     Dialog,
     DialogHeader,
@@ -9,6 +11,7 @@ import {
 } from "@material-tailwind/react";
 import AceEditor from "react-ace";
 import * as jsYAML from "js-yaml"; // YAML parser for validation
+import moment from "moment";
 
 import "ace-builds/src-noconflict/mode-yaml"; // YAML mode
 import "ace-builds/src-noconflict/theme-monokai"; // Dark theme (you can change this to other Ace themes)
@@ -18,9 +21,14 @@ import "ace-builds/src-noconflict/ext-language_tools"; // Enables autocompletion
 import { debounce } from "lodash"; // Import debounce from lodash
 import { saveSutClientYmlConfigFileAPI } from "../../api/configFile_apis";
 
-export default function YamlEditor({ yamlRecord, closeEditor }) {
-    const sizes = ["xs", "sm", "md", "xxl", "lg", "xl"]; // Predefined modal sizes
-    const [sizeIndex, setSizeIndex] = React.useState(2); // Start with "md" (index 2)
+export default function YamlEditor({
+    yamlRecord,
+    closeEditor,
+    setConfigFiles,
+}) {
+    // const sizes = ["xs", "sm", "md", "xxl", "lg", "xl"]; // Predefined modal sizes
+    const sizes = ["xs", "sm", "md", "lg", "xl", "xxl"]; // Predefined modal sizes
+    const [sizeIndex, setSizeIndex] = React.useState(3); // Start with "lg" (index 3)
     const [editorHeight, setEditorHeight] = useState("500px"); // Editor height state
     const modalRef = useRef(null); // Reference to the modal element
     const [yamlEditedContent, setYamlEditedContent] = useState(
@@ -31,6 +39,16 @@ export default function YamlEditor({ yamlRecord, closeEditor }) {
     const [description, setDescription] = useState(yamlRecord.description); // State for description input
     const [contentChanged, setContentChanged] = useState(false); // To store if content has changed
     const [originalContent, setOriginalContent] = useState(yamlRecord.content); // To store original content
+    const [isLoading, setIsLoading] = useState(false); // To store original content
+
+    const updateParentConfigList = (updatedConfig) => {
+        console.log("Updated config:", updatedConfig);
+        setConfigFiles((prevConfigFiles) => {
+            return prevConfigFiles.map((config) =>
+                config.id === updatedConfig.id ? updatedConfig : config
+            );
+        });
+    };
 
     // Function to open modal with a specific size
     const handleOpen = (index) => {
@@ -57,7 +75,27 @@ export default function YamlEditor({ yamlRecord, closeEditor }) {
         closeEditor(); // Call the closeEditor callback to notify the parent
     };
 
-    const handleSave = () => {
+    // Function to handle input changes
+    const handleInputChange = (event) => {
+        const { name, value } = event.target;
+        console.log(`Name: ${name}, Value: ${value}`);
+        if (name === "name" && value != originalContent.name) {
+            setName(value);
+            setContentChanged(true);
+        }
+        if (name === "description" && value != originalContent.description) {
+            setDescription(value);
+            setContentChanged(true);
+        }
+        if (name === "content") {
+            setYamlEditedContent(value);
+            handleYamlChange(value); // Call handleYamlChange with updated value
+        }
+    };
+
+    const handleSave = async (event) => {
+        event.preventDefault(); // Prevent default form submission
+        setIsLoading(true);
         try {
             jsYAML.load(yamlEditedContent); // Validate YAML using js-yaml
             setErrorMessage(null); // Clear error if no issues
@@ -68,10 +106,27 @@ export default function YamlEditor({ yamlRecord, closeEditor }) {
                 description: description, // Get the updated description
                 content: yamlEditedContent, // Use the edited YAML content
             };
-            saveSutClientYmlConfigFileAPI(yamlRecord.id, dataToSend); // Save the edited content
+            const response = await saveSutClientYmlConfigFileAPI(
+                yamlRecord.id,
+                dataToSend
+            ); // Save the edited content
+            console.log("Response from API:", response);
+
+            // Update the form with the latest saved data
+            setYamlEditedContent(response.content);
+            setDescription(response.description);
+            setOriginalContent(response); // Update the original content with response
+            setName(response.name);
+            setContentChanged(false); // Disable save button after successful save
+
+            // Update the parent component's list with the updated data
+            updateParentConfigList(response);
+            handleClose(); // Close the modal
+            console.log("Saved successfully!");
         } catch (e) {
             setErrorMessage(`YAML Error: ${e.message}`); // Show YAML errors
-            return;
+        } finally {
+            setIsLoading(false);
         }
     };
 
@@ -89,7 +144,7 @@ export default function YamlEditor({ yamlRecord, closeEditor }) {
                         ".modal-footer"
                     ).offsetHeight;
                 const availableHeight =
-                    modalHeight - headerHeight - footerHeight - 40; // Adjust with padding/margins
+                    modalHeight - headerHeight - footerHeight; // Adjust with padding/margins
                 setEditorHeight(`${availableHeight}px`);
             }
         };
@@ -100,15 +155,6 @@ export default function YamlEditor({ yamlRecord, closeEditor }) {
         return () => window.removeEventListener("resize", adjustEditorHeight);
     }, [sizeIndex]); // Re-run whenever modal size changes
 
-    // const debouncedYamlChange = debounce((newValue) => {
-    //     try {
-    //         jsYaml.load(newValue); // Validate YAML using js-yaml
-    //         setErrorMessage(null); // Clear error if no issues
-    //     } catch (e) {
-    //         setErrorMessage(`YAML Error: ${e.message}`); // Show YAML errors
-    //     }
-    // }, 500); // Debounce time in milliseconds
-
     // Handle changes in YAML editor
     const handleYamlChange = (newValue) => {
         try {
@@ -118,7 +164,6 @@ export default function YamlEditor({ yamlRecord, closeEditor }) {
         } catch (e) {
             setErrorMessage(`YAML Error: ${e.message}`); // Show YAML errors
         }
-        // debouncedYamlChange(newValue); // Debounce the validation
         setContentChanged(newValue !== originalContent); // Check if content has changed
     };
 
@@ -128,88 +173,121 @@ export default function YamlEditor({ yamlRecord, closeEditor }) {
             setOriginalContent(rawYaml);
             setYamlEditedContent(rawYaml); // Reset editor when yamlRecord changes
         }
-    }, [yamlRecord]);
+        let modified = moment(yamlRecord.modified_at).format(
+            "MMM DD/YY, hh:MM A"
+        );
+        console.log("YAML Record changed:", { modified });
+    }, [yamlEditedContent, description, name, yamlRecord]);
 
     return (
         <>
-            <Dialog
-                open={true}
-                onClose={closeEditor}
-                size={sizes[sizeIndex]} // Dynamically set the modal size
-                ref={modalRef} // Set the reference to the modal
-                animate={{
-                    mount: { scale: 1, y: 0 },
-                    unmount: { scale: 0.9, y: -100 },
-                }}
-            >
-                <DialogHeader className="modal-header">
-                    <div className="flex justify-between items-center w-full">
-                        <div className="text-left">Edit YAML File</div>
-                        <div className="flex gap-3">
-                            <Button onClick={handleSizeUp} variant="gradient">
-                                Size +
-                            </Button>
-                            <Button onClick={handleSizeDown} variant="gradient">
-                                Size -
-                            </Button>
+            <form onSubmit={handleSave}>
+                <Dialog
+                    open={true}
+                    onClose={closeEditor}
+                    size={sizes[sizeIndex]} // Dynamically set the modal size
+                    ref={modalRef} // Set the reference to the modal
+                    animate={{
+                        mount: { scale: 1, y: 0 },
+                        unmount: { scale: 0.9, y: -100 },
+                    }}
+                >
+                    <DialogHeader className="modal-header">
+                        <div className="flex justify-between items-center w-full">
+                            <div className="text-left">Edit YAML File</div>
+                            <p className="font-sans font-light text-sm">
+                                Last modified at{" "}
+                                {moment(yamlRecord.modified_at).format(
+                                    "MMM DD/YY, hh:MM A"
+                                )}
+                            </p>
+                            <div className="flex gap-3">
+                                <Button
+                                    onClick={handleSizeUp}
+                                    variant="gradient"
+                                >
+                                    Size +
+                                </Button>
+                                <Button
+                                    onClick={handleSizeDown}
+                                    variant="gradient"
+                                >
+                                    Size -
+                                </Button>
+                            </div>
                         </div>
-                    </div>
-                    <div>
-                        <label>Name:</label>
-                        <input
-                            type="text"
-                            value={name}
-                            onChange={(e) => setName(e.target.value)}
-                        />
-                    </div>
-                    <div>
-                        <label>Description:</label>
-                        <input
-                            type="text"
-                            value={description}
-                            onChange={(e) => setDescription(e.target.value)}
-                        />
-                    </div>
-                </DialogHeader>
-                <DialogBody className="h-full overflow-scroll">
-                    <AceEditor
-                        mode="yaml"
-                        theme="monokai"
-                        onChange={handleYamlChange} // Use the updated handleYamlChange function
-                        name="yaml-editor"
-                        value={yamlEditedContent} // Use yamlEditedContent to reflect user changes
-                        editorProps={{ $blockScrolling: true }}
-                        setOptions={{
-                            enableBasicAutocompletion: true,
-                            enableLiveAutocompletion: true,
-                            enableSnippets: true,
-                            showLineNumbers: true,
-                            tabSize: 8,
-                            fontSize: 16,
-                        }}
-                        style={{
-                            width: "100%",
-                            height: editorHeight, // Dynamically adjust height
-                            fontSize: "14px",
-                        }}
-                    />
-                </DialogBody>
-                <DialogFooter className="modal-footer">
-                    <div className="flex justify-end items-center w-full gap-3">
-                        <div>
-                            <Button
-                                onClick={handleSave}
-                                disabled={!contentChanged}
-                            >
-                                Save Changes
-                            </Button>
+                    </DialogHeader>
+                    <DialogBody className="h-full overflow-scroll">
+                        <div className="p-4 mb-4">
+                            <Input
+                                variant="outlined"
+                                label="Any noteworthy name"
+                                placeholder="Get Creative!"
+                                name="name"
+                                value={name}
+                                onChange={handleInputChange}
+                            />
                         </div>
-                        <div>
-                            <Button onClick={handleClose}>Close</Button>
+                        <div className="p-4 mb-4">
+                            {/* <label>Description:</label> */}
+                            <Input
+                                variant="outlined"
+                                label="Description"
+                                placeholder="SUT-Client IP should be good!"
+                                name="description"
+                                value={description}
+                                onChange={handleInputChange}
+                            />
                         </div>
-                    </div>
-                </DialogFooter>
-            </Dialog>
+                        <div className="p-4 mb-4 rounded-sm shadow-sm bg-blue-gray-400">
+                            <AceEditor
+                                mode="yaml"
+                                theme="monokai"
+                                // onChange={handleYamlChange} // Use the updated handleYamlChange function
+                                onChange={handleInputChange}
+                                name="content"
+                                value={yamlEditedContent} // Use yamlEditedContent to reflect user changes
+                                editorProps={{ $blockScrolling: true }}
+                                setOptions={{
+                                    enableBasicAutocompletion: true,
+                                    enableLiveAutocompletion: true,
+                                    enableSnippets: true,
+                                    showLineNumbers: true,
+                                    tabSize: 8,
+                                    fontSize: 16,
+                                }}
+                                style={{
+                                    width: "100%",
+                                    height: editorHeight, // Dynamically adjust height
+                                    fontSize: "14px",
+                                }}
+                            />
+                        </div>
+                    </DialogBody>
+                    <DialogFooter className="modal-footer">
+                        <div className="flex justify-end items-center w-full gap-3">
+                            <div>
+                                {isLoading ? (
+                                    <>
+                                        <Spinner className="h-4 w-4" />
+                                        Saving...
+                                    </>
+                                ) : (
+                                    <Button
+                                        onClick={handleSave}
+                                        disabled={!contentChanged}
+                                    >
+                                        Save Changes
+                                    </Button>
+                                )}
+                            </div>
+                            <div>
+                                <Button onClick={handleClose}>Close</Button>
+                            </div>
+                        </div>
+                    </DialogFooter>
+                </Dialog>
+            </form>
         </>
     );
 }

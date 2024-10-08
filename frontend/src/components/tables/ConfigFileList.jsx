@@ -36,6 +36,7 @@ const ConfigFileList = ({ configFilesList }) => {
     };
 
     const closeEditor = () => {
+        console.log("Editor state being toggled");
         setIsEditorOpen(false); // Close the editor dialog
     };
 
@@ -46,7 +47,15 @@ const ConfigFileList = ({ configFilesList }) => {
 
     useEffect(() => {
         setConfigFiles(configFilesList);
-    }, [configFilesList, configFiles]);
+    }, [configFiles, configFilesList]);
+
+    const updateConfigFiles = (updatedRecord) => {
+        setConfigFiles((prevRecord) => {
+            prevRecord.map((record) => {
+                record.id === updatedRecord.id ? updatedRecord : record;
+            });
+        });
+    };
 
     return (
         <>
@@ -109,6 +118,9 @@ const ConfigFileList = ({ configFilesList }) => {
                                                     }}
                                                     checked={selected === id}
                                                     onClick={() =>
+                                                        handleRowClick(id)
+                                                    }
+                                                    onChange={() =>
                                                         handleRowClick(id)
                                                     }
                                                 />
@@ -187,7 +199,7 @@ const ConfigFileList = ({ configFilesList }) => {
                 <YamlEditor
                     yamlRecord={yamlRecord}
                     closeEditor={closeEditor} // Pass a callback to close the editor
-                    setConfigFiles={setConfigFiles}
+                    setConfigFiles={updateConfigFiles}
                 />
             )}
         </>

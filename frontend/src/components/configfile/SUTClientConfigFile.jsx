@@ -7,7 +7,7 @@
 // import "ace-builds/src-noconflict/theme-github"; // Dark theme (you can change this to other Ace themes)
 // import "ace-builds/src-noconflict/ext-language_tools"; // Enables autocompletion and syntax validation
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 // import { getSutClientYmlConfigFilesListAPI } from "../../api/configFile_apis";
 import { getSutClientYmlConfigFilesListAPI } from "@/api/configFile_apis";
 
@@ -37,6 +37,11 @@ const SUTClientConfigFile = () => {
             setErrorMessage("Failed to fetch YAML content");
         }
     };
+
+    const memoizedConfigFiles = useMemo(
+        () => configFilesList,
+        [configFilesList]
+    );
 
     useEffect(() => {
         fetchConfigFiles();

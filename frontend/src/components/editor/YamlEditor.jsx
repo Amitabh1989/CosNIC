@@ -41,14 +41,16 @@ export default function YamlEditor({
     const [originalContent, setOriginalContent] = useState(yamlRecord.content); // To store original content
     const [isLoading, setIsLoading] = useState(false); // To store original content
 
-    const updateParentConfigList = (updatedConfig) => {
-        console.log("Updated config:", updatedConfig);
-        setConfigFiles((prevConfigFiles) => {
-            return prevConfigFiles.map((config) =>
-                config.id === updatedConfig.id ? updatedConfig : config
-            );
-        });
-    };
+    // const updateParentConfigList = (updatedConfig) => {
+    //     console.log("Updated config as we see here :", updatedConfig);
+    //     setConfigFiles((prevConfigFiles) => {
+    //         const updatedFiles = prevConfigFiles.map((config) =>
+    //             config.id === updatedConfig.id ? updatedConfig : config
+    //         );
+    //         console.log("Updated config files:", updatedFiles);
+    //         return [...updatedFiles]; // Spread to ensure new reference
+    //     });
+    // };
 
     // Function to open modal with a specific size
     const handleOpen = (index) => {
@@ -111,6 +113,13 @@ export default function YamlEditor({
                 dataToSend
             ); // Save the edited content
             console.log("Response from API:", response);
+            console.log("Response content:", response.content);
+            console.log("Updated name:", response.name);
+            console.log("Updated description:", response.description);
+            console.log(
+                "Updated modified at:",
+                moment(response.modified_at).format("MMM DD/YY, hh:MM A")
+            );
 
             // Update the form with the latest saved data
             setYamlEditedContent(response.content);
@@ -120,8 +129,9 @@ export default function YamlEditor({
             setContentChanged(false); // Disable save button after successful save
 
             // Update the parent component's list with the updated data
-            updateParentConfigList(response);
-            handleClose(); // Close the modal
+            // updateParentConfigList(response);
+            setConfigFiles(response);
+            // handleClose(); // Close the modal
             console.log("Saved successfully!");
         } catch (e) {
             setErrorMessage(`YAML Error: ${e.message}`); // Show YAML errors
@@ -167,6 +177,18 @@ export default function YamlEditor({
         setContentChanged(newValue !== originalContent); // Check if content has changed
     };
 
+    // useEffect(() => {
+    //     if (yamlRecord && yamlRecord.content) {
+    //         console.log("In useEffect of YamlEditor");
+    //         const rawYaml = yamlRecord.content.replace(/\\r\\n/g, "\n"); // Normalize newlines
+    //         setOriginalContent(rawYaml);
+    //         setYamlEditedContent(rawYaml); // Reset editor when yamlRecord changes
+    //     }
+    //     let modified = moment(yamlRecord.modified_at).format(
+    //         "MMM DD/YY, hh:MM A"
+    //     );
+    //     console.log("YAML Record changed:", { modified });
+    // }, [yamlEditedContent, description, name, yamlRecord]);
     useEffect(() => {
         if (yamlRecord && yamlRecord.content) {
             const rawYaml = yamlRecord.content.replace(/\\r\\n/g, "\n"); // Normalize newlines
@@ -177,7 +199,12 @@ export default function YamlEditor({
             "MMM DD/YY, hh:MM A"
         );
         console.log("YAML Record changed:", { modified });
-    }, [yamlEditedContent, description, name, yamlRecord]);
+    }, [
+        yamlRecord.content,
+        yamlRecord.name,
+        yamlRecord.description,
+        yamlRecord.modified_at,
+    ]);
 
     return (
         <>

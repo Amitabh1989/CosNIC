@@ -4,6 +4,7 @@ console.log("Base URL is :", BASE_URL);
 const apiEndpoints = {
     loginUser: `${BASE_URL}/user/login/`,
     getUsers: `${BASE_URL}/users`,
+    // TestCases FetchAPI
     getTestCases: `${BASE_URL}/testops/testcase/`,
     getTestCaseByID: (id) => `${BASE_URL}/testops/testcase`,
     createTest: `${BASE_URL}/tests/create`,

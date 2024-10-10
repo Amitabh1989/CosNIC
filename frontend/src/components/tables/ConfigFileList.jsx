@@ -22,6 +22,8 @@ const ConfigFileList = ({ configFilesList }) => {
     const [yamlRecord, setYamlRecord] = useState(""); // YAML content
     const [selected, setSelectedItem] = useState(null);
     const [isEditorOpen, setIsEditorOpen] = React.useState(false); // Controls dialog visibility
+    const [recordHasChanged, setRecordHasChanged] = React.useState(false);
+    const [changedRecord, setChangedRecord] = React.useState(null);
 
     const handleEdit = (id) => {
         console.log("Edit file : ", id);
@@ -45,15 +47,36 @@ const ConfigFileList = ({ configFilesList }) => {
         console.log(`Selected ID: ${id}`);
     };
 
+    // useEffect(() => {
+    //     setConfigFiles(configFilesList);
+    // }, [configFiles, configFilesList]);
     useEffect(() => {
-        setConfigFiles(configFilesList);
-    }, [configFiles, configFilesList]);
+        console.log("configFiles state changed: ", configFiles);
+        if (recordHasChanged) {
+            console.log("Record has changed: ", changedRecord);
+            setConfigFiles(changedRecord);
+            setRecordHasChanged(false);
+        } else {
+            setConfigFiles(configFilesList);
+        }
+    }, [configFiles, configFilesList, changedRecord]);
 
     const updateConfigFiles = (updatedRecord) => {
-        setConfigFiles((prevRecord) => {
-            prevRecord.map((record) => {
-                record.id === updatedRecord.id ? updatedRecord : record;
-            });
+        const record = configFiles.find((file) => file.id === updatedRecord.id);
+        console.log(
+            `Record : Updated ID : ${updatedRecord.id} : ${JSON.stringify(record)}`
+        );
+        setConfigFiles((prevConfigFiles) => {
+            const newConfigFiles = prevConfigFiles.map((file) =>
+                file.id === updatedRecord.id ? updatedRecord : file
+            );
+            console.log("Updated record in ConfigList: ", updatedRecord);
+            console.log("New config files array:", newConfigFiles);
+            setRecordHasChanged(true);
+            setChangedRecord(newConfigFiles);
+            setConfigFiles(newConfigFiles);
+            // setConfigFiles(newConfigFiles);
+            return newConfigFiles; // Always return a new array reference
         });
     };
 

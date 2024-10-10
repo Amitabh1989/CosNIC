@@ -26,12 +26,11 @@ export const getSutClientYmlConfigFilesListAPI = async () => {
 
 export const getSutClientYmlConfigFileByIDAPI = async (id) => {
     try {
-        const response =
-            // await apiEndpoints.getSutClientYmlConfigFileByID.get(id);
-            await baseBackendApi.get(
-                apiEndpoints.getSutClientYmlConfigFileByID,
-                id
-            );
+        console.log("Getting SUT Client YML config file by ID:", id);
+        const response = await baseBackendApi.get(
+            apiEndpoints.getSutClientYmlConfigFileByID(id)
+        );
+        console.log("API response:", response);
         return response.data;
     } catch (error) {
         console.error(error);

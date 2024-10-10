@@ -118,6 +118,7 @@ class YamlConfigFileViewSet(viewsets.ModelViewSet):
         try:
             serializer.is_valid(raise_exception=True)
             serializer.save()
+            print("Updated and saved Serializer data is ", serializer.data)
         except ValidationError as e:
             print("Validation errors: ", e.detail)  # Print the validation errors
             return Response(e.detail, status=status.HTTP_400_BAD_REQUEST)

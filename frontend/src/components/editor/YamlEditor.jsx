@@ -19,7 +19,10 @@ import "ace-builds/src-noconflict/theme-github"; // Dark theme (you can change t
 import "ace-builds/src-noconflict/ext-language_tools"; // Enables autocompletion and syntax validation
 
 import { debounce } from "lodash"; // Import debounce from lodash
-import { saveSutClientYmlConfigFileAPI } from "../../api/configFile_apis";
+import {
+    saveSutClientYmlConfigFileAPI,
+    getSutClientYmlConfigFileByIDAPI,
+} from "../../api/configFile_apis";
 
 export default function YamlEditor({
     yamlRecord,
@@ -41,16 +44,22 @@ export default function YamlEditor({
     const [originalContent, setOriginalContent] = useState(yamlRecord.content); // To store original content
     const [isLoading, setIsLoading] = useState(false); // To store original content
 
-    // const updateParentConfigList = (updatedConfig) => {
-    //     console.log("Updated config as we see here :", updatedConfig);
-    //     setConfigFiles((prevConfigFiles) => {
-    //         const updatedFiles = prevConfigFiles.map((config) =>
-    //             config.id === updatedConfig.id ? updatedConfig : config
-    //         );
-    //         console.log("Updated config files:", updatedFiles);
-    //         return [...updatedFiles]; // Spread to ensure new reference
-    //     });
-    // };
+    const refreshRecord = async (id) => {
+        try {
+            const record = await getSutClientYmlConfigFileByIDAPI(id);
+            console.log("Record fetched:", record);
+            setContentChanged(true);
+            setOriginalContent(record);
+            setYamlEditedContent(record.content);
+            setName(record.name);
+            setDescription(record.description);
+            setConfigFiles(record);
+            console.log("Record refreshed:", record);
+            // return record;
+        } catch (e) {
+            setErrorMessage(`Error fetching record: ${e.message}`);
+        }
+    };
 
     // Function to open modal with a specific size
     const handleOpen = (index) => {
@@ -75,6 +84,11 @@ export default function YamlEditor({
 
     const handleClose = () => {
         closeEditor(); // Call the closeEditor callback to notify the parent
+        // if (contentChanged) {
+        //     refreshRecord(yamlRecord.id);
+        // } else {
+        //     setContentChanged(false);
+        // }
     };
 
     // Function to handle input changes
@@ -126,7 +140,7 @@ export default function YamlEditor({
             setDescription(response.description);
             setOriginalContent(response); // Update the original content with response
             setName(response.name);
-            setContentChanged(false); // Disable save button after successful save
+            setContentChanged(true); // Disable save button after successful save
 
             // Update the parent component's list with the updated data
             // updateParentConfigList(response);
@@ -137,6 +151,7 @@ export default function YamlEditor({
             setErrorMessage(`YAML Error: ${e.message}`); // Show YAML errors
         } finally {
             setIsLoading(false);
+            setContentChanged(false); // Disable save button after successful save
         }
     };
 
@@ -177,18 +192,6 @@ export default function YamlEditor({
         setContentChanged(newValue !== originalContent); // Check if content has changed
     };
 
-    // useEffect(() => {
-    //     if (yamlRecord && yamlRecord.content) {
-    //         console.log("In useEffect of YamlEditor");
-    //         const rawYaml = yamlRecord.content.replace(/\\r\\n/g, "\n"); // Normalize newlines
-    //         setOriginalContent(rawYaml);
-    //         setYamlEditedContent(rawYaml); // Reset editor when yamlRecord changes
-    //     }
-    //     let modified = moment(yamlRecord.modified_at).format(
-    //         "MMM DD/YY, hh:MM A"
-    //     );
-    //     console.log("YAML Record changed:", { modified });
-    // }, [yamlEditedContent, description, name, yamlRecord]);
     useEffect(() => {
         if (yamlRecord && yamlRecord.content) {
             const rawYaml = yamlRecord.content.replace(/\\r\\n/g, "\n"); // Normalize newlines

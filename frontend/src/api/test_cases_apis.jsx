@@ -4,7 +4,8 @@ import apiEndpoints from "./apiEndpoints";
 
 export const getTestCasesApi = async () => {
     try {
-        const response = await apiEndpoints.getTestCases();
+        const response = await baseBackendApi.get(apiEndpoints.getTestCases);
+        console.log("Test cases response is:", response.data);
         return response; // Return the response for further processing
     } catch (error) {
         console.error("Error fetching test cases:", error);

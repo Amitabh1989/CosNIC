@@ -29,6 +29,8 @@
     "ace-builds": "^1.36.2",
     "axios": "^1.7.7",
     "codemirror": "^6.0.1",
+    "dexie": "^4.0.8",
+    "dexie-react-hooks": "^1.1.7",
     "dotenv": "^16.4.5",
     "dotenv-expand": "^11.0.6",
     "eslint-config-next": "^14.2.14",

@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect, useMemo, use } from "react";
+import React, { useState, useEffect, useMemo, useCallback } from "react";
 import { DocumentIcon } from "@heroicons/react/24/solid";
 import { ArrowDownTrayIcon } from "@heroicons/react/24/outline";
 import { MagnifyingGlassIcon } from "@heroicons/react/24/outline";
@@ -11,30 +11,47 @@ import {
     IconButton,
     Typography,
 } from "@material-tailwind/react";
-import { getTestCasesApi, getTestCaseByIDApi } from "@/api/test_cases";
+import { getTestCasesApi, getTestCaseByIDApi } from "@/api/test_cases_apis";
+import {
+    saveTestCasesToIndexedDB,
+    getTestCasesFromIndexedDB,
+    getTestCaseByIDFromIndexedDB,
+} from "@/services/indexedDBService";
+
+const TABLE_HEAD = [
+    "id",
+    "tcid",
+    "title",
+    "suite_name",
+    "applicable_os",
+    "stream",
+    "category",
+];
 
 const TestCasesListAndSelection = () => {
-    const [tableData, setTableData] = useState([]);
+    const [testCasesData, setTestCasesData] = useState([]);
     const [selectedRows, setSelectedRows] = useState([]);
     const [error, setError] = useState(null);
     const [reload, setReload] = useState(false);
 
-    const fetchTestCaseData = useMemo(() => {
-        async () => {
-            try {
-                const response = await getTestCasesApi();
-                console.log("Test cases response is:", response.data);
-                setTableData(response.data);
-            } catch (error) {
-                console.error("Error fetching test cases:", error);
-                setError(error);
-            }
-        };
+    const fetchTestCaseData = useCallback(async () => {
+        try {
+            const response = await getTestCasesApi();
+            console.log("Test cases response is:", response.data);
+            setTestCasesData(response.data);
+        } catch (error) {
+            console.error("Error fetching test cases:", error);
+            setError(error);
+        }
+    }, [testCasesData]);
+
+    useEffect(() => {
+        fetchTestCaseData();
+        console.log("Test cases data is:", testCasesData);
     }, [reload]);
 
-    // useEffect(() => {
-
     return (
+        // <div>It all right</div>
         <Card className="h-full w-full overflow-scroll">
             <CardHeader
                 floated={false}
@@ -71,82 +88,90 @@ const TestCasesListAndSelection = () => {
                     </tr>
                 </thead>
                 <tbody>
-                    {TABLE_ROWS.map(
-                        ({ number, customer, amount, issued, date }, index) => {
-                            const isLast = index === TABLE_ROWS.length - 1;
-                            const classes = isLast
-                                ? "p-4"
-                                : "p-4 border-b border-gray-300";
+                    {testCasesData?.map((record, index) => {
+                        const isLast = index === testCasesData.length - 1;
+                        const classes = isLast
+                            ? "p-4"
+                            : "p-4 border-b border-gray-300";
 
-                            return (
-                                <tr key={number}>
-                                    <td className={classes}>
-                                        <div className="flex items-center gap-1">
-                                            <Checkbox />
-                                            <Typography
-                                                variant="small"
-                                                color="blue-gray"
-                                                className="font-bold"
-                                            >
-                                                {number}
-                                            </Typography>
-                                        </div>
-                                    </td>
-                                    <td className={classes}>
+                        return (
+                            <tr key={record.id}>
+                                <td className={classes}>
+                                    <div className="flex items-center gap-1">
+                                        <Checkbox />
                                         <Typography
                                             variant="small"
-                                            className="font-normal text-gray-600"
+                                            color="blue-gray"
+                                            className="font-bold"
                                         >
-                                            {customer}
+                                            {record.id}
                                         </Typography>
-                                    </td>
-                                    <td className={classes}>
-                                        <Typography
-                                            variant="small"
-                                            className="font-normal text-gray-600"
-                                        >
-                                            {amount}
-                                        </Typography>
-                                    </td>
-                                    <td className={classes}>
-                                        <Typography
-                                            variant="small"
-                                            className="font-normal text-gray-600"
-                                        >
-                                            {issued}
-                                        </Typography>
-                                    </td>
-                                    <td className={classes}>
-                                        <Typography
-                                            variant="small"
-                                            className="font-normal text-gray-600"
-                                        >
-                                            {date}
-                                        </Typography>
-                                    </td>
-                                    <td className={classes}>
-                                        <div className="flex items-center gap-2">
-                                            <IconButton
-                                                variant="text"
-                                                size="sm"
-                                            >
-                                                <DocumentIcon className="h-4 w-4 text-gray-900" />
-                                            </IconButton>
-                                            <IconButton
-                                                variant="text"
-                                                size="sm"
-                                            >
-                                                <ArrowDownTrayIcon
-                                                    strokeWidth={3}
-                                                    className="h-4 w-4 text-gray-900"
-                                                />
-                                            </IconButton>
-                                        </div>
-                                    </td>
-                                </tr>
-                            );
-                        }
-                    )}
+                                    </div>
+                                </td>
+                                <td className={classes}>
+                                    <Typography
+                                        variant="small"
+                                        className="font-normal text-gray-600"
+                                    >
+                                        {record.tcid}
+                                    </Typography>
+                                </td>
+                                <td className={classes}>
+                                    <Typography
+                                        variant="small"
+                                        className="font-normal text-gray-600"
+                                    >
+                                        {record.title}
+                                    </Typography>
+                                </td>
+                                <td className={classes}>
+                                    <Typography
+                                        variant="small"
+                                        className="font-normal text-gray-600"
+                                    >
+                                        {record.suite_name}
+                                    </Typography>
+                                </td>
+                                <td className={classes}>
+                                    <Typography
+                                        variant="small"
+                                        className="font-normal text-gray-600"
+                                    >
+                                        {record.applicable_os}
+                                    </Typography>
+                                </td>
+                                <td className={classes}>
+                                    <Typography
+                                        variant="small"
+                                        className="font-normal text-gray-600"
+                                    >
+                                        {record.stream}
+                                    </Typography>
+                                </td>
+                                <td className={classes}>
+                                    <Typography
+                                        variant="small"
+                                        className="font-normal text-gray-600"
+                                    >
+                                        {record.category}
+                                    </Typography>
+                                </td>
+                                <td className={classes}>
+                                    <div className="flex items-center gap-2">
+                                        <IconButton variant="text" size="sm">
+                                            <DocumentIcon className="h-4 w-4 text-gray-900" />
+                                        </IconButton>
+                                        <IconButton variant="text" size="sm">
+                                            <ArrowDownTrayIcon
+                                                strokeWidth={3}
+                                                className="h-4 w-4 text-gray-900"
+                                            />
+                                        </IconButton>
+                                    </div>
+                                </td>
+                            </tr>
+                        );
+                    })}
                 </tbody>
             </table>
         </Card>

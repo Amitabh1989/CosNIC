@@ -27,7 +27,7 @@ import {
     Tooltip,
 } from "@material-tailwind/react";
 import { useSelector, useDispatch } from "react-redux";
-import { setVenvs } from "@/reduxToolkit/slice";
+import { setVenvs } from "@/reduxToolkit/venvSlice";
 
 export const SortableTable = ({
     columns,

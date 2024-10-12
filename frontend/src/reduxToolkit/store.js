@@ -1,9 +1,52 @@
+// import { configureStore } from "@reduxjs/toolkit";
+// import { persistStore, persistReducer } from "redux-persist";
+// import { combineReducers } from "redux";
+// // import venvReducer, { testCasesReducer } from "./slice";
+// import thunk from "redux-thunk";
+// import venvReducer from "./slice";
+// import testCasesReducer from "./testCasesSlice";
+// // import { createIndexedDBStorage } from "redux-persist-indexeddb-storage"; // For IndexedDB
+// import storage from "redux-persist-indexeddb-storage";
+
+// // Step 1: Set up IndexedDB storage for redux-persist
+// const persistConfig = {
+//     key: "root",
+//     // storage: createIndexedDBStorage("CosNICReduxDB"), // Use IndexedDB instead of localStorage
+//     storage: storage("CosNICReduxDB"), // Use IndexedDB instead of localStorage
+//     whitelist: ["venv", "testCases"], // Only persist venv slice for now, extend as needed
+// };
+
+// // Combine your reducers
+// export const rootReducer = combineReducers({
+//     venv: venvReducer,
+//     testCases: testCasesReducer,
+// });
+
+// // Wrap your rootReducer with persistReducer
+// export const persistedReducer = persistReducer(persistConfig, rootReducer);
+
+// // Step 3: Set up the store with the persisted reducer
+// export const store = configureStore({
+//     reducer: persistedReducer,
+//     middleware: (getDefaultMiddleware) =>
+//         getDefaultMiddleware({
+//             serializableCheck: false,
+//         }).concat(thunk), // Add thunk middleware,
+//     devTools: process.env.NODE_ENV !== "production", // Enable Redux DevTools in development
+// });
+
+// // Step 4: Set up the persistor
+// export const persistor = persistStore(store);
+
 import { configureStore } from "@reduxjs/toolkit";
 import { persistStore, persistReducer } from "redux-persist";
 import { combineReducers } from "redux";
-import venvReducer from "./slice";
+import thunk from "redux-thunk";
+import venvReducer from "./venvSlice";
+import testCasesReducer from "./testCasesSlice";
+import storage from "redux-persist/lib/storage"; // defaults to localStorage for web
 
-// Step 1: Create the custom noop storage (already done above)
+// Define a noop storage for SSR (this part is fine)
 const createNoopStorage = () => {
     return {
         getItem() {
@@ -18,35 +61,45 @@ const createNoopStorage = () => {
     };
 };
 
-const storage =
+// Use localStorage or noopStorage depending on whether window is available
+const storageToUse =
     typeof window !== "undefined"
-        ? require("redux-persist/lib/storage").default // Use localStorage for client-side
+        ? storage // Use localStorage for client-side
         : createNoopStorage(); // Use noop storage for SSR
 
-// Step 2: Create a configuration object for redux-persist
+// Configure persist config
 const persistConfig = {
-    key: "root", // root key for the persisted state
-    storage, // the type of storage (localStorage in this case or noop for SSR)
+    key: "root",
+    storage: storageToUse, // Use the appropriate storage
+    whitelist: ["venv", "testCases"], // Only persist these reducers
 };
 
-// Combine your reducers
-export const rootReducer = combineReducers({
+// Combine reducers
+const rootReducer = combineReducers({
     venv: venvReducer,
-    // user: userReducer, // add more reducers if needed
-    whitelist: ["venv"], // only persist the venv slice
+    testCases: testCasesReducer, // Add your testCases reducer here
 });
 
-// Wrap your rootReducer with persistReducer
-export const persistedReducer = persistReducer(persistConfig, rootReducer);
+// Conditionally wrap rootReducer with persistReducer for CSR
+const persistedReducer =
+    typeof window !== "undefined"
+        ? persistReducer(persistConfig, rootReducer)
+        : rootReducer; // Use rootReducer without persistence for SSR
 
-// Step 3: Set up the store with the persisted reducer
+// Configure store with thunk middleware
 export const store = configureStore({
     reducer: persistedReducer,
     middleware: (getDefaultMiddleware) =>
         getDefaultMiddleware({
-            serializableCheck: false,
-        }),
+            serializableCheck: false, // Disable serializable check for redux-persist
+        }).concat(thunk, loggerMiddleware), // Add logger here
+    devTools: process.env.NODE_ENV !== "production", // Enable Redux DevTools
 });
 
-// Step 4: Set up the persistor
+// Conditionally set up persistor only for CSR
+// export const persistor =
+//     typeof window !== "undefined" ? persistStore(store) : null;
 export const persistor = persistStore(store);
+
+// Debugging - log the store state after initialization
+console.log("Store state after initialization:", store.getState());

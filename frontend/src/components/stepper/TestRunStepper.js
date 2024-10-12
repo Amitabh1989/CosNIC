@@ -10,7 +10,7 @@ import { GrDocumentConfig } from "react-icons/gr";
 import { ImList2 } from "react-icons/im";
 import { VscPreview } from "react-icons/vsc";
 import EnvSelection from "../env/EnvSelector";
-import TestCasesListAndSelection from "../test/TestCasesListAndSelection";
+import TestCasesListAndSelection from "../testcases/TestCasesListAndSelection";
 
 export default function TestRunStepper({ step }) {
     const [activeStep, setActiveStep] = React.useState(0);

@@ -4,7 +4,7 @@ import { getVenvStatusAPI_v2 } from "@/api/venv_apis";
 import { SortableTable } from "@/components/tables/SortableTable";
 import { useSelector, useDispatch } from "react-redux";
 // import { setVenvs } from "./slice"; // import the action to store data in Redux
-import { setVenvs } from "@/reduxToolkit/slice";
+import { setVenvs } from "@/reduxToolkit/venvSlice";
 import { Button } from "@material-tailwind/react";
 
 // import { Tab } from "@material-tailwind/react";

@@ -9,6 +9,11 @@ const nextConfig = {
     env: {
         NEXT_PUBLIC_BACKEND_BASE_URL: process.env.NEXT_PUBLIC_BACKEND_BASE_URL,
     },
+    logging: {
+        fetches: {
+            fullUrl: true,
+        },
+    },
 };
 
 export default nextConfig;

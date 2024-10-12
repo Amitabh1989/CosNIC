@@ -1,6 +1,7 @@
 // const { createSlice, nanoid } = require("@reduxjs/toolkit");
 
 import { createSlice, nanoid } from "@reduxjs/toolkit"; // Use import, not require
+// import create from "react-icons-md/create";
 
 const initialState = {
     venvs: [],
@@ -10,6 +11,9 @@ const initialState = {
     pages: {}, // Track pages with offsets and limit
 };
 
+/**
+ * Virtual Environment record slice for Redux Toolkit.
+ */
 const venvSlice = createSlice({
     name: "venv",
     initialState,
@@ -40,5 +44,40 @@ const venvSlice = createSlice({
     },
 });
 
+/**
+ * Test Cases record slice for Redux Toolkit.
+ */
+
+// // Initial state for the test cases slice
+// const initialTestCasesState = {
+//     testCases: [], // Store test cases data
+//     isIndexed: false, // Boolean to check if test cases are indexed in IndexedDB
+// };
+
+// const testCasesSlice = createSlice({
+//     name: "testCases",
+//     initialState: initialTestCasesState,
+//     reducers: {
+//         setTestCases: (state, action) => {
+//             const { newTestCases } = action.payload;
+//             state.testCases = newTestCases; // Save test cases data
+//         },
+//         resetTestCases: (state) => {
+//             state.testCases = []; // Reset test cases data
+//         },
+//         setIsTestCaseIndexed: (state, action) => {
+//             state.isIndexed = action.payload; // Set test case index status
+//         },
+//     },
+// });
+
+// Export actions and reducer for venv slice
 export const { setVenvs } = venvSlice.actions;
-export default venvSlice.reducer;
+const venvReducer = venvSlice.reducer;
+export default venvReducer;
+
+// // Export actions and reducer for test cases slice
+// export const { setTestCases, resetTestCases, setIsTestCaseIndexed } =
+//     testCasesSlice.actions;
+// // export const testCasesReducer = testCasesSlice.reducer;
+// export const testCasesReducer = testCasesSlice.reducer;

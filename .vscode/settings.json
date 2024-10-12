@@ -1,11 +1,14 @@
 {
   "cSpell.words": [
     "browsable",
+    "indexeddb",
     "messgae",
     "monokai",
+    "reduxjs",
     "sutclientyml",
     "testcase",
+    "testcases",
     "testops"
-],
+  ],
   "java.format.settings.url": "formatter"
 }

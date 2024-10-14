@@ -1,6 +1,4 @@
 "use client";
-// import React, { useState, useEffect, useMemo, useCallback } from "react";
-// import { useDispatch, useSelector } from "react-redux";
 import { DocumentIcon } from "@heroicons/react/24/solid";
 import { ArrowDownTrayIcon } from "@heroicons/react/24/outline";
 import { MagnifyingGlassIcon } from "@heroicons/react/24/outline";
@@ -12,6 +10,11 @@ import {
     IconButton,
     Typography,
 } from "@material-tailwind/react";
+import React, { useEffect, useMemo, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchTestCases } from "@/reduxToolkit/testCasesSlice";
+import { createSelector } from "reselect";
+import { FixedSizeList as List } from "react-window"; // Virtualization library
 
 const TABLE_HEAD = [
     "id",
@@ -23,19 +26,7 @@ const TABLE_HEAD = [
     "category",
 ];
 
-import React, { useEffect, useMemo } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import {
-    setTestCases,
-    setLoading,
-    setError,
-    batchInsert,
-} from "@/reduxToolkit/testCasesSlice";
-import db from "@/services/indexedDBService";
-import { getTestCasesApi } from "@/api/test_cases_apis";
-import { createSelector } from "reselect"; // To memoize selectors
-
-// Memoized selector using reselect
+// Memoized selector
 const selectTestCasesData = createSelector(
     (state) => state.testCases?.data || [],
     (data) => [...data]
@@ -43,65 +34,59 @@ const selectTestCasesData = createSelector(
 
 const TestCasesListAndSelection = React.memo(() => {
     const dispatch = useDispatch();
-    // Memoized selectors to avoid unnecessary re-renders
-    // const testCases = useSelector((state) => state.testCases?.data || []);
     const testCases = useSelector(selectTestCasesData);
     const loading = useSelector((state) => state.testCases?.loading || false);
+    const isIndexed = useSelector(
+        (state) => state.testCases?.isIndexed || false
+    );
     const error = useSelector((state) => state.testCases?.error || null);
 
-    // useMemo to memoize derived states (can be skipped if no computational derivation)
-    const testCasesMemo = useMemo(() => testCases, [testCases]);
+    const [debouncedSearchTerm, setDebouncedSearchTerm] = useState(""); // Debounced search term
+    const [searchTerm, setSearchTerm] = useState(""); // For handling the search term
 
-    const setTestCasesIn = (testCases) => (dispatch) => {
-        console.log("Dispatching setTestCases with payload:", testCases);
-        dispatch({
-            type: "testCases/setTestCases",
-            payload: testCases,
-        });
+    const handleSearch = (term) => {
+        setSearchTerm(term);
     };
 
     useEffect(() => {
-        const fetchTestCases = async () => {
-            try {
-                console.log(`Loading is : ${loading}`);
-                dispatch(setLoading(true));
-                // Check IndexedDB first
-                const indexedDbTestCases = await db.testCases.toArray();
-                if (indexedDbTestCases.length > 0) {
-                    console.log(
-                        "Returning test cases from IndexedDB. : ",
-                        indexedDbTestCases
-                    );
-                    // dispatch(setTestCases(indexedDbTestCases));
-                    dispatch(setTestCasesIn(indexedDbTestCases));
-                    console.log(
-                        `Dispatched succesfully : ${indexedDbTestCases.length}`
-                    );
-                    return;
-                }
-
-                // Fetch from API if not in IndexedDB
-                const response = await getTestCasesApi(); // Replace with actual API
-                if (response.status !== 200) {
-                    throw new Error("Failed to fetch from API");
-                }
-
-                // Store in IndexedDB and Redux
-                // await db.testCases.bulkPut(response.data);
-                await batchInsert(response.data);
-                dispatch(setTestCases(response.data));
-            } catch (error) {
-                console.log(`Errro is : ${error}`);
-                dispatch(setError(error.message));
-            } finally {
-                dispatch(setLoading(false));
-            }
-        };
-
-        fetchTestCases();
+        if (!loading) {
+            dispatch(fetchTestCases());
+        }
     }, []);
 
-    // UI: Show loading, error, or data
+    // Debounce search term
+    useEffect(() => {
+        const handler = setTimeout(() => {
+            setDebouncedSearchTerm(searchTerm);
+        }, 300);
+        return () => {
+            clearTimeout(handler);
+        };
+    }, [searchTerm]);
+
+    // Memoized filtered records
+    const filteredTestCases = useMemo(() => {
+        if (debouncedSearchTerm === "") {
+            return testCases;
+        }
+        return testCases.filter((record) => {
+            return (
+                record.title
+                    .toLowerCase()
+                    .includes(debouncedSearchTerm.toLowerCase()) ||
+                record.suite_name
+                    .toLowerCase()
+                    .includes(debouncedSearchTerm.toLowerCase()) ||
+                record.stream
+                    .toLowerCase()
+                    .includes(debouncedSearchTerm.toLowerCase()) ||
+                record.category
+                    .toLowerCase()
+                    .includes(debouncedSearchTerm.toLowerCase())
+            );
+        });
+    }, [debouncedSearchTerm, testCases]);
+
     if (loading) {
         return <div>Loading...</div>;
     }
@@ -110,337 +95,216 @@ const TestCasesListAndSelection = React.memo(() => {
         return <div>Error: {error}</div>;
     }
 
-    return (
-        // <div>It all right</div>
-        <div>
-            {loading ? (
-                <div>Loading...</div>
-            ) : error ? (
-                <div>{error}</div>
-            ) : (
-                <Card className="h-full w-full overflow-scroll">
-                    <CardHeader
-                        floated={false}
-                        shadow={false}
-                        className="mb-2 rounded-none p-2"
-                    >
-                        <div className="w-full md:w-96">
-                            <Input
-                                label="Search Invoice"
-                                icon={
-                                    <MagnifyingGlassIcon className="h-5 w-5" />
-                                }
-                            />
-                        </div>
-                    </CardHeader>
-                    <table className="w-full min-w-max table-auto text-left">
-                        <thead>
-                            <tr>
-                                {TABLE_HEAD.map(({ head, icon }, index) => (
-                                    <th
-                                        key={index}
-                                        className="border-b border-gray-300 p-4"
-                                    >
-                                        <div className="flex items-center gap-1">
-                                            {icon}
-                                            <Typography
-                                                color="blue-gray"
-                                                variant="small"
-                                                className="!font-bold"
-                                            >
-                                                {head}
-                                            </Typography>
-                                        </div>
-                                    </th>
-                                ))}
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {testCasesMemo?.map((record, index) => {
-                                const isLast =
-                                    index === testCasesMemo.length - 1;
-                                const classes = isLast
-                                    ? "p-4"
-                                    : "p-4 border-b border-gray-300";
+    // const Row = ({ index, style }) => {
+    //     const record = filteredTestCases[index];
+    //     const isLast = index === filteredTestCases.length - 1;
+    //     const classes = isLast ? "p-4" : "p-4 border-b border-gray-300";
 
-                                return (
-                                    // <tr key={record.id}>
-                                    <tr key={index}>
-                                        <td className={classes}>
-                                            <div className="flex items-center gap-1">
-                                                <Checkbox />
-                                                <Typography
-                                                    variant="small"
-                                                    color="blue-gray"
-                                                    className="font-bold"
-                                                >
-                                                    {record.id}
-                                                </Typography>
-                                            </div>
-                                        </td>
-                                        <td className={classes}>
-                                            <Typography
-                                                variant="small"
-                                                className="font-normal text-gray-600"
-                                            >
-                                                {record.tcid}
-                                            </Typography>
-                                        </td>
-                                        <td className={classes}>
-                                            <Typography
-                                                variant="small"
-                                                className="font-normal text-gray-600"
-                                            >
-                                                {record.title}
-                                            </Typography>
-                                        </td>
-                                        <td className={classes}>
-                                            <Typography
-                                                variant="small"
-                                                className="font-normal text-gray-600"
-                                            >
-                                                {record.suite_name}
-                                            </Typography>
-                                        </td>
-                                        <td className={classes}>
-                                            <Typography
-                                                variant="small"
-                                                className="font-normal text-gray-600"
-                                            >
-                                                {record.applicable_os}
-                                            </Typography>
-                                        </td>
-                                        <td className={classes}>
-                                            <Typography
-                                                variant="small"
-                                                className="font-normal text-gray-600"
-                                            >
-                                                {record.stream}
-                                            </Typography>
-                                        </td>
-                                        <td className={classes}>
-                                            <Typography
-                                                variant="small"
-                                                className="font-normal text-gray-600"
-                                            >
-                                                {record.category}
-                                            </Typography>
-                                        </td>
-                                        <td className={classes}>
-                                            <div className="flex items-center gap-2">
-                                                <IconButton
-                                                    variant="text"
-                                                    size="sm"
-                                                >
-                                                    <DocumentIcon className="h-4 w-4 text-gray-900" />
-                                                </IconButton>
-                                                <IconButton
-                                                    variant="text"
-                                                    size="sm"
-                                                >
-                                                    <ArrowDownTrayIcon
-                                                        strokeWidth={3}
-                                                        className="h-4 w-4 text-gray-900"
-                                                    />
-                                                </IconButton>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                );
-                            })}
-                        </tbody>
-                    </table>
-                </Card>
-            )}
-        </div>
+    //     return (
+    //         <tr key={record.id} style={style}>
+    //             <td className={classes}>
+    //                 <div className="flex items-center gap-1">
+    //                     <Checkbox />
+    //                     <Typography
+    //                         variant="small"
+    //                         color="blue-gray"
+    //                         className="font-bold"
+    //                     >
+    //                         {record.id}
+    //                     </Typography>
+    //                 </div>
+    //             </td>
+    //             <td className={classes}>
+    //                 <Typography
+    //                     variant="small"
+    //                     className="font-normal text-gray-600"
+    //                 >
+    //                     {record.tcid}
+    //                 </Typography>
+    //             </td>
+    //             <td className={classes}>
+    //                 <Typography
+    //                     variant="small"
+    //                     className="font-normal text-gray-600"
+    //                 >
+    //                     {record.title}
+    //                 </Typography>
+    //             </td>
+    //             <td className={classes}>
+    //                 <Typography
+    //                     variant="small"
+    //                     className="font-normal text-gray-600"
+    //                 >
+    //                     {record.suite_name}
+    //                 </Typography>
+    //             </td>
+    //             <td className={classes}>
+    //                 <Typography
+    //                     variant="small"
+    //                     className="font-normal text-gray-600"
+    //                 >
+    //                     {record.applicable_os}
+    //                 </Typography>
+    //             </td>
+    //             <td className={classes}>
+    //                 <Typography
+    //                     variant="small"
+    //                     className="font-normal text-gray-600"
+    //                 >
+    //                     {record.stream}
+    //                 </Typography>
+    //             </td>
+    //             <td className={classes}>
+    //                 <Typography
+    //                     variant="small"
+    //                     className="font-normal text-gray-600"
+    //                 >
+    //                     {record.category}
+    //                 </Typography>
+    //             </td>
+    //             <td className={classes}>
+    //                 <div className="flex items-center gap-2">
+    //                     <IconButton variant="text" size="sm">
+    //                         <DocumentIcon className="h-4 w-4 text-gray-900" />
+    //                     </IconButton>
+    //                     <IconButton variant="text" size="sm">
+    //                         <ArrowDownTrayIcon
+    //                             strokeWidth={3}
+    //                             className="h-4 w-4 text-gray-900"
+    //                         />
+    //                     </IconButton>
+    //                 </div>
+    //             </td>
+    //         </tr>
+    //     );
+    // };
+
+    // Fixing row height by setting specific height using style
+    const Row = ({ index, style }) => {
+        const record = filteredTestCases[index];
+        return (
+            <div style={style} className="flex p-2 border-b border-gray-300">
+                <div className="w-1/12">
+                    <Checkbox />
+                </div>
+                <div className="w-2/12">
+                    <Typography variant="small" className="font-bold">
+                        {record.id}
+                    </Typography>
+                </div>
+                <div className="w-2/12">
+                    <Typography
+                        variant="small"
+                        className="font-normal text-gray-600"
+                    >
+                        {record.tcid}
+                    </Typography>
+                </div>
+                <div className="w-2/12">
+                    <Typography
+                        variant="small"
+                        className="font-normal text-gray-600"
+                    >
+                        {record.title}
+                    </Typography>
+                </div>
+                <div className="w-2/12">
+                    <Typography
+                        variant="small"
+                        className="font-normal text-gray-600"
+                    >
+                        {record.suite_name}
+                    </Typography>
+                </div>
+                <div className="w-1/12">
+                    <Typography
+                        variant="small"
+                        className="font-normal text-gray-600"
+                    >
+                        {record.applicable_os}
+                    </Typography>
+                </div>
+                <div className="w-1/12">
+                    <Typography
+                        variant="small"
+                        className="font-normal text-gray-600"
+                    >
+                        {record.stream}
+                    </Typography>
+                </div>
+                <div className="w-1/12">
+                    <Typography
+                        variant="small"
+                        className="font-normal text-gray-600"
+                    >
+                        {record.category}
+                    </Typography>
+                </div>
+                <div className="w-1/12 flex items-center gap-2">
+                    <IconButton variant="text" size="sm">
+                        <DocumentIcon className="h-4 w-4 text-gray-900" />
+                    </IconButton>
+                    <IconButton variant="text" size="sm">
+                        <ArrowDownTrayIcon
+                            strokeWidth={3}
+                            className="h-4 w-4 text-gray-900"
+                        />
+                    </IconButton>
+                </div>
+            </div>
+        );
+    };
+
+    return (
+        <Card className="h-full w-full overflow-scroll">
+            <CardHeader
+                floated={false}
+                shadow={false}
+                className="mb-2 rounded-none p-2"
+            >
+                <div className="w-full md:w-96">
+                    <Input
+                        label="Search Test Cases"
+                        value={searchTerm}
+                        icon={<MagnifyingGlassIcon className="h-5 w-5" />}
+                        onChange={(e) => handleSearch(e.target.value)}
+                    />
+                </div>
+            </CardHeader>
+            <table className="w-full min-w-max table-auto text-left">
+                <thead>
+                    <tr>
+                        {TABLE_HEAD.map((head, index) => (
+                            <th
+                                key={index}
+                                className="border-b border-gray-300 p-4"
+                            >
+                                <div className="flex items-center gap-1">
+                                    <Typography
+                                        color="blue-gray"
+                                        variant="small"
+                                        className="!font-bold"
+                                    >
+                                        {head}
+                                    </Typography>
+                                </div>
+                            </th>
+                        ))}
+                    </tr>
+                </thead>
+                <tbody>
+                    <List
+                        height={500} // Adjust height as needed
+                        itemCount={filteredTestCases.length}
+                        itemSize={50} // Row height
+                        width={"2000%"}
+                    >
+                        {Row}
+                    </List>
+                </tbody>
+            </table>
+        </Card>
     );
 });
 
 export default TestCasesListAndSelection;
-
-// import { fetchTestCases, setTestCases } from "@/reduxToolkit/testCasesSlice";
-
-// const TestCasesListAndSelection = React.memo(() => {
-//     // const TestCasesListAndSelection = () => {
-//     const dispatch = useDispatch();
-
-//     // const testCases = useSelector((state) => state.testCases.data);
-//     const testCases = useSelector((state) => state.testCases?.data || []);
-//     const isIndexed = useSelector(
-//         (state) => state.testCases?.isIndexed || false
-//     );
-//     const loading = useSelector((state) => state.testCases?.loading || false);
-//     const error = useSelector((state) => state.testCases?.error || null);
-
-//     useEffect(() => {
-//         const data = {
-//             id: 1,
-//             title: "Dummy Tets Case",
-//             tcid: "100",
-//             suite_name: "Demo",
-//             applicable_os: "linux",
-//             stream: "core",
-//             category: "functional",
-//         };
-//         dispatch(setTestCases(data));
-//         console.log("Data has been saved in the setTestCases");
-//         // dispatch(fetchTestCases()); // Dispatch as early as possible
-//         // }, [dispatch]);
-//     }, []);
-
-//     useEffect(() => {
-//         console.log(`Loading value : ${loading}`);
-//         if (!loading) {
-//             dispatch(fetchTestCases());
-//             console.log(`Dispatched fetchTestCases : ${isIndexed}`);
-//         } else {
-//             console.log(`Test Cases are : ${testCases}`);
-//         }
-//     }, []);
-
-//     return (
-//         // <div>It all right</div>
-//         <div>
-//             {loading ? (
-//                 <div>Loading...</div>
-//             ) : error ? (
-//                 <div>{error}</div>
-//             ) : (
-//                 <Card className="h-full w-full overflow-scroll">
-//                     <CardHeader
-//                         floated={false}
-//                         shadow={false}
-//                         className="mb-2 rounded-none p-2"
-//                     >
-//                         <div className="w-full md:w-96">
-//                             <Input
-//                                 label="Search Invoice"
-//                                 icon={
-//                                     <MagnifyingGlassIcon className="h-5 w-5" />
-//                                 }
-//                             />
-//                         </div>
-//                     </CardHeader>
-//                     <table className="w-full min-w-max table-auto text-left">
-//                         <thead>
-//                             <tr>
-//                                 {TABLE_HEAD.map(({ head, icon }, index) => (
-//                                     <th
-//                                         key={index}
-//                                         className="border-b border-gray-300 p-4"
-//                                     >
-//                                         <div className="flex items-center gap-1">
-//                                             {icon}
-//                                             <Typography
-//                                                 color="blue-gray"
-//                                                 variant="small"
-//                                                 className="!font-bold"
-//                                             >
-//                                                 {head}
-//                                             </Typography>
-//                                         </div>
-//                                     </th>
-//                                 ))}
-//                             </tr>
-//                         </thead>
-//                         <tbody>
-//                             {testCases?.map((record, index) => {
-//                                 const isLast = index === testCases.length - 1;
-//                                 const classes = isLast
-//                                     ? "p-4"
-//                                     : "p-4 border-b border-gray-300";
-
-//                                 return (
-//                                     // <tr key={record.id}>
-//                                     <tr key={index}>
-//                                         <td className={classes}>
-//                                             <div className="flex items-center gap-1">
-//                                                 <Checkbox />
-//                                                 <Typography
-//                                                     variant="small"
-//                                                     color="blue-gray"
-//                                                     className="font-bold"
-//                                                 >
-//                                                     {record.id}
-//                                                 </Typography>
-//                                             </div>
-//                                         </td>
-//                                         <td className={classes}>
-//                                             <Typography
-//                                                 variant="small"
-//                                                 className="font-normal text-gray-600"
-//                                             >
-//                                                 {record.tcid}
-//                                             </Typography>
-//                                         </td>
-//                                         <td className={classes}>
-//                                             <Typography
-//                                                 variant="small"
-//                                                 className="font-normal text-gray-600"
-//                                             >
-//                                                 {record.title}
-//                                             </Typography>
-//                                         </td>
-//                                         <td className={classes}>
-//                                             <Typography
-//                                                 variant="small"
-//                                                 className="font-normal text-gray-600"
-//                                             >
-//                                                 {record.suite_name}
-//                                             </Typography>
-//                                         </td>
-//                                         <td className={classes}>
-//                                             <Typography
-//                                                 variant="small"
-//                                                 className="font-normal text-gray-600"
-//                                             >
-//                                                 {record.applicable_os}
-//                                             </Typography>
-//                                         </td>
-//                                         <td className={classes}>
-//                                             <Typography
-//                                                 variant="small"
-//                                                 className="font-normal text-gray-600"
-//                                             >
-//                                                 {record.stream}
-//                                             </Typography>
-//                                         </td>
-//                                         <td className={classes}>
-//                                             <Typography
-//                                                 variant="small"
-//                                                 className="font-normal text-gray-600"
-//                                             >
-//                                                 {record.category}
-//                                             </Typography>
-//                                         </td>
-//                                         <td className={classes}>
-//                                             <div className="flex items-center gap-2">
-//                                                 <IconButton
-//                                                     variant="text"
-//                                                     size="sm"
-//                                                 >
-//                                                     <DocumentIcon className="h-4 w-4 text-gray-900" />
-//                                                 </IconButton>
-//                                                 <IconButton
-//                                                     variant="text"
-//                                                     size="sm"
-//                                                 >
-//                                                     <ArrowDownTrayIcon
-//                                                         strokeWidth={3}
-//                                                         className="h-4 w-4 text-gray-900"
-//                                                     />
-//                                                 </IconButton>
-//                                             </div>
-//                                         </td>
-//                                     </tr>
-//                                 );
-//                             })}
-//                         </tbody>
-//                     </table>
-//                 </Card>
-//             )}
-//         </div>
-//     );
-// });
-
-// export default TestCasesListAndSelection;

@@ -27,10 +27,6 @@ const SUTClientConfigFile = () => {
         try {
             const response = await getSutClientYmlConfigFilesListAPI();
             console.log("Response from API:", response.length);
-            // console.log(`Config files all : ${JSON.stringify(response)}`);
-            // console.log(`Config files: ${JSON.stringify(response[0])}`);
-            // const rawYaml = response[0].content.replace(/\\r\\n/g, "\n"); // Normalize newlines
-            // setYamlContent(rawYaml);
             setConfigFilesList(response);
         } catch (error) {
             console.error(error);

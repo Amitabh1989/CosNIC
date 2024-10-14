@@ -82,7 +82,7 @@ export async function batchInsert(data, batchSize = 100) {
     }
 }
 
-// // Async thunk to fetch test cases
+// Async thunk to fetch test cases
 // export const fetchTestCases = createAsyncThunk(
 //     "testCases/fetchTestCases",
 //     async (_, { getState, rejectWithValue }) => {
@@ -182,7 +182,7 @@ const testCasesSlice = createSlice({
         setTestCases: (state, action) => {
             state.data = action.payload;
             state.isIndexed = true;
-            console.log(`Test case has been set : ${action.payload}`);
+            console.log(`Test case has been set`);
         },
         setLoading: (state, action) => {
             state.loading = action.payload;
@@ -193,22 +193,22 @@ const testCasesSlice = createSlice({
             state.loading = false;
         },
     },
-    // extraReducers: (builder) => {
-    //     builder
-    //         .addCase(fetchTestCases.pending, (state) => {
-    //             state.loading = true;
-    //             state.error = null; // Reset errors on each fetch attempt
-    //         })
-    //         .addCase(fetchTestCases.fulfilled, (state, action) => {
-    //             state.loading = false;
-    //             state.data = action.payload;
-    //             state.isIndexed = true; // Set isIndexed to true if data is fetched
-    //         })
-    //         .addCase(fetchTestCases.rejected, (state, action) => {
-    //             state.loading = false;
-    //             state.error = action.payload || "Failed to fetch test cases";
-    //         });
-    // },
+    extraReducers: (builder) => {
+        builder
+            .addCase(fetchTestCases.pending, (state) => {
+                state.loading = true;
+                state.error = null; // Reset errors on each fetch attempt
+            })
+            .addCase(fetchTestCases.fulfilled, (state, action) => {
+                state.loading = false;
+                state.data = action.payload;
+                state.isIndexed = true; // Set isIndexed to true if data is fetched
+            })
+            .addCase(fetchTestCases.rejected, (state, action) => {
+                state.loading = false;
+                state.error = action.payload || "Failed to fetch test cases";
+            });
+    },
 });
 
 export const { setTestCases, setLoading, setError } = testCasesSlice.actions;

@@ -92,13 +92,11 @@ export const store = configureStore({
     middleware: (getDefaultMiddleware) =>
         getDefaultMiddleware({
             serializableCheck: false, // Disable serializable check for redux-persist
-        }).concat(thunk, loggerMiddleware), // Add logger here
+        }),
+    // }).concat(thunk, loggerMiddleware), // Add logger here
     devTools: process.env.NODE_ENV !== "production", // Enable Redux DevTools
 });
 
-// Conditionally set up persistor only for CSR
-// export const persistor =
-//     typeof window !== "undefined" ? persistStore(store) : null;
 export const persistor = persistStore(store);
 
 // Debugging - log the store state after initialization

@@ -50,42 +50,39 @@ export default function UserLoginForm() {
         try {
             const response = await loginUserApi(formData);
             console.log("Login response is:", response);
-            // console.log("Login response data is:", response.data);
             console.log("Login response status is:", response.status);
 
             if (response.status === 200) {
-                // alert("Login successful!");
-                // Redirect to dashboard
-                // Check if there's a redirect URL stored
-                const { access, refresh } = response.data; // Adjust this based on your API response format
+                const { access, refresh } = response.data; // Adjust based on your API response format
                 sessionStorage.setItem("access_token", access); // Store the access token
                 sessionStorage.setItem("refresh_token", refresh); // Store the refresh token
-                try {
-                    // Get the stored redirect URL
-                    let redirectUrl =
-                        sessionStorage.getItem("redirect_after_login") ||
-                        "/user/dashboard";
-                    sessionStorage.removeItem("redirect_after_login"); // Clear redirect URL after use
-                    console.log(
-                        "Redirecting to from login component :",
-                        redirectUrl
-                    );
-                    // Define disallowed URLs
-                    const disallowedPaths = ["/login", "/logout", "/register"];
 
-                    // Check if the redirect URL is disallowed
-                    if (disallowedPaths.includes(redirectUrl)) {
-                        redirectUrl = "/user/dashboard"; // Default to home page or another valid URL
-                    }
-                    console.log(
-                        "Redirecting URL just before actual redirect :",
-                        redirectUrl
-                    );
-                    router.push(redirectUrl); // Redirect to the valid URL
-                } catch (err) {
-                    console.log("Error redirecting after login:", err);
-                    router.push("/user/dashboard");
+                // Check if there's a redirect URL stored
+                let redirectUrl =
+                    sessionStorage.getItem("redirect_after_login") ||
+                    "/user/dashboard";
+                sessionStorage.removeItem("redirect_after_login"); // Clear redirect URL after use
+
+                console.log(
+                    "Redirecting to from login component:",
+                    redirectUrl
+                );
+
+                // Define disallowed URLs
+                const disallowedPaths = ["/login", "/logout", "/register"];
+
+                // Check if the redirect URL is disallowed
+                if (
+                    disallowedPaths.some((path) => redirectUrl.includes(path))
+                ) {
+                    redirectUrl = "/user/dashboard"; // Default to dashboard or another valid page
                 }
+
+                console.log(
+                    "Redirecting URL just before actual redirect:",
+                    redirectUrl
+                );
+                router.push(redirectUrl); // Redirect to the valid URL
             } else {
                 setError(response.message || "Something went wrong");
             }

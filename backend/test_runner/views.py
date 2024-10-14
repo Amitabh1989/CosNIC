@@ -4,11 +4,14 @@ import time
 
 from celery.result import AsyncResult
 from django.conf import settings
-from django.contrib.auth import get_user_model
+
+# Create your views here.
+from django.contrib.auth import authenticate, get_user_model, login, logout
 from django.contrib.auth.models import User
 from django.core.files.storage import default_storage
 from django.urls import reverse
-from rest_framework import status, viewsets
+from rest_framework import permissions, status, viewsets
+from rest_framework.authentication import SessionAuthentication, TokenAuthentication
 from rest_framework.decorators import action
 from rest_framework.exceptions import NotAuthenticated
 from rest_framework.permissions import AllowAny, IsAuthenticated
@@ -46,15 +49,36 @@ from .tasks.venv_jobs import (
     sanitize_venv_name,
 )
 
-# Create your views here.
+
+class IsAuthenticatedOrReadOnly(permissions.BasePermission):
+    def has_permission(self, request, view):
+        return (
+            request.method in permissions.SAFE_METHODS or request.user.is_authenticated
+        )
+
+
+User = get_user_model()
 
 
 class TestCaseView(viewsets.ModelViewSet):
     queryset = TestCase.objects.all()
     serializer_class = TestCaseSerializer
     pagination_class = CustomLimitOffsetPagination
+    # authentication_classes = [TokenAuthentication, SessionAuthentication]
+    permission_classes = [IsAuthenticated]  # Require authentication
+    # authentication_classes = [SessionAuthentication]
+
+    def retrieve(self, request, *args, **kwargs):
+        print(f"The URL is hit : {request.user}")
+        return super().retrieve(request, *args, **kwargs)
 
     def list(self, request):
+        print(f"User : {request.user}")
+        if not request.user.is_authenticated:
+            print("User is not authenticated")
+        else:
+            print(f"User authenticated: {request.user}")
+
         queryset = self.get_queryset().order_by("-created_at")
         serializer = TestCaseSerializer(queryset, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)

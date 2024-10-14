@@ -67,13 +67,13 @@ CORS_ALLOW_ALL_ORIGINS = True
 #     "DELETE",
 #     "OPTIONS",
 # ]
-# CORS_ALLOW_HEADERS = [
-#     "accept",
-#     "authorization",
-#     "content-type",
-#     "x-csrftoken",
-#     "x-requested-with",
-# ]
+CORS_ALLOW_HEADERS = [
+    "accept",
+    "authorization",
+    "content-type",
+    "x-csrftoken",
+    "x-requested-with",
+]
 
 
 # Application definition
@@ -243,8 +243,8 @@ REST_FRAMEWORK = {
 SIMPLE_JWT = {
     "ACCESS_TOKEN_LIFETIME": timedelta(minutes=180),
     "REFRESH_TOKEN_LIFETIME": timedelta(days=50),
-    "ROTATE_REFRESH_TOKENS": True,
-    "BLACKLIST_AFTER_ROTATION": True,
+    "ROTATE_REFRESH_TOKENS": False,
+    "BLACKLIST_AFTER_ROTATION": False,
     "UPDATE_LAST_LOGIN": True,
     "ALGORITHM": "HS256",
     "VERIFYING_KEY": None,

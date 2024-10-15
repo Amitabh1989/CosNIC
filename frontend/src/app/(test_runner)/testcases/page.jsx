@@ -3,7 +3,6 @@ import TestCasesListAndSelection from "@/components/testcases/TestCasesListAndSe
 const TestCases = () => {
     return (
         <div>
-            TestCases
             <TestCasesListAndSelection />
         </div>
     );

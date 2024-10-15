@@ -15,6 +15,9 @@ import { useDispatch, useSelector } from "react-redux";
 import { fetchTestCases } from "@/reduxToolkit/testCasesSlice";
 import { createSelector } from "reselect";
 import { FixedSizeList as List } from "react-window"; // Virtualization library
+// import { Virtuoso, TableVirtuoso, Table } from "react-virtuoso";
+import AutoSizer from "react-virtualized-auto-sizer";
+// import styled from "styled-components";
 
 const TABLE_HEAD = [
     "id",
@@ -24,6 +27,7 @@ const TABLE_HEAD = [
     "applicable_os",
     "stream",
     "category",
+    "actions",
 ];
 
 // Memoized selector
@@ -50,7 +54,9 @@ const TestCasesListAndSelection = React.memo(() => {
 
     useEffect(() => {
         if (!loading) {
+            console.log("Sending dispatch");
             dispatch(fetchTestCases());
+            console.log("Sending dispatch : ", loading);
         }
     }, []);
 
@@ -87,6 +93,11 @@ const TestCasesListAndSelection = React.memo(() => {
         });
     }, [debouncedSearchTerm, testCases]);
 
+    useEffect(() => {
+        console.log("Checking test cases : ", testCases);
+        console.log("Checking test cases loading : ", loading);
+    }, [loading, testCases, error]);
+
     if (loading) {
         return <div>Loading...</div>;
     }
@@ -97,118 +108,196 @@ const TestCasesListAndSelection = React.memo(() => {
 
     // const Row = ({ index, style }) => {
     //     const record = filteredTestCases[index];
-    //     const isLast = index === filteredTestCases.length - 1;
-    //     const classes = isLast ? "p-4" : "p-4 border-b border-gray-300";
-
+    //     const bgColor = index % 2 === 0 ? "bg-gray-300" : "bg-white"; // Alternating colors
     //     return (
-    //         <tr key={record.id} style={style}>
-    //             <td className={classes}>
-    //                 <div className="flex items-center gap-1">
-    //                     <Checkbox />
-    //                     <Typography
-    //                         variant="small"
-    //                         color="blue-gray"
-    //                         className="font-bold"
-    //                     >
-    //                         {record.id}
-    //                     </Typography>
-    //                 </div>
-    //             </td>
-    //             <td className={classes}>
+    //         <div
+    //             style={style}
+    //             className={`flex flex-row-9 gap-4 justify-between p-4 ${bgColor} content-between self-auto`}
+    //         >
+    //             <div className="flex-grow-0 w-16">
+    //                 {/* Adjusted width for Select */}
+    //                 <Checkbox />
+    //             </div>
+    //             <div className="flex-grow-0 w-16">
+    //                 <Typography variant="small" className="font-bold">
+    //                     {record.id}
+    //                 </Typography>
+    //             </div>
+    //             <div className="flex-grow-0 w-16">
     //                 <Typography
     //                     variant="small"
     //                     className="font-normal text-gray-600"
     //                 >
     //                     {record.tcid}
     //                 </Typography>
-    //             </td>
-    //             <td className={classes}>
-    //                 <Typography
-    //                     variant="small"
-    //                     className="font-normal text-gray-600"
-    //                 >
-    //                     {record.title}
-    //                 </Typography>
-    //             </td>
-    //             <td className={classes}>
+    //             </div>
+    //             <div className="flex-grow w-32">
+    //                 {/* Suite Name takes more space */}
     //                 <Typography
     //                     variant="small"
     //                     className="font-normal text-gray-600"
     //                 >
     //                     {record.suite_name}
     //                 </Typography>
-    //             </td>
-    //             <td className={classes}>
+    //             </div>
+    //             <div className="flex-grow w-32">
+    //                 {/* Title takes more space */}
+    //                 <Typography
+    //                     variant="small"
+    //                     className="font-normal text-gray-600"
+    //                 >
+    //                     {record.title}
+    //                 </Typography>
+    //             </div>
+    //             <div className="flex-grow-0 w-24">
     //                 <Typography
     //                     variant="small"
     //                     className="font-normal text-gray-600"
     //                 >
     //                     {record.applicable_os}
     //                 </Typography>
-    //             </td>
-    //             <td className={classes}>
+    //             </div>
+    //             <div className="flex-grow-0 w-24">
     //                 <Typography
     //                     variant="small"
     //                     className="font-normal text-gray-600"
     //                 >
     //                     {record.stream}
     //                 </Typography>
-    //             </td>
-    //             <td className={classes}>
+    //             </div>
+    //             <div className="flex-grow-0 w-24">
     //                 <Typography
     //                     variant="small"
     //                     className="font-normal text-gray-600"
     //                 >
     //                     {record.category}
     //                 </Typography>
-    //             </td>
-    //             <td className={classes}>
-    //                 <div className="flex items-center gap-2">
-    //                     <IconButton variant="text" size="sm">
-    //                         <DocumentIcon className="h-4 w-4 text-gray-900" />
-    //                     </IconButton>
-    //                     <IconButton variant="text" size="sm">
-    //                         <ArrowDownTrayIcon
-    //                             strokeWidth={3}
-    //                             className="h-4 w-4 text-gray-900"
-    //                         />
-    //                     </IconButton>
-    //                 </div>
-    //             </td>
-    //         </tr>
+    //             </div>
+    //             <div className="flex-grow-0">
+    //                 <IconButton variant="text" size="sm">
+    //                     <DocumentIcon className="h-4 w-4 text-gray-900" />
+    //                 </IconButton>
+    //                 <IconButton variant="text" size="sm">
+    //                     <ArrowDownTrayIcon
+    //                         strokeWidth={3}
+    //                         className="h-4 w-4 text-gray-900"
+    //                     />
+    //                 </IconButton>
+    //             </div>
+    //         </div>
     //     );
     // };
+    // className={`flex flex-col flex-no-wrap gap-4 justify-between p-4 ${bgColor} content-between self-auto`}
 
-    // Fixing row height by setting specific height using style
-    const Row = ({ index, style }) => {
+    // <div style={style} className="flex flex-col gap-2">
+    // <div style={style} className={`p-2 ${bgColor}`}>
+    // const EachRow = ({ index, style }) => {
+    //     const record = filteredTestCases[index];
+    //     const bgColor = index % 2 === 0 ? "bg-gray-300" : "bg-white"; // Alternating colors
+    //     return (
+    //         <div style={style} className="flex flex-col gap-2">
+    //             <div className="grid grid-rows-5 gap-2 p-2">
+    //                 <div className="col-span-1">
+    //                     <Checkbox />
+    //                     {"Hey man"}
+    //                 </div>
+    //                 <div className="col-span-1">
+    //                     <Typography variant="small" className="font-bold">
+    //                         {record.id}
+    //                     </Typography>
+    //                 </div>
+    //                 <div className="col-span-1">
+    //                     <Typography
+    //                         variant="small"
+    //                         className="font-normal text-gray-600"
+    //                     >
+    //                         {record.tcid}
+    //                     </Typography>
+    //                 </div>
+    //                 <div>
+    //                     <Typography
+    //                         variant="small"
+    //                         className="font-normal text-gray-600"
+    //                     >
+    //                         {record.suite_name}
+    //                     </Typography>
+    //                 </div>
+    {
+        /* <div>
+                        <Typography
+                            variant="small"
+                            className="font-normal text-gray-600"
+                        >
+                            {record.title}
+                        </Typography>
+                    </div>
+                    <div>
+                        <Typography
+                            variant="small"
+                            className="font-normal text-gray-600"
+                        >
+                            {record.applicable_os}
+                        </Typography>
+                    </div>
+                    <div>
+                        <Typography
+                            variant="small"
+                            className="font-normal text-gray-600"
+                        >
+                            {record.stream}
+                        </Typography>
+                    </div>
+                    <div>
+                        <Typography
+                            variant="small"
+                            className="font-normal text-gray-600"
+                        >
+                            {record.category}
+                        </Typography>
+                    </div> */
+    }
+    {
+        /* <div className="flex gap-2">
+                        <IconButton variant="text" size="sm">
+                            <DocumentIcon className="h-4 w-4 text-gray-900" />
+                        </IconButton>
+                        <IconButton variant="text" size="sm">
+                            <ArrowDownTrayIcon
+                                strokeWidth={3}
+                                className="h-4 w-4 text-gray-900"
+                            />
+                        </IconButton>
+                    </div>
+                </div>
+            </div>
+        );
+    }; */
+    }
+
+    const EachRow = ({ index, style }) => {
         const record = filteredTestCases[index];
+        const bgColor = index % 2 === 0 ? "bg-gray-100" : "bg-white"; // Alternating colors
+
         return (
-            <div style={style} className="flex p-2 border-b border-gray-300">
-                <div className="w-1/12">
+            // Apply the `style` prop here for react-window positioning
+            <div
+                style={style}
+                className={`flex items-start justify-between gap-2 p-2 ${bgColor}`}
+            >
+                <div className="flex-shrink-0">
                     <Checkbox />
                 </div>
-                <div className="w-2/12">
+                <div className="flex-shrink-0 w-16">
                     <Typography variant="small" className="font-bold">
                         {record.id}
                     </Typography>
                 </div>
-                <div className="w-2/12">
-                    <Typography
-                        variant="small"
-                        className="font-normal text-gray-600"
-                    >
+                <div className="flex-shrink-0 w-16">
+                    <Typography variant="small" className="font-bold">
                         {record.tcid}
                     </Typography>
                 </div>
-                <div className="w-2/12">
-                    <Typography
-                        variant="small"
-                        className="font-normal text-gray-600"
-                    >
-                        {record.title}
-                    </Typography>
-                </div>
-                <div className="w-2/12">
+                <div className="flex-grow">
                     <Typography
                         variant="small"
                         className="font-normal text-gray-600"
@@ -216,31 +305,23 @@ const TestCasesListAndSelection = React.memo(() => {
                         {record.suite_name}
                     </Typography>
                 </div>
-                <div className="w-1/12">
-                    <Typography
-                        variant="small"
-                        className="font-normal text-gray-600"
-                    >
+                {/* <div className="flex-shrink-0 w-16">
+                    <Typography variant="small" className="font-bold">
                         {record.applicable_os}
                     </Typography>
                 </div>
-                <div className="w-1/12">
-                    <Typography
-                        variant="small"
-                        className="font-normal text-gray-600"
-                    >
+                <div className="flex-shrink-0 w-16">
+                    <Typography variant="small" className="font-bold">
                         {record.stream}
                     </Typography>
                 </div>
-                <div className="w-1/12">
-                    <Typography
-                        variant="small"
-                        className="font-normal text-gray-600"
-                    >
+                <div className="flex-shrink-0 w-16">
+                    <Typography variant="small" className="font-bold">
                         {record.category}
                     </Typography>
-                </div>
-                <div className="w-1/12 flex items-center gap-2">
+                </div> */}
+
+                <div className="flex-shrink-0">
                     <IconButton variant="text" size="sm">
                         <DocumentIcon className="h-4 w-4 text-gray-900" />
                     </IconButton>
@@ -256,55 +337,199 @@ const TestCasesListAndSelection = React.memo(() => {
     };
 
     return (
-        <Card className="h-full w-full overflow-scroll">
-            <CardHeader
-                floated={false}
-                shadow={false}
-                className="mb-2 rounded-none p-2"
-            >
-                <div className="w-full md:w-96">
-                    <Input
-                        label="Search Test Cases"
-                        value={searchTerm}
-                        icon={<MagnifyingGlassIcon className="h-5 w-5" />}
-                        onChange={(e) => handleSearch(e.target.value)}
-                    />
-                </div>
-            </CardHeader>
-            <table className="w-full min-w-max table-auto text-left">
-                <thead>
-                    <tr>
-                        {TABLE_HEAD.map((head, index) => (
-                            <th
-                                key={index}
-                                className="border-b border-gray-300 p-4"
-                            >
-                                <div className="flex items-center gap-1">
-                                    <Typography
-                                        color="blue-gray"
-                                        variant="small"
-                                        className="!font-bold"
-                                    >
-                                        {head}
-                                    </Typography>
-                                </div>
-                            </th>
-                        ))}
-                    </tr>
-                </thead>
-                <tbody>
-                    <List
-                        height={500} // Adjust height as needed
-                        itemCount={filteredTestCases.length}
-                        itemSize={50} // Row height
-                        width={"2000%"}
-                    >
-                        {Row}
-                    </List>
-                </tbody>
-            </table>
-        </Card>
+        <List
+            height={600} // Fixed height
+            itemCount={filteredTestCases.length} // How many rows to render
+            itemSize={40} // Row height
+            width={"100%"} // Full width
+        >
+            {EachRow}
+        </List>
     );
 });
 
+//     return (
+//         <div className="container" style={{ height: "800px", width: "100%" }}>
+//             <AutoSizer>
+//                 {({ height, width }) => {
+//                     console.log("AutoSizer height:", height, "width:", width);
+//                     return (
+//                         <List
+//                             height={height}
+//                             itemCount={filteredTestCases.length}
+//                             itemSize={40}
+//                             width={width}
+//                         >
+//                             {EachRow}
+//                         </List>
+//                     );
+//                 }}
+//             </AutoSizer>
+//         </div>
+//     );
+// });
+
 export default TestCasesListAndSelection;
+
+//     return (
+//         <TableVirtuoso
+//             style={{ height: "400px" }}
+//             totalCount={filteredTestCases.length}
+//             fixedHeaderContent={() => (
+//                 <tr>
+//                     <th style={{ width: "100px" }}>ID</th>
+//                     <th style={{ width: "100px" }}>TCID</th>
+//                     <th style={{ width: "100px" }}>Title</th>
+//                     <th style={{ width: "150px" }}>Suite Name</th>
+//                     <th style={{ width: "100px" }}>Applicable OS</th>
+//                     <th style={{ width: "100px" }}>Stream</th>
+//                     <th style={{ width: "100px" }}>Category</th>
+//                     <th style={{ width: "100px" }}>Actions</th>
+//                 </tr>
+//             )}
+//             itemContent={(index) => {
+//                 const record = filteredTestCases[index];
+//                 const bgColor = index % 2 === 0 ? "bg-gray-300" : "bg-white"; // Alternating row colors
+
+//                 return (
+//                     <tr className={`border-b ${bgColor}`}>
+//                         <td
+//                             className="p-2 text-center"
+//                             style={{ width: "100px" }}
+//                         >
+//                             {record.id}
+//                         </td>
+//                         <td
+//                             className="p-2 text-center"
+//                             style={{ width: "100px" }}
+//                         >
+//                             {record.tcid}
+//                         </td>
+//                         <td
+//                             className="p-2 text-center"
+//                             style={{ width: "100px" }}
+//                         >
+//                             {record.title}
+//                         </td>
+//                         <td
+//                             className="p-2 text-center"
+//                             style={{ width: "150px" }}
+//                         >
+//                             {record.suite_name}
+//                         </td>
+//                         <td
+//                             className="p-2 text-center"
+//                             style={{ width: "100px" }}
+//                         >
+//                             {record.applicable_os}
+//                         </td>
+//                         <td
+//                             className="p-2 text-center"
+//                             style={{ width: "100px" }}
+//                         >
+//                             {record.stream}
+//                         </td>
+//                         <td
+//                             className="p-2 text-center"
+//                             style={{ width: "100px" }}
+//                         >
+//                             {record.category}
+//                         </td>
+//                         <td
+//                             className="p-2 text-center"
+//                             style={{ width: "100px" }}
+//                         >
+//                             {record.action}
+//                         </td>
+//                     </tr>
+//                 );
+//             }}
+//         />
+//     );
+// });
+
+// const VirtuosoRow = ({ index }) => {
+//     const record = filteredTestCases[index];
+//     const bgColor = index % 2 === 0 ? "bg-gray-300" : "bg-white"; // Alternating colors
+
+//     return (
+//         <div
+//             // style={style}
+//             className={`flex flex-row flex-nowrap gap-4 justify-between p-4 m-4 ${bgColor}`}
+//         >
+//             <div className="flex-grow-0 w-16">
+//                 {" "}
+//                 {/* Adjusted width for Select */}
+//                 <Checkbox />
+//             </div>
+//             <div className="flex-grow-0 w-16">
+//                 <Typography variant="small" className="font-bold">
+//                     {record.id}
+//                 </Typography>
+//             </div>
+//             <div className="flex-grow-0 w-16">
+//                 <Typography
+//                     variant="small"
+//                     className="font-normal text-gray-600"
+//                 >
+//                     {record.tcid}
+//                 </Typography>
+//             </div>
+//             <div className="flex-grow w-32">
+//                 {" "}
+//                 {/* Suite Name takes more space */}
+//                 <Typography
+//                     variant="small"
+//                     className="font-normal text-gray-600"
+//                 >
+//                     {record.suite_name}
+//                 </Typography>
+//             </div>
+//             <div className="flex-grow w-32">
+//                 {" "}
+//                 {/* Title takes more space */}
+//                 <Typography
+//                     variant="small"
+//                     className="font-normal text-gray-600"
+//                 >
+//                     {record.title}
+//                 </Typography>
+//             </div>
+//             <div className="flex-grow-0 w-24">
+//                 <Typography
+//                     variant="small"
+//                     className="font-normal text-gray-600"
+//                 >
+//                     {record.applicable_os}
+//                 </Typography>
+//             </div>
+//             <div className="flex-grow-0 w-24">
+//                 <Typography
+//                     variant="small"
+//                     className="font-normal text-gray-600"
+//                 >
+//                     {record.stream}
+//                 </Typography>
+//             </div>
+//             <div className="flex-grow-0 w-24">
+//                 <Typography
+//                     variant="small"
+//                     className="font-normal text-gray-600"
+//                 >
+//                     {record.category}
+//                 </Typography>
+//             </div>
+//             <div className="flex-grow-0">
+//                 <IconButton variant="text" size="sm">
+//                     <DocumentIcon className="h-4 w-4 text-gray-900" />
+//                 </IconButton>
+//                 <IconButton variant="text" size="sm">
+//                     <ArrowDownTrayIcon
+//                         strokeWidth={3}
+//                         className="h-4 w-4 text-gray-900"
+//                     />
+//                 </IconButton>
+//             </div>
+//         </div>
+//     );
+// };

@@ -42,6 +42,7 @@ import { configureStore } from "@reduxjs/toolkit";
 import { persistStore, persistReducer } from "redux-persist";
 import { combineReducers } from "redux";
 import thunk from "redux-thunk";
+import logger from "redux-logger"; // Import logger middleware
 import venvReducer from "./venvSlice";
 import testCasesReducer from "./testCasesSlice";
 import storage from "redux-persist/lib/storage"; // defaults to localStorage for web
@@ -67,11 +68,18 @@ const storageToUse =
         ? storage // Use localStorage for client-side
         : createNoopStorage(); // Use noop storage for SSR
 
+// // Configure persist config
+// const persistConfig = {
+//     key: "root",
+//     storage: storageToUse, // Use the appropriate storage
+//     whitelist: ["venv", "testCases"], // Only persist these reducers
+// };
+
 // Configure persist config
 const persistConfig = {
     key: "root",
     storage: storageToUse, // Use the appropriate storage
-    whitelist: ["venv", "testCases"], // Only persist these reducers
+    whitelist: ["venv"], // Only persist these reducers
 };
 
 // Combine reducers
@@ -92,8 +100,7 @@ export const store = configureStore({
     middleware: (getDefaultMiddleware) =>
         getDefaultMiddleware({
             serializableCheck: false, // Disable serializable check for redux-persist
-        }),
-    // }).concat(thunk, loggerMiddleware), // Add logger here
+        }).concat(logger), // Add loggerMiddleware here
     devTools: process.env.NODE_ENV !== "production", // Enable Redux DevTools
 });
 

@@ -67,22 +67,34 @@ import { getTestCasesApi } from "@/api/test_cases_apis";
 
 // features/testCasesSlice.js
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import Dexie from "dexie";
+import db, { batchInsert } from "../services/indexedDBService";
+// import Dexie from "dexie";
 
-const db = new Dexie("CosNICDatabase");
-db.version(1).stores({
-    testCases: "++id, tcid, title, suite_name, applicable_os, stream, category",
-});
+// const db = new Dexie("CosNICDatabase");
+// db.version(1).stores({
+//     testCases: "++id, tcid, title, suite_name, applicable_os, stream, category",
+// });
 
 //  [Violation] 'success' handler took 155ms
-export async function batchInsert(data, batchSize = 100) {
-    for (let i = 0; i < data.length; i += batchSize) {
-        const batch = data.slice(i, i + batchSize);
-        await db.testCases.bulkPut(batch);
-    }
-}
+// export async function batchInsert(data, batchSize = 100) {
+//     for (let i = 0; i < data.length; i += batchSize) {
+//         const batch = data.slice(i, i + batchSize);
+//         const existingRecords = await db.testCases
+//             .where("id")
+//             .anyOf(batch.map((record) => record.id))
+//             .toArray();
+//         const existingIds = new Set(existingRecords.map((record) => record.id));
+
+//         const newBatch = batch.filter((item) => !existingIds.has(item.id));
+//         // Insert only new records
+//         if (newBatch.length > 0) {
+//             await db.testCases.bulkPut(newBatch);
+//         }
+//     }
+// }
 
 // Async thunk to fetch test cases
+/* This `fetchTestCases` function is an asynchronous thunk created using `createAsyncThunk` from Redux Toolkit. It is responsible for fetching test cases data either from the Redux store, IndexedDB, or an external API. */
 // export const fetchTestCases = createAsyncThunk(
 //     "testCases/fetchTestCases",
 //     async (_, { getState, rejectWithValue }) => {
@@ -131,37 +143,89 @@ export async function batchInsert(data, batchSize = 100) {
 // );
 
 // Async thunk to fetch test cases
+// export const fetchTestCases = createAsyncThunk(
+//     "testCases/fetchTestCases",
+//     async (_, { getState, rejectWithValue }) => {
+//         try {
+//             // 1. Check Redux store first (data already in memory)
+//             const state = getState();
+//             const cachedTestCases = state.testCases?.data;
+//             if (cachedTestCases && cachedTestCases.length > 0) {
+//                 console.log("Returning cached test cases from Redux store.");
+//                 return cachedTestCases;
+//             }
+
+//             // 2. Check IndexedDB (if data is saved locally)
+//             const indexedDbTestCases = await db.testCases.toArray();
+//             if (indexedDbTestCases.length > 0) {
+//                 console.log("Returning test cases from IndexedDB.");
+//                 return indexedDbTestCases;
+//             }
+
+//             // 3. Fetch from API (if no local data found)
+//             const response = await getTestCasesApi(); // Replace with actual API call
+//             if (response.status !== 200) {
+//                 throw new Error("Failed to fetch data from API");
+//             }
+
+//             console.log("Fetched test cases from API.");
+
+//             // 4. Save the fetched data to IndexedDB
+//             await batchInsert(response.data); // Insert into IndexedDB
+
+//             // Return the fresh data
+//             return response.data;
+//         } catch (error) {
+//             console.error("Error fetching test cases:", error.message);
+//             return rejectWithValue(error.message);
+//         }
+//     }
+// );
+
+const PAGE_SIZE = 50;
+
 export const fetchTestCases = createAsyncThunk(
     "testCases/fetchTestCases",
-    async (_, { getState, rejectWithValue }) => {
+    async (page = 1, { getState, dispatch, rejectWithValue }) => {
         try {
-            // 1. Check Redux store first (data already in memory)
-            const state = getState();
-            const cachedTestCases = state.testCases?.data;
-            if (cachedTestCases && cachedTestCases.length > 0) {
-                console.log("Returning cached test cases from Redux store.");
-                return cachedTestCases;
-            }
+            // const state = getState();
+            // const cachedTestCases = state.testCases?.data?.slice(
+            //     0,
+            //     PAGE_SIZE * page
+            // );
+            // console.log(`Cached data redux store : ${cachedTestCases}`);
+            // if (
+            //     cachedTestCases &&
+            //     cachedTestCases.length >= PAGE_SIZE * (page - 1)
+            // ) {
+            //     console.log(
+            //         "Returning data from Cached store 123 : ",
+            //         cachedTestCases
+            //     );
+            //     return cachedTestCases;
+            // }
 
-            // 2. Check IndexedDB (if data is saved locally)
-            const indexedDbTestCases = await db.testCases.toArray();
+            // 2. Check IndexedDB
+            const indexedDbTestCases = await db.testCases
+                .offset((page - 1) * PAGE_SIZE)
+                .limit(PAGE_SIZE)
+                .toArray();
             if (indexedDbTestCases.length > 0) {
-                console.log("Returning test cases from IndexedDB.");
+                console.log("Returning Test Cases from IndexedDB");
                 return indexedDbTestCases;
             }
 
-            // 3. Fetch from API (if no local data found)
+            // 3. If data is not found anywhere, call api and get it
             const response = await getTestCasesApi(); // Replace with actual API call
             if (response.status !== 200) {
                 throw new Error("Failed to fetch data from API");
             }
+            console.log(`Fetched test cases from API for page ${page}.`);
 
-            console.log("Fetched test cases from API.");
-
-            // 4. Save the fetched data to IndexedDB
+            // 4. Save the fetched data to IndexedDB in chunks
             await batchInsert(response.data); // Insert into IndexedDB
 
-            // Return the fresh data
+            // Return the freshly fetched data for the current page
             return response.data;
         } catch (error) {
             console.error("Error fetching test cases:", error.message);
@@ -177,6 +241,7 @@ const testCasesSlice = createSlice({
         loading: false, // Indicates loading state
         error: null, // Holds any errors
         isIndexed: false, // Indicates if data is saved in IndexedDB
+        hasMore: true, // Track if there's more data to load
     },
     reducers: {
         setTestCases: (state, action) => {
@@ -200,8 +265,9 @@ const testCasesSlice = createSlice({
                 state.error = null; // Reset errors on each fetch attempt
             })
             .addCase(fetchTestCases.fulfilled, (state, action) => {
+                state.data = [...state.data, ...action.payload]; // Append the new batch of data
                 state.loading = false;
-                state.data = action.payload;
+                state.hasMore = action.payload.length > 0; // Check if there's more data to load
                 state.isIndexed = true; // Set isIndexed to true if data is fetched
             })
             .addCase(fetchTestCases.rejected, (state, action) => {

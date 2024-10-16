@@ -41,7 +41,7 @@
 import { configureStore } from "@reduxjs/toolkit";
 import { persistStore, persistReducer } from "redux-persist";
 import { combineReducers } from "redux";
-import thunk from "redux-thunk";
+import { thunk } from "redux-thunk";
 import logger from "redux-logger"; // Import logger middleware
 import venvReducer from "./venvSlice";
 import testCasesReducer from "./testCasesSlice";
@@ -100,7 +100,7 @@ export const store = configureStore({
     middleware: (getDefaultMiddleware) =>
         getDefaultMiddleware({
             serializableCheck: false, // Disable serializable check for redux-persist
-        }).concat(logger), // Add loggerMiddleware here
+        }).concat(thunk, logger), // Add loggerMiddleware here
     devTools: process.env.NODE_ENV !== "production", // Enable Redux DevTools
 });
 

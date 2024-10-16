@@ -2,6 +2,8 @@
 // import localFont from "next/font/local";
 import "./globals.css";
 import { Providers } from "@/reduxToolkit/provider";
+import { TestCasesContextProvider } from "@/contexts/TestCasesContext";
+
 // import { PersistGate } from "redux-persist/integration/react";
 // import { persistor } from "@/reduxToolkit/store";
 
@@ -27,9 +29,11 @@ export default function RootLayout({ children }) {
         <html lang="en">
             <body>
                 <Providers>
-                    {/* <PersistGate loading={null} persistor={persistor}> */}
-                    {children}
-                    {/* </PersistGate> */}
+                    <TestCasesContextProvider>
+                        {/* <PersistGate loading={null} persistor={persistor}> */}
+                        {children}
+                        {/* </PersistGate> */}
+                    </TestCasesContextProvider>
                 </Providers>
             </body>
         </html>

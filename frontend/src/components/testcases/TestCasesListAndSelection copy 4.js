@@ -57,12 +57,18 @@ const TestCasesListAndSelection = React.memo(() => {
     const dispatch = useDispatch();
     const testCases = useSelector(selectTestCasesData);
     const loading = useSelector((state) => state.testCases?.loading || false);
-    const { selectedTestCases, handleTestCasesSelection } =
-        useContext(TestCasesContext);
+    const [handleTestCasesSelection] = useContext(TestCasesContext);
+    // const hasMore = useSelector((state) => state.testCases?.hasMore || false);
+    // const isIndexed = useSelector(
+    //     (state) => state.testCases?.isIndexed || false
+    // );
+    // const error = useSelector((state) => state.testCases?.error || null);
+    // const [selectedTestCases, setSelectedTestCases] = useState([]);
 
     const [debouncedSearchTerm, setDebouncedSearchTerm] = useState(""); // Debounced search term
     const [searchTerm, setSearchTerm] = useState(""); // For handling the search term
     const [value, onRowClick] = React.useState("");
+    // const [scrollPos, setScrollPos] = useState(0); // To track scroll position
     const [combinedTestCases, setCombinedTestCases] = useState([]); // Final state to render
     const tableRef = useRef(null); // Create a ref for the table
 
@@ -125,6 +131,26 @@ const TestCasesListAndSelection = React.memo(() => {
         setSearchTerm(value);
     };
 
+    // const handleCheckboxChange = useCallback((id) => {
+    //     console.log(
+    //         `Selected ID : ${id} and selected testCases : ${selectedTestCases}`
+    //     );
+    //     setSelectedTestCases((prevSelected) => {
+    //         if (prevSelected.includes(id)) {
+    //             console.log("Removing ID : ", id);
+    //             const newArray = prevSelected.filter(
+    //                 (testCaseId) => testCaseId !== id
+    //             );
+    //             console.log(`New Array is after removing : ${newArray}`);
+    //             return newArray;
+    //         } else {
+    //             const newArray = [...prevSelected, id];
+    //             console.log(`New Array is : ${newArray}`);
+    //             return newArray;
+    //         }
+    //     });
+    // }, []);
+
     // Debounce search term
     useEffect(() => {
         const handler = setTimeout(() => {
@@ -140,6 +166,15 @@ const TestCasesListAndSelection = React.memo(() => {
         if (debouncedSearchTerm === "") {
             console.log(`Loading is : ${loading}`);
             setCombinedTestCases(testCases);
+            // When no search, display paginated test cases
+            // setCombinedTestCases((prevData) => {
+            //     const uniqueTestCases = [
+            //         ...new Map(
+            //             testCases.map((item) => [item["id"], item])
+            //         ).values(),
+            //     ];
+            //     return uniqueTestCases;
+            // });
         } else {
             // If there's a search term, show the filtered test cases
             const filtered = testCases.filter((record) => {
@@ -158,14 +193,44 @@ const TestCasesListAndSelection = React.memo(() => {
                         .includes(searchTerm.toLowerCase())
                 );
             });
-
+            // setCombinedTestCases((prevData) => {
+            //     const uniqueTestCases = [
+            //         ...new Map(
+            //             filtered.map((item) => [item["id"], item])
+            //         ).values(),
+            //     ];
+            //     return uniqueTestCases;
+            // });
             setCombinedTestCases(filtered);
         }
     }, [debouncedSearchTerm, testCases]); // Rerun if searchTerm or testCases change
 
+    // if (loading) {
+    //     return (
+    //         <div className="bg-gray-200 flex justify-center py-6 h-52">
+    //             <div className="h-36 w-36 flex items-center justify-center">
+    //                 <div className="container flex justify-center items-center">
+    //                     <div className="water h-20 w-20 bg-[#35b3e7] rounded-full relative overflow-hidden"></div>
+    //                 </div>
+    //             </div>
+    //         </div>
+    //     ); // Show loading only when fetching the first page
+    // }
+
+    // if (error) {
+    //     return <div>Error: {error}</div>;
+    // }
+
     return (
         <div>
             {loading ? (
+                // <div className="bg-gray-200 flex justify-center py-6 h-52">
+                //     <div className="h-36 w-36 flex items-center justify-center">
+                //         <div className="container flex justify-center items-center">
+                //             <div className="water h-20 w-20 bg-[#35b3e7] rounded-full relative overflow-hidden"></div>
+                //         </div>
+                //     </div>
+                // </div>
                 <div className="bg-gray-200 flex justify-center py-6 h-52">
                     <DefaultSkeleton />
                 </div>
@@ -214,6 +279,10 @@ const TestCasesListAndSelection = React.memo(() => {
                                 rowHeight={30}
                                 // rowCount={testCases?.length || 0}
                                 style={STYLE}
+                                // scrollTop={scrollPositionRef.current} // Maintain scroll position
+                                // onScroll={({ scrollTop }) =>
+                                //     (scrollPositionRef.current = scrollTop)
+                                // } // Save scroll position
                             />
                         </div>
                     </Card>
@@ -225,3 +294,48 @@ const TestCasesListAndSelection = React.memo(() => {
 });
 
 export default TestCasesListAndSelection;
+
+// // Header renderer for column headers
+// const headerRenderer = ({ columnIndex, key, style }) => {
+//     return (
+//         <div
+//             key={key}
+//             style={{ ...style, ...STYLE.header }} // Apply header styles
+//             className="header-cell"
+//         >
+//             {columns[columnIndex].label} {/* Display column label */}
+//         </div>
+//     );
+// };
+
+// const cellRenderer = ({ columnIndex, key, rowIndex, style }) => {
+//     if (rowIndex === 0) return null; // Ignore the header row
+//     const rowStyle = rowIndex % 2 === 0 ? STYLE.evenRow : STYLE.oddRow;
+//     const cellData =
+//         filteredTestCases[rowIndex][columns[columnIndex].dataKey];
+
+//     return (
+//         <div
+//             key={key}
+//             style={{ ...style, ...rowStyle, ...STYLE, padding: "8px" }} // Added padding for font spacing
+//             className="cell"
+//         >
+//             {cellData}
+//         </div>
+//     );
+// };
+
+// // Scroll event listener to trigger loading more data
+// const handleScroll = (e) => {
+//     const { scrollTop, scrollHeight, clientHeight } = e.target;
+//     // if (scrollHeight - scrollTop === clientHeight && !loading && hasMore) {
+//     if (
+//         scrollHeight - scrollTop <= clientHeight + 50 &&
+//         !loading &&
+//         hasMore
+//     ) {
+//         setPage((prevPage) => prevPage + 1); // Load the next page
+//     }
+//     // setScrollPos(scrollTop); // Save the scroll position
+//     // scrollPositionRef.current = scrollTop; // Track scroll position
+// };

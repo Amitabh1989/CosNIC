@@ -59,8 +59,17 @@ db.version(1).stores({
 });
 
 export async function batchInsert(data, batchSize = 100) {
-    for (let i = 0; i < data.length; i += batchSize) {
-        const batch = data.slice(i, i + batchSize);
+    // Step 1: Remove duplicates based on 'id'
+    const uniqueData = Array.from(
+        new Map(data.map((item) => [item.id, item])).values()
+    );
+
+    // Step 2: Sort data by 'id' if required
+    uniqueData.sort((a, b) => a.id - b.id); // Sort by ID in ascending order
+
+    // Step 3: Insert unique records in batches
+    for (let i = 0; i < uniqueData.length; i += batchSize) {
+        const batch = uniqueData.slice(i, i + batchSize);
         const existingRecords = await db.testCases
             .where("id")
             .anyOf(batch.map((record) => record.id))
@@ -68,6 +77,7 @@ export async function batchInsert(data, batchSize = 100) {
         const existingIds = new Set(existingRecords.map((record) => record.id));
 
         const newBatch = batch.filter((item) => !existingIds.has(item.id));
+
         // Insert only new records
         if (newBatch.length > 0) {
             await db.testCases.bulkPut(newBatch);

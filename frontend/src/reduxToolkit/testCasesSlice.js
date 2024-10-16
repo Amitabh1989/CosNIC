@@ -188,28 +188,18 @@ export const fetchTestCases = createAsyncThunk(
     "testCases/fetchTestCases",
     async (page = 1, { getState, dispatch, rejectWithValue }) => {
         try {
-            // const state = getState();
-            // const cachedTestCases = state.testCases?.data?.slice(
-            //     0,
-            //     PAGE_SIZE * page
-            // );
-            // console.log(`Cached data redux store : ${cachedTestCases}`);
-            // if (
-            //     cachedTestCases &&
-            //     cachedTestCases.length >= PAGE_SIZE * (page - 1)
-            // ) {
-            //     console.log(
-            //         "Returning data from Cached store 123 : ",
-            //         cachedTestCases
-            //     );
-            //     return cachedTestCases;
-            // }
+            // 1. Check Redux store first if exists
 
             // 2. Check IndexedDB
-            const indexedDbTestCases = await db.testCases
-                .offset((page - 1) * PAGE_SIZE)
-                .limit(PAGE_SIZE)
-                .toArray();
+            // const indexedDbTestCases = await db.testCases
+            //     .offset((page - 1) * PAGE_SIZE)
+            //     .limit(PAGE_SIZE)
+            //     .toArray();
+            // if (indexedDbTestCases.length > 0) {
+            //     console.log("Returning Test Cases from IndexedDB");
+            //     return indexedDbTestCases;
+            // }
+            const indexedDbTestCases = await db.testCases.toArray();
             if (indexedDbTestCases.length > 0) {
                 console.log("Returning Test Cases from IndexedDB");
                 return indexedDbTestCases;
@@ -257,6 +247,11 @@ const testCasesSlice = createSlice({
             state.error = action.payload;
             state.loading = false;
         },
+        resetTestCases: (state) => {
+            state.data = [];
+            state.page = 1;
+            state.hasMore = true;
+        },
     },
     extraReducers: (builder) => {
         builder
@@ -265,9 +260,11 @@ const testCasesSlice = createSlice({
                 state.error = null; // Reset errors on each fetch attempt
             })
             .addCase(fetchTestCases.fulfilled, (state, action) => {
+                if (action.payload.length === 0) {
+                    state.hasMore = false; // No more data to load
+                }
                 state.data = [...state.data, ...action.payload]; // Append the new batch of data
                 state.loading = false;
-                state.hasMore = action.payload.length > 0; // Check if there's more data to load
                 state.isIndexed = true; // Set isIndexed to true if data is fetched
             })
             .addCase(fetchTestCases.rejected, (state, action) => {
@@ -277,5 +274,6 @@ const testCasesSlice = createSlice({
     },
 });
 
-export const { setTestCases, setLoading, setError } = testCasesSlice.actions;
+export const { setTestCases, setLoading, setError, resetTestCases } =
+    testCasesSlice.actions;
 export default testCasesSlice.reducer;

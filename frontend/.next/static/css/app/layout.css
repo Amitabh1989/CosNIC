@@ -681,6 +681,15 @@ video {
 .col-span-4 {
   grid-column: span 4 / span 4;
 }
+.col-start-2 {
+  grid-column-start: 2;
+}
+.col-start-3 {
+  grid-column-start: 3;
+}
+.col-start-4 {
+  grid-column-start: 4;
+}
 .row-start-2 {
   grid-row-start: 2;
 }
@@ -708,11 +717,17 @@ video {
   margin-left: 1px;
   margin-right: 1px;
 }
+.-mb-10 {
+  margin-bottom: -2.5rem;
+}
 .-mb-3 {
   margin-bottom: -0.75rem;
 }
 .-ml-1 {
   margin-left: -0.25rem;
+}
+.-mt-3 {
+  margin-top: -0.75rem;
 }
 .-mt-6 {
   margin-top: -1.5rem;
@@ -798,17 +813,11 @@ video {
 .mt-px {
   margin-top: 1px;
 }
-.-mb-10 {
-  margin-bottom: -2.5rem;
+.-mb-1 {
+  margin-bottom: -0.25rem;
 }
-.-mt-5 {
-  margin-top: -1.25rem;
-}
-.-mt-3 {
-  margin-top: -0.75rem;
-}
-.mr-10 {
-  margin-right: 2.5rem;
+.mt-48 {
+  margin-top: 12rem;
 }
 .box-border {
   box-sizing: border-box;
@@ -917,6 +926,12 @@ video {
 }
 .h-screen {
   height: 100vh;
+}
+.h-80 {
+  height: 20rem;
+}
+.h-96 {
+  height: 24rem;
 }
 .max-h-96 {
   max-height: 24rem;
@@ -1246,8 +1261,14 @@ video {
 .appearance-none {
   appearance: none;
 }
+.grid-cols-3 {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
 .grid-cols-6 {
   grid-template-columns: repeat(6, minmax(0, 1fr));
+}
+.grid-cols-4 {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
 }
 .grid-rows-2 {
   grid-template-rows: repeat(2, minmax(0, 1fr));
@@ -1423,6 +1444,9 @@ video {
 }
 .overflow-scroll {
   overflow: scroll;
+}
+.overflow-y-auto {
+  overflow-y: auto;
 }
 .overflow-x-hidden {
   overflow-x: hidden;
@@ -1898,6 +1922,10 @@ video {
 .bg-yellow-500\/20 {
   background-color: rgb(255 235 59 / 0.2);
 }
+.bg-blue-gray-300 {
+  --tw-bg-opacity: 1;
+  background-color: rgb(144 164 174 / var(--tw-bg-opacity));
+}
 .bg-opacity-60 {
   --tw-bg-opacity: 0.6;
 }
@@ -2212,6 +2240,9 @@ video {
 .pb-4 {
   padding-bottom: 1rem;
 }
+.pl-4 {
+  padding-left: 1rem;
+}
 .pt-0 {
   padding-top: 0px;
 }
@@ -2235,9 +2266,6 @@ video {
 }
 .pt-px {
   padding-top: 1px;
-}
-.pl-4 {
-  padding-left: 1rem;
 }
 .text-left {
   text-align: left;
@@ -2622,6 +2650,14 @@ video {
 .text-yellow-900 {
   --tw-text-opacity: 1;
   color: rgb(245 127 23 / var(--tw-text-opacity));
+}
+.text-cyan-200 {
+  --tw-text-opacity: 1;
+  color: rgb(128 222 234 / var(--tw-text-opacity));
+}
+.text-gray-400 {
+  --tw-text-opacity: 1;
+  color: rgb(189 189 189 / var(--tw-text-opacity));
 }
 .antialiased {
   -webkit-font-smoothing: antialiased;

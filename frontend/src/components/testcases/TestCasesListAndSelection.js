@@ -63,7 +63,7 @@ const TestCasesListAndSelection = React.memo(() => {
 
     const [debouncedSearchTerm, setDebouncedSearchTerm] = useState(""); // Debounced search term
     const [searchTerm, setSearchTerm] = useState(""); // For handling the search term
-    const [value, onRowClick] = React.useState("");
+    const [rowClickedID, setRowClickedID] = React.useState("");
     const [combinedTestCases, setCombinedTestCases] = useState([]); // Final state to render
     const tableRef = useRef(null); // Create a ref for the table
 
@@ -84,7 +84,7 @@ const TestCasesListAndSelection = React.memo(() => {
                     <Checkbox
                         label={rowData.id}
                         value={rowData.id}
-                        onChange={() => handleTestCasesSelection(rowData.id)}
+                        onChange={() => handleTestCasesSelection(rowData)}
                     />
                 ),
             },
@@ -111,6 +111,11 @@ const TestCasesListAndSelection = React.memo(() => {
         ],
         []
     );
+
+    const handleRowClick = (e) => {
+        console.log(`Row Clicked : ${e}`);
+        setRowClickedID(e);
+    };
 
     useEffect(() => {
         if (!loading) {
@@ -211,12 +216,11 @@ const TestCasesListAndSelection = React.memo(() => {
                                             rowKey="id"
                                             rows={combinedTestCases}
                                             columns={columns}
-                                            value={value}
+                                            value={rowClickedID}
                                             // onRowClick={onRowClick}
-                                            onRowClick={(e) => onRowClick(e)}
+                                            onRowClick={handleRowClick}
                                             className="font-poppins"
                                             rowHeight={30}
-                                            // rowCount={testCases?.length || 0}
                                             style={STYLE}
                                         />
                                     </div>

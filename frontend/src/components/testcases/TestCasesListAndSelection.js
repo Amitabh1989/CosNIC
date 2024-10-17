@@ -26,8 +26,14 @@ import { DefaultSkeleton } from "../common/Skeleton";
 // import { TestCasesContext } from "../contexts/TestCasesContext";
 import { TestCasesContext } from "../../contexts/TestCasesContext";
 import TestCasesCart from "../cart/TestCasesCart";
+import {
+    addToTestCasesCart,
+    removeFromTestCaseCart,
+    // resetTestCasesCart,
+} from "@/reduxToolkit/selectedTestCaseCartSlice";
 
 import ReactVirtualizedMultiGrid from "react-virtualized-multi-grid";
+import { set } from "lodash";
 const STYLE = {
     border: "1px solid #ddd", // Border for cells and headers
     fontFamily: "'Poppins', sans-serif", // Apply Poppins font family to all content
@@ -60,12 +66,15 @@ const TestCasesListAndSelection = React.memo(() => {
     const loading = useSelector((state) => state.testCases?.loading || false);
     const { selectedTestCases, handleTestCasesSelection } =
         useContext(TestCasesContext);
-
+    const testCasesCart = useSelector(
+        (state) => state.testCasesCart.selectedTestCases
+    );
     const [debouncedSearchTerm, setDebouncedSearchTerm] = useState(""); // Debounced search term
     const [searchTerm, setSearchTerm] = useState(""); // For handling the search term
     const [rowClickedID, setRowClickedID] = React.useState("");
     const [combinedTestCases, setCombinedTestCases] = useState([]); // Final state to render
     const tableRef = useRef(null); // Create a ref for the table
+    const [internalSelectionList, setInternalSelectionList] = useState([]);
 
     // Columns for the table
     const columns = useMemo(
@@ -74,29 +83,44 @@ const TestCasesListAndSelection = React.memo(() => {
                 width: 60,
                 label: "#",
                 dataKey: "index",
+                sort: false,
                 render: (value, rowData, rowIndex) => rowIndex + 1,
             },
             {
                 width: 80,
                 label: "Select",
                 dataKey: "id",
+                sort: true,
                 render: (value, rowData) => (
                     <Checkbox
                         label={rowData.id}
                         value={rowData.id}
+                        checked={
+                            testCasesCart.some(
+                                (testCase) => testCase.id === rowData.id
+                            ) || internalSelectionList.includes(rowData.id)
+                                ? true
+                                : false
+                        }
                         onChange={() => handleTestCasesSelection(rowData)}
                     />
                 ),
             },
-            { width: 60, label: "TCID", dataKey: "tcid" },
-            { width: 200, label: "Suite Name", dataKey: "suite_name" },
-            { width: 90, label: "OS", dataKey: "applicable_os" },
-            { width: 80, label: "Stream", dataKey: "stream" },
-            { width: 80, label: "Category", dataKey: "category" },
+            { width: 60, label: "TCID", dataKey: "tcid", sort: true },
+            {
+                width: 200,
+                label: "Suite Name",
+                dataKey: "suite_name",
+                sort: true,
+            },
+            { width: 90, label: "OS", dataKey: "applicable_os", sort: true },
+            { width: 80, label: "Stream", dataKey: "stream", sort: true },
+            { width: 80, label: "Category", dataKey: "category", sort: true },
             {
                 width: 80,
                 label: "Actions",
                 dataKey: "action",
+                sort: false,
                 render: (value, rowData) => (
                     <div className="flex gap-2">
                         <IconButton variant="text" size="sm">
@@ -109,13 +133,12 @@ const TestCasesListAndSelection = React.memo(() => {
                 ),
             },
         ],
-        []
+        [testCasesCart, internalSelectionList]
     );
 
-    const handleRowClick = (e) => {
-        console.log(`Row Clicked : ${e}`);
-        setRowClickedID(e);
-    };
+    // useEffect(() => {
+    //     // Trigger re-render or refetch logic for virtualized table based on updated cart
+    // }, [rowClickedID]); // Re-run whenever the cart changes
 
     useEffect(() => {
         if (!loading) {
@@ -169,6 +192,25 @@ const TestCasesListAndSelection = React.memo(() => {
         }
     }, [debouncedSearchTerm, testCases]); // Rerun if searchTerm or testCases change
 
+    const handleRowClick = (rowData) => {
+        console.log(`Row Clicked 1: ${rowData}`);
+        // console.log(`Row Clicked 2: ${JSON.stringify(rowData)}`);
+        const rowObj = testCases.find((row) => row.id === rowData);
+        if (internalSelectionList.find((id) => id === rowData)) {
+            setInternalSelectionList(
+                internalSelectionList.filter((id) => id !== rowData)
+            );
+            setRowClickedID(null);
+            dispatch(removeFromTestCaseCart(rowObj));
+        } else {
+            setInternalSelectionList([...internalSelectionList, rowData]);
+            // setInternalSelectionList.push(rowData);
+            setRowClickedID(rowData);
+            dispatch(addToTestCasesCart(rowObj));
+        }
+        console.log(`Inteeranl Selection List: ${internalSelectionList}`);
+    };
+
     return (
         <div>
             {loading ? (
@@ -217,8 +259,10 @@ const TestCasesListAndSelection = React.memo(() => {
                                             rows={combinedTestCases}
                                             columns={columns}
                                             value={rowClickedID}
-                                            // onRowClick={onRowClick}
-                                            onRowClick={handleRowClick}
+                                            // onRowClick={setRowClickedID}
+                                            onRowClick={(e) =>
+                                                handleRowClick(e)
+                                            }
                                             className="font-poppins"
                                             rowHeight={30}
                                             style={STYLE}

@@ -1,20 +1,33 @@
 "use client";
-import React, { createContext, useState, useCallback } from "react";
+import React, { createContext, useCallback, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import {
+    addToTestCasesCart,
+    removeFromTestCaseCart,
+} from "../reduxToolkit/selectedTestCaseCartSlice"; // Import your Redux action
 
 export const TestCasesContext = createContext();
 
 export const TestCasesContextProvider = ({ children }) => {
-    const [selectedTestCases, setSelectedTestCases] = useState([]);
+    const dispatch = useDispatch();
+    const selectedTestCases = useSelector(
+        (state) => state.testCasesCart.selectedTestCases
+    );
 
-    const handleTestCasesSelection = useCallback((id) => {
-        setSelectedTestCases((prevSelected) => {
-            if (prevSelected.includes(id)) {
-                return prevSelected.filter((testCaseId) => testCaseId !== id);
+    const handleTestCasesSelection = useCallback(
+        (testCase) => {
+            const isSelected = selectedTestCases.some(
+                (selectedTestCase) => selectedTestCase.id === testCase.id
+            );
+            if (isSelected) {
+                dispatch(removeFromTestCaseCart(testCase)); // Dispatch Redux action instead of local state management
+                return;
             } else {
-                return [...prevSelected, id];
+                dispatch(addToTestCasesCart(testCase)); // Dispatch Redux action instead of local state management
             }
-        });
-    }, []);
+        },
+        [dispatch, selectedTestCases]
+    );
     return (
         <TestCasesContext.Provider
             value={{ selectedTestCases, handleTestCasesSelection }}

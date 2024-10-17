@@ -45,6 +45,7 @@ import { thunk } from "redux-thunk";
 import logger from "redux-logger"; // Import logger middleware
 import venvReducer from "./venvSlice";
 import testCasesReducer from "./testCasesSlice";
+import testCasesCartReducer from "./selectedTestCaseCartSlice";
 import storage from "redux-persist/lib/storage"; // defaults to localStorage for web
 
 // Define a noop storage for SSR (this part is fine)
@@ -79,13 +80,14 @@ const storageToUse =
 const persistConfig = {
     key: "root",
     storage: storageToUse, // Use the appropriate storage
-    whitelist: ["venv"], // Only persist these reducers
+    whitelist: ["venv", "testCasesCart"], // Only persist these reducers
 };
 
 // Combine reducers
 const rootReducer = combineReducers({
     venv: venvReducer,
     testCases: testCasesReducer, // Add your testCases reducer here
+    testCasesCart: testCasesCartReducer, // Add your testCases reducer here
 });
 
 // Conditionally wrap rootReducer with persistReducer for CSR

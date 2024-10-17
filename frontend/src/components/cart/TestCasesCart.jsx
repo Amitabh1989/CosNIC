@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useEffect } from "react";
 import {
     Card,
     CardBody,
@@ -9,40 +9,48 @@ import {
     CardHeader,
 } from "@material-tailwind/react";
 import { TestCasesContext } from "@/contexts/TestCasesContext";
+import { useSelector, useDispatch } from "react-redux";
+import { resetTestCasesCart } from "@/reduxToolkit/selectedTestCaseCartSlice";
 
 const TestCasesCart = () => {
-    const { selectedTestCases, handleTestCasesSelection } =
-        React.useContext(TestCasesContext);
+    const dispatch = useDispatch();
+    const testCasesCart = useSelector(
+        (state) => state.testCasesCart.selectedTestCases
+    );
+
+    // useEffect(() => {
+    //     // Trigger re-render or refetch logic for virtualized table based on updated cart
+    // }, [testCasesCart]); // Re-run whenever the cart changes
 
     // Log the selected test cases to the console
-    console.log("Selected Test Cases:", selectedTestCases);
+    console.log("Selected Test Cases:", testCasesCart);
 
     return (
         <Card className="mt-48 w-full h-1/2">
             <CardHeader
                 floated={false}
-                className="h-20 flex justify-center items-center bg-blue-gray-100"
+                className="h-15 flex justify-center items-center bg-black"
             >
-                <Typography variant="h4" color="blue-gray" className="p-2">
+                <Typography variant="h4" color="white" className="p-2">
                     Test Case cart
                 </Typography>
             </CardHeader>
             <CardBody className="w-full overflow-y-auto">
                 <table className="w-full">
                     <tbody>
-                        {selectedTestCases?.map((testCase, index) => {
+                        {testCasesCart.map((testCase, index) => {
                             const isEven = index % 2 === 0;
                             const classes = `${isEven ? "bg-white" : "bg-gray-100"}`;
 
                             return (
-                                <tr key={testCase.id} className={classes}>
+                                <tr key={index} className={classes}>
                                     <td className="p-2">
                                         <Typography
                                             variant="small"
                                             color="blue-gray"
                                             className="font-normal"
                                         >
-                                            {index + 1}
+                                            {index}
                                             {" : "}
                                         </Typography>
                                     </td>
@@ -76,7 +84,9 @@ const TestCasesCart = () => {
                         <Button>Confirm</Button>
                     </div>
                     <div className="col-start-4 p-2">
-                        <Button>Clear</Button>
+                        <Button onClick={() => dispatch(resetTestCasesCart())}>
+                            Clear
+                        </Button>
                     </div>
                 </div>
             </CardFooter>

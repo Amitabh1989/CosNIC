@@ -98,9 +98,10 @@ export default function UserLoginForm() {
     };
 
     return (
-        <div className="flex flex-grow w-1/2 items-center justify-center bg-gray-100 h-screen">
+        <div className="flex flex-grow items-center justify-center bg-gray-100 h-screen w-full">
             {/* <Card className="absolute shadow-lg w-96 items-center h-1/2"> */}
-            <Card className="relative shadow-lg w-96 items-center h-1/2">
+            {/* <Card className="shadow-lg w-96 items-center h-1/2 place-items-center"> */}
+            <Card className="shadow-lg w-96 flex justify-center items-center">
                 {/* Card Header */}
                 <CardHeader
                     variant="solid"
@@ -110,13 +111,12 @@ export default function UserLoginForm() {
                     <Typography variant="h1" color="white" className="p-4">
                         Cos-NIC
                     </Typography>
-                    <Typography variant="h4" color="white" className="pb-2">
+                    {/* <Typography variant="h4" color="white" className="pb-2">
                         Welcome back
-                    </Typography>
+                    </Typography> */}
                 </CardHeader>
-
                 {/* Card body */}
-                <CardBody className="flex flex-col gap-4 w-full h-full">
+                <CardBody className="flex flex-col gap-4 w-full h-full justify-center items-center p-4">
                     <Typography variant="h4" color="blue-gray">
                         Login to your account
                     </Typography>
@@ -126,10 +126,10 @@ export default function UserLoginForm() {
                         </Typography>
                     )}
                     <form
-                        className="mt-6 mb-2 min-w-[24rem] w-full sm:w-auto max-w-screen-lg"
+                        className="mt-6 mb-2 min-w-[24rem] w-full sm:w-auto max-w-screen-lg pad-4"
                         onSubmit={handleSubmit}
                     >
-                        <div className="flex flex-col gap-4 h-full">
+                        <div className="flex flex-col gap-4 h-full p-4">
                             <div className="mb-1 flex flex-col gap-6">
                                 <Typography
                                     variant="h6"
@@ -171,23 +171,20 @@ export default function UserLoginForm() {
                                     }}
                                 />
                             </div>
-                            <div className="mt-10">
+                            <div className="mt-6 flex w-full h-10">
                                 <Button
-                                    className="flex items-center justify-center w-full !pt-0 !pb-0"
+                                    className="items-center w-full justify-center !pt-0 !pb-0 rounded-full"
                                     fullWidth
+                                    size="lg"
                                     type="submit"
+                                    loading={loading ? true : false}
                                 >
-                                    {loading ? (
-                                        <Spinner className="h-4 w-4" />
-                                    ) : (
-                                        "Sign in"
-                                    )}
+                                    Sign in
                                 </Button>
                             </div>
                         </div>
                     </form>
                 </CardBody>
-
                 {/* Card Footer */}
                 <CardFooter className="pt-0">
                     <Typography

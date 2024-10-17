@@ -1,3 +1,5 @@
 .venv/
 venvs/
 ctrl_repo/
+node_modules
+node_modules

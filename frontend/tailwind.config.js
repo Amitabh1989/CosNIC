@@ -1,9 +1,9 @@
-// /* @type {import('tailwindcss').Config} */
+// /** @type {import('tailwindcss').Config} */
 // /* styles/globals.css */
 const withMT = require("@material-tailwind/react/utils/withMT");
 
 module.exports = withMT({
-    content: ["./pages/**/*.{js,ts,jsx,tsx}"],
+    content: ["./pages/**/*.{js,ts,jsx,tsx}", "./src/**/*.{js,ts,jsx,tsx}"],
     theme: {
         extend: {
             fontFamily: {

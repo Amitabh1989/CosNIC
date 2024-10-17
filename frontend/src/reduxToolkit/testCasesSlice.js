@@ -263,7 +263,8 @@ const testCasesSlice = createSlice({
                 if (action.payload.length === 0) {
                     state.hasMore = false; // No more data to load
                 }
-                state.data = [...state.data, ...action.payload]; // Append the new batch of data
+                // state.data = [...state.data, ...action.payload]; // Append the new batch of data
+                state.data = action.payload; // Append the new batch of data
                 state.loading = false;
                 state.isIndexed = true; // Set isIndexed to true if data is fetched
             })

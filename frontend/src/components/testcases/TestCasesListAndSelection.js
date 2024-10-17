@@ -6,6 +6,7 @@ import {
     Card,
     Input,
     Checkbox,
+    CardBody,
     CardHeader,
     IconButton,
     Typography,
@@ -171,53 +172,61 @@ const TestCasesListAndSelection = React.memo(() => {
                 </div>
             ) : (
                 <>
-                    <Card className="h-full w-full overflow-scroll">
-                        <CardHeader
-                            floated={false}
-                            shadow={false}
-                            className="mb-2 rounded-none p-2"
-                        >
-                            <div className="w-full md:w-96">
-                                <Input
-                                    label="Search TestCase"
-                                    icon={
-                                        <MagnifyingGlassIcon className="h-5 w-5" />
-                                    }
-                                    onChange={handleSearch}
-                                />
-                            </div>
-                            {/* Debug: Show total number of records */}
-                            <div>
-                                Total Records Loaded: {combinedTestCases.length}
-                            </div>
-                        </CardHeader>
-                        <br />
-
-                        <div
-                            id="testCasesTable"
-                            ref={tableRef} // Attach ref to the table wrapper
-                            style={{
-                                width: "100%",
-                                height: "100vh",
-                                fontFamily: "'Poppins', sans-serif", // Apply font here
-                            }}
-                            className="p-4 shadow-lg"
-                        >
-                            <ReactVirtualizedMultiGrid
-                                rowKey="id"
-                                rows={combinedTestCases}
-                                columns={columns}
-                                value={value}
-                                // onRowClick={onRowClick}
-                                onRowClick={(e) => onRowClick(e)}
-                                className="font-poppins"
-                                rowHeight={30}
-                                // rowCount={testCases?.length || 0}
-                                style={STYLE}
-                            />
+                    <div className="grid grid-cols-6 gap-4 w-full p-4">
+                        <div className="col-span-4 w-full">
+                            <Card className="h-full w-full">
+                                <CardHeader
+                                    floated={false}
+                                    shadow={false}
+                                    className="-mb-10 rounded-none p-2"
+                                >
+                                    <div className="w-full md:w-96 p-4">
+                                        <Input
+                                            label="Search TestCase"
+                                            icon={
+                                                <MagnifyingGlassIcon className="h-5 w-5" />
+                                            }
+                                            onChange={handleSearch}
+                                        />
+                                    </div>
+                                    {/* Debug: Show total number of records */}
+                                    <div className="font-poppins text-sm font-bold -mt-3 pl-4">
+                                        Total Records Loaded:{" "}
+                                        {combinedTestCases.length}
+                                    </div>
+                                </CardHeader>
+                                <br />
+                                <CardBody>
+                                    <div
+                                        id="testCasesTable"
+                                        ref={tableRef} // Attach ref to the table wrapper
+                                        style={{
+                                            width: "100%",
+                                            height: "70vh",
+                                            fontFamily: "'Poppins', sans-serif", // Apply font here
+                                        }}
+                                        className="p-4 shadow-lg"
+                                    >
+                                        <ReactVirtualizedMultiGrid
+                                            rowKey="id"
+                                            rows={combinedTestCases}
+                                            columns={columns}
+                                            value={value}
+                                            // onRowClick={onRowClick}
+                                            onRowClick={(e) => onRowClick(e)}
+                                            className="font-poppins"
+                                            rowHeight={30}
+                                            // rowCount={testCases?.length || 0}
+                                            style={STYLE}
+                                        />
+                                    </div>
+                                </CardBody>
+                            </Card>
                         </div>
-                    </Card>
-                    <TestCasesCart />
+                        <div className="col-span-2 w-full">
+                            <TestCasesCart />
+                        </div>
+                    </div>
                 </>
             )}
         </div>

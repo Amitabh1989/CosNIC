@@ -9,6 +9,8 @@ const TestCaseComponent = () => {
     const fetchTestCasesList = async () => { 
         try {
             const response = await
+        } catch (error) {
+            console.log("Error in fetching test cases list", error);
         }
     }
 

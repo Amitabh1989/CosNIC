@@ -1,5 +1,6 @@
-from django.db import models
+import yaml
 from django.contrib.postgres.fields import ArrayField
+from django.db import models
 
 # Create your models here.
 
@@ -291,3 +292,21 @@ class Config(models.Model):
 
     def __str__(self):
         return f"Config {self.nickname}"
+
+
+class YamlConfigFile(models.Model):
+    name = models.CharField(max_length=255)
+    file = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    modified_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return self.name
+
+    def save(self, *args, **kwargs):
+        try:
+            # Validate YAML content before saving
+            yaml.safe_load(self.file)
+        except yaml.YAMLError as e:
+            raise ValueError(f"Invalid YAML content: {e}") from e
+        super().save(*args, **kwargs)

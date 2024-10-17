@@ -29,18 +29,15 @@ from .models import UserProfile
 
 
 class LoginSerializer(serializers.Serializer):
-    username = serializers.CharField(required=True)
+    email = serializers.EmailField(required=True)
     password = serializers.CharField(required=True)
 
     def validate(self, data):
-        username = data.get("username")
+        email = data.get("email")
         password = data.get("password")
 
-        if not username or not password:
-            raise serializers.ValidationError("Username and password are required.")
-
-        # You can perform additional validation here if needed
-
+        if not email or not password:
+            raise serializers.ValidationError("Email and password are required.")
         return data
 
 

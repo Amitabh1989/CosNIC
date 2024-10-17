@@ -10,7 +10,6 @@ from .views import (
 )
 
 router = DefaultRouter()
-# router.register(r'check-username', CheckUsernameAvailability, basename='check-username')
 
 
 urlpatterns = [

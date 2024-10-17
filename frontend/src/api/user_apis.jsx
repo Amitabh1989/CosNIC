@@ -1,15 +1,29 @@
 import baseBackendApi from "./base_api"; // Axios instance with interceptors
 import Cookies from "js-cookie";
+import apiEndpoints from "./apiEndpoints";
 
 export const loginUserApi = async (credentials) => {
     try {
-        const response = await baseBackendApi.post("api/token/", credentials);
+        // const response = await baseBackendApi.post("api/token/", credentials);
+        console.log(
+            "Backend base URL is login :",
+            process.env.NEXT_PUBLIC_BACKEND_BASE_URL
+            // process.env.BACKEND_BASE_URL
+        );
+
+        console.log("Credentials are:", credentials);
+        console.log("API endpoint is:", apiEndpoints.loginUser);
+        // const response = await baseBackendApi.post("login/", credentials);
+        const response = await baseBackendApi.post(
+            apiEndpoints.loginUser,
+            credentials
+        );
         sessionStorage.setItem("access_token", response.data.access); // Store access token in memory
         Cookies.set("refresh_token", response.data.refresh, {
             secure: true,
             httpOnly: true,
         }); // Secure cookie
-        return response.data;
+        return response;
     } catch (error) {
         console.log("Login failed", error);
         throw error;

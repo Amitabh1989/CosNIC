@@ -1,5 +1,6 @@
 from datetime import datetime
 
+from django.conf import settings
 from django.contrib.auth.models import User
 from django.db import transaction
 from django.utils import timezone
@@ -8,6 +9,7 @@ from rest_framework import serializers
 
 from .models import (
     CtrlPackageRepo,
+    RequirementsModel,
     Server,
     SubTests,
     TestCase,
@@ -86,11 +88,17 @@ class RunTestSerializer(serializers.Serializer):
 class VirtualEnvironmentSerializer(serializers.ModelSerializer):
     # test_jobs = TestJobSerializer(many=True)
     # ctrl_package_version = serializers.SerializerMethodField()
+    status = serializers.CharField(read_only=True)
+    # test_jobs = serializers.StringRelatedField(many=True, read_only=True)
+    venv_name = serializers.CharField(read_only=True)
+    nickname = serializers.CharField(max_length=100, required=True)
+    # user = UserSerializer(read_only=True)
 
     class Meta:
         model = VirtualEnvironment
         exclude = [
-            "status",  # Exclude because this is managed internally or by task
+            # "venv_name",  # Exclude because it is set automatically
+            # "status",  # Exclude because this is managed internally or by task
             "last_used_at",  # Exclude because it is updated based on usage
             "user",  # Exclude because it is set based on the current logged-in user
             "lease_duration",  # Exclude because it is set based on the current logged-in user
@@ -98,19 +106,33 @@ class VirtualEnvironmentSerializer(serializers.ModelSerializer):
             "path",  # Exclude because it is set automatically
             "server",  # Exclude because it is set by server (in future)
             # "test_jobs",  # Exclude because it's not defined in the current model context
+            "script",  # Exclude because it is set by the user
         ]
 
     def create(self, validated_data):
         print(f"Nickname called : {validated_data['nickname']}")
-        if not validated_data["nickname"].strip():
-            validated_data["nickname"] = (
-                f'{validated_data["venv_name"]}_{timezone.now().strftime("%Y-%m-%d-%H%M%S")}'
-            )
-        else:
-            validated_data["nickname"] = (
-                f'{validated_data["nickname"]}_{timezone.now().strftime("%Y-%m-%d-%H%M%S")}'
-            )
+        # Get the user from context or pass it through some means
+        user = self.context["request"].user  # Get the user from the context
+        validated_data["user"] = user  # Manually set the user field
+        venv_name = validated_data["venv_name"]  # Manually set the user field
+        print("Venv name in VirtualEnvironmentSerializer is : ", venv_name)
+        if venv_name.strip() == "" or not venv_name:
+            # Save the instance partially to generate the primary key
+            instance = super().create(
+                validated_data
+            )  # Create the initial instance without venv_name
+
+            venv_name = f"myPytestVenv_{instance.pk}"
+            print("New unique venv name is : ", venv_name)
+            validated_data["venv_name"] = venv_name
         return super().create(validated_data)
+
+    def to_representation(self, instance):
+        data = super().to_representation(instance)
+        print("Ctrl pkg version in to_representation: ", instance.ctrl_package_version)
+        if data["ctrl_package_version"]:
+            data["ctrl_package_version"] = instance.ctrl_package_version.repo_version
+        return data
 
 
 class VirtualEnvironmentInitSerializer(serializers.ModelSerializer):
@@ -212,14 +234,26 @@ class CtrlPackageRepoSerializer(serializers.ModelSerializer):
 
 class VenvsStatusJobsUsersSerializer(serializers.ModelSerializer):
     # test_jobs = TestJobSerializer(many=True)
-    user = UserSerializer()
+    # user = UserSerializer()
+    status = serializers.CharField(read_only=True)
+    venv_name = serializers.CharField(read_only=True)
+    # ctrl_package_version = (
+    #     serializers.SerializerMethodField()
+    # )  # represent the str rep of the object
     """
     https://chatgpt.com/share/758a96f2-b506-4ee3-aaad-9f420adfbe7f
     """
 
     class Meta:
         model = VirtualEnvironment
-        fields = ["venv_name", "status", "user", "test_jobs", "last_used_at"]
+        fields = [
+            "venv_name",
+            "status",
+            # "user",
+            "test_jobs",
+            "modified_at",
+            # "ctrl_package_version",
+        ]
 
     def to_representation(self, instance):
         representation = super().to_representation(instance)
@@ -228,3 +262,14 @@ class VenvsStatusJobsUsersSerializer(serializers.ModelSerializer):
         )  # Assuming related name is 'test_jobs'
         representation["user"] = instance.user.username
         return representation
+
+    # def get_ctrl_package_version(self, obj):
+    #     if obj.ctrl_package_version is None:
+    #         return None
+    #     return str(obj.ctrl_package_version.repo_version)
+
+
+class RequirementsModelSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = RequirementsModel
+        fields = ["nickname", "requirements", "description"]

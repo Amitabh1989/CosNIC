@@ -1,25 +1,33 @@
 from django.contrib import admin
+
 from .models import (
-    SITVersionModel,
+    ConfigurationModel,
+    CTRLModel,
+    EmailOptionsModel,
+    PythonPathModel,
     SITModel,
+    SITVersionModel,
     STATModel,
-    # TestSuiteModel,
-    TestSuitesPathModel,
     SUTClientConfigModel,
     TestConfigModel,
-    CTRLModel,
-    PythonPathModel,
-    WaitConfigModel,
-    ConfigurationModel,
-    EmailOptionsModel,
-    TestSuiteFilePath,
     TestSuiteFileName,
+    TestSuiteFilePath,
+    # TestSuiteModel,
+    TestSuitesPathModel,
+    WaitConfigModel,
+    YamlFormatConfigFileModel,
     # RecipientModel
 )
 
 
 class ConfigurationModelAdmin(admin.ModelAdmin):
-    list_display = ['id', 'name', 'sit', 'stat']
+    list_display = ["id", "name", "sit", "stat"]
+
+
+class YamlConfigAdmin(admin.ModelAdmin):
+    list_display = ["id", "name"]
+    list_display_links = ["id", "name"]
+
 
 # Register your models here.
 admin.site.register(SITVersionModel)
@@ -35,5 +43,4 @@ admin.site.register(ConfigurationModel, ConfigurationModelAdmin)
 admin.site.register(EmailOptionsModel)
 admin.site.register(TestSuiteFilePath)
 admin.site.register(TestSuiteFileName)
-
-
+admin.site.register(YamlFormatConfigFileModel, YamlConfigAdmin)

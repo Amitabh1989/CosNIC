@@ -13,7 +13,7 @@ from celery import shared_task
 from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import User
-from django.core.exceptions import ObjectDoesNotExist
+from django.core.exceptions import ObjectDoesNotExist, ValidationError
 from django.core.files import File
 from django.core.files.base import ContentFile
 from django.core.files.storage import default_storage
@@ -221,7 +221,8 @@ def create_venv_task(
 
     try:
         user = get_user_model().objects.get(id=user_id)
-        venv_name = sanitize_venv_name(venv_name)
+        # venv_name = sanitize_venv_name(venv_name)
+        print(f"Venv name is : {venv_name}")
         venv_path = os.path.join(settings.BASE_DIR, "venvs", str(user.id), venv_name)
 
         logger.info(f"Venv path is: {venv_path}")
@@ -260,14 +261,14 @@ def create_venv_task(
                 )
 
         # Handle nickname
-        if not nickname or nickname.strip() == "":
-            nickname = f'{venv_name}_{timezone.now().strftime("%Y-%m-%d-%H%M%S")}'
-        else:
-            nickname = f'{nickname}_{timezone.now().strftime("%Y-%m-%d-%H%M%S")}'
+        # if not nickname or nickname.strip() == "":
+        #     nickname = f'{venv_name}_{timezone.now().strftime("%Y-%m-%d-%H%M%S")}'
+        # else:
+        #     nickname = f'{nickname}_{timezone.now().strftime("%Y-%m-%d-%H%M%S")}'
 
         # Create VirtualEnvironment object
         with transaction.atomic():
-            obj = VirtualEnvironment(
+            obj = VirtualEnvironment.objects.get_or_create(
                 user=user,
                 venv_name=venv_name,
                 path=venv_path,
@@ -796,3 +797,61 @@ def copy_install_packages_to_venv_task(self, **kwargs):
 
 #     else:
 #         print("No config object associated with this virtual environment.")
+
+
+@shared_task
+def update_venv_python_version(venv_path, requested_version):
+    """
+    Update the Python version in the specified virtual environment if it does not match the requested version.
+    """
+    try:
+        # Check current Python version in venv
+        venv_python = os.path.join(
+            venv_path, "bin", "python"
+        )  # Adjust for Windows: os.path.join(venv_path, 'Scripts', 'python.exe')
+        current_version = (
+            subprocess.check_output([venv_python, "--version"], text=True)
+            .strip()
+            .split()[1]
+        )
+
+        if current_version == requested_version:
+            return f"Python version in venv is already {requested_version}."
+
+        # Download and install the requested Python version
+        install_path = f"/path/to/python/versions/{requested_version}"
+        if not os.path.exists(install_path):
+            # Replace this with appropriate commands to download and install Python
+            subprocess.run(
+                [
+                    "wget",
+                    f"https://www.python.org/ftp/python/{requested_version}/Python-{requested_version}.tgz",
+                ],
+                check=True,
+                shell=False,
+            )
+            subprocess.run(
+                ["tar", "xzf", f"Python-{requested_version}.tgz"],
+                check=True,
+                shell=False,
+            )
+            subprocess.run(
+                [f"Python-{requested_version}/configure", "--prefix=" + install_path],
+                check=True,
+                shell=False,
+            )
+            subprocess.run(
+                ["make", "install"], cwd=install_path, check=True, shell=False
+            )
+
+        # Use the newly installed Python to update the venv
+        new_python = os.path.join(install_path, "bin", "python")  # Adjust for Windows
+        subprocess.run([new_python, "-m", "venv", venv_path], check=True, shell=False)
+
+        return f"Updated venv to use Python {requested_version}."
+
+    except subprocess.CalledProcessError as e:
+        raise ValidationError(f"Error occurred: {e.output.decode()}")
+
+    except Exception as e:
+        raise ValidationError(f"An unexpected error occurred: {str(e)}")

@@ -35,6 +35,8 @@ STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
 print(f"BASE DIR : {BASE_DIR}")
 print(f"REPO_PATH : {REPO_ROOT}")
 
+MAX_VENVS_PER_USER = 20
+
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
@@ -55,6 +57,24 @@ CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",  # Replace with the actual frontend origin
     "http://127.0.0.1:3000",
 ]
+CORS_ALLOW_CREDENTIALS = True
+CORS_ALLOW_ALL_ORIGINS = True
+# CORS_ALLOW_METHODS = [
+#     "GET",
+#     "POST",
+#     "PUT",
+#     "PATCH",
+#     "DELETE",
+#     "OPTIONS",
+# ]
+CORS_ALLOW_HEADERS = [
+    "accept",
+    "authorization",
+    "content-type",
+    "x-csrftoken",
+    "x-requested-with",
+]
+
 
 # Application definition
 
@@ -223,9 +243,9 @@ REST_FRAMEWORK = {
 SIMPLE_JWT = {
     "ACCESS_TOKEN_LIFETIME": timedelta(minutes=180),
     "REFRESH_TOKEN_LIFETIME": timedelta(days=50),
-    "ROTATE_REFRESH_TOKENS": True,
-    "BLACKLIST_AFTER_ROTATION": True,
-    "UPDATE_LAST_LOGIN": False,
+    "ROTATE_REFRESH_TOKENS": False,
+    "BLACKLIST_AFTER_ROTATION": False,
+    "UPDATE_LAST_LOGIN": True,
     "ALGORITHM": "HS256",
     "VERIFYING_KEY": None,
     "AUDIENCE": None,
@@ -373,3 +393,10 @@ CACHES = {
 
 
 CACHE_MIDDLEWARE_SECONDS = 0
+
+
+# When we want to authentication using email instead of username, we need custom EmailBackend
+AUTHENTICATION_BACKENDS = [
+    "users.authentication.EmailBackend",
+    "django.contrib.auth.backends.ModelBackend",
+]

@@ -19,11 +19,41 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import include, path
+from rest_framework import status
+from rest_framework.response import Response
+from rest_framework_simplejwt.token_blacklist.models import BlacklistedToken
 from rest_framework_simplejwt.views import (
     TokenObtainPairView,
     TokenRefreshView,
     TokenVerifyView,
 )
+
+# from .models import BlacklistedToken
+
+
+# def is_token_blacklisted(token):
+#     # print(f"{BlacklistedToken.objects.filter(id__startswith=1)}")
+#     try:
+#         blacklisted = BlacklistedToken.objects.filter(token=token).exists()
+#     except BlacklistedToken.DoesNotExist:
+#         blacklisted = True
+#     print(f"Checking if token is blacklisted : {blacklisted}")
+#     return blacklisted
+
+
+# # In your token refresh view
+# class TokenRefreshView(TokenRefreshView):
+#     def post(self, request, *args, **kwargs):
+#         print(f"Token refresh request : {request.data}")
+#         print(f"Kwargs : {kwargs}, args : {args}")
+#         # Check if refresh token is blacklisted
+#         refresh_token = request.data.get("refresh")
+#         if refresh_token and is_token_blacklisted(refresh_token):
+#             return Response(
+#                 {"error": "Token is blacklisted"}, status=status.HTTP_401_UNAUTHORIZED
+#             )
+#         return super().post(request, *args, **kwargs)
+
 
 urlpatterns = [
     path("admin/", admin.site.urls),
@@ -36,7 +66,7 @@ urlpatterns = [
     # User
     path("user/", include("users.urls")),
     path("configuration/", include("configfile.urls")),
-    path("test_ops/", include("test_runner.urls")),
+    path("testops/", include("test_runner.urls")),
     path("pulse/", include("pulse.urls")),
     # ===================== #
     # DRF session-based authentication endpoints for browsable API

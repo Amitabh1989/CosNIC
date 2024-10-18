@@ -35,6 +35,7 @@ const testCasesCartSlice = createSlice({
     name: "testCasesCart",
     initialState: {
         selectedTestCases: [], // Stores test case data
+        finalizedCart: [],
         loading: false, // Indicates loading state
         error: null, // Holds any errors
     },
@@ -66,6 +67,13 @@ const testCasesCartSlice = createSlice({
             );
             console.log("Test case found in the list, removed it.");
         },
+        finalizeTestCasesCart: (state) => {
+            // Finalize the test cases cart
+            console.log("Finalizing the test cases cart.");
+            const finalizedTestCases = state.selectedTestCases;
+            state.finalizedCart = finalizedTestCases;
+            console.log(`Finalized test cases cart: ${state.finalizedCart}`);
+        },
 
         setLoading: (state, action) => {
             state.loading = action.payload;
@@ -87,5 +95,6 @@ export const {
     setError,
     resetTestCasesCart,
     removeFromTestCaseCart,
+    finalizeTestCasesCart,
 } = testCasesCartSlice.actions;
 export default testCasesCartSlice.reducer;

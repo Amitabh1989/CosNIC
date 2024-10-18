@@ -7,10 +7,15 @@ import {
     Typography,
     Button,
     CardHeader,
+    Chip,
+    Badge,
 } from "@material-tailwind/react";
 import { TestCasesContext } from "@/contexts/TestCasesContext";
 import { useSelector, useDispatch } from "react-redux";
-import { resetTestCasesCart } from "@/reduxToolkit/selectedTestCaseCartSlice";
+import {
+    resetTestCasesCart,
+    finalizeTestCasesCart,
+} from "@/reduxToolkit/selectedTestCaseCartSlice";
 
 const TestCasesCart = () => {
     const dispatch = useDispatch();
@@ -18,23 +23,27 @@ const TestCasesCart = () => {
         (state) => state.testCasesCart.selectedTestCases
     );
 
-    // useEffect(() => {
-    //     // Trigger re-render or refetch logic for virtualized table based on updated cart
-    // }, [testCasesCart]); // Re-run whenever the cart changes
-
     // Log the selected test cases to the console
     console.log("Selected Test Cases:", testCasesCart);
 
     return (
-        <Card className="mt-48 w-full h-1/2">
-            <CardHeader
-                floated={false}
-                className="h-15 flex justify-center items-center bg-black"
+        <Card className="mt-48 w-full h-1/2 relative">
+            <Badge
+                color="red"
+                className="absolute top-4 right-4 transform translate-x-1/2 -translate-y-1/2 font-bold"
+                content={
+                    testCasesCart.length === 0 ? "0" : testCasesCart.length
+                }
             >
-                <Typography variant="h4" color="white" className="p-2">
-                    Test Case cart
-                </Typography>
-            </CardHeader>
+                <CardHeader
+                    floated={false}
+                    className="h-10 flex w-full justify-center items-center bg-black relative"
+                >
+                    <Typography variant="h5" color="white" className="p-2">
+                        Test Case cart
+                    </Typography>
+                </CardHeader>
+            </Badge>
             <CardBody className="w-full overflow-y-auto">
                 <table className="w-full">
                     <tbody>
@@ -81,7 +90,11 @@ const TestCasesCart = () => {
             <CardFooter className="pt-0">
                 <div className="grid grid-cols-4">
                     <div className="col-start-3 p-2">
-                        <Button>Confirm</Button>
+                        <Button
+                            onClick={() => dispatch(finalizeTestCasesCart())}
+                        >
+                            Confirm
+                        </Button>
                     </div>
                     <div className="col-start-4 p-2">
                         <Button onClick={() => dispatch(resetTestCasesCart())}>

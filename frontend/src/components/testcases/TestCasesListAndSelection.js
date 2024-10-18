@@ -7,6 +7,7 @@ import {
     Input,
     Checkbox,
     CardBody,
+    Tooltip,
     CardHeader,
     IconButton,
     Typography,
@@ -19,12 +20,15 @@ import React, {
     useRef,
     useContext,
 } from "react";
+import { LuListTodo } from "react-icons/lu";
+import { FcTodoList } from "react-icons/fc";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchTestCases, resetTestCases } from "@/reduxToolkit/testCasesSlice";
 import { createSelector } from "reselect";
 import { DefaultSkeleton } from "../common/Skeleton";
 // import { TestCasesContext } from "../contexts/TestCasesContext";
 import { TestCasesContext } from "../../contexts/TestCasesContext";
+import SubTestSelectionComp from "./SubTestSelectionComp";
 import TestCasesCart from "../cart/TestCasesCart";
 import {
     addToTestCasesCart,
@@ -75,6 +79,16 @@ const TestCasesListAndSelection = React.memo(() => {
     const [combinedTestCases, setCombinedTestCases] = useState([]); // Final state to render
     const tableRef = useRef(null); // Create a ref for the table
     const [internalSelectionList, setInternalSelectionList] = useState([]);
+    const [openSubtestModal, setOpenSubtestModal] = React.useState(false);
+
+    // const handleOpen = () => setOpenSubtestModal(!open);
+
+    // Effect to sync internalSelectionList with testCasesCart
+    useEffect(() => {
+        // Update internalSelectionList when testCasesCart changes
+        const selectedIds = testCasesCart.map((testCase) => testCase.id);
+        setInternalSelectionList(selectedIds);
+    }, [testCasesCart]); // Sync whenever testCasesCart changes
 
     // Columns for the table
     const columns = useMemo(
@@ -91,20 +105,19 @@ const TestCasesListAndSelection = React.memo(() => {
                 label: "Select",
                 dataKey: "id",
                 sort: true,
-                render: (value, rowData) => (
-                    <Checkbox
-                        label={rowData.id}
-                        value={rowData.id}
-                        checked={
-                            testCasesCart.some(
-                                (testCase) => testCase.id === rowData.id
-                            ) || internalSelectionList.includes(rowData.id)
-                                ? true
-                                : false
-                        }
-                        onChange={() => handleTestCasesSelection(rowData)}
-                    />
-                ),
+                render: (value, rowData) => {
+                    const isChecked = internalSelectionList.includes(
+                        rowData.id
+                    ); // Check if rowData.id is in internalSelectionList
+                    return (
+                        <Checkbox
+                            label={rowData.id}
+                            value={rowData.id}
+                            checked={isChecked}
+                            onChange={() => handleTestCasesSelection(rowData)}
+                        />
+                    );
+                },
             },
             { width: 60, label: "TCID", dataKey: "tcid", sort: true },
             {
@@ -123,9 +136,16 @@ const TestCasesListAndSelection = React.memo(() => {
                 sort: false,
                 render: (value, rowData) => (
                     <div className="flex gap-2">
-                        <IconButton variant="text" size="sm">
-                            <DocumentIcon className="h-5 w-5" />
-                        </IconButton>
+                        <Tooltip content="Select Subtests">
+                            <IconButton variant="text" size="sm">
+                                <FcTodoList
+                                    className="h-6 w-6"
+                                    onClick={(event) =>
+                                        handleSubtestWizard(event, rowData)
+                                    }
+                                />
+                            </IconButton>
+                        </Tooltip>
                         <IconButton variant="text" size="sm">
                             <ArrowDownTrayIcon className="h-5 w-5" />
                         </IconButton>
@@ -139,6 +159,24 @@ const TestCasesListAndSelection = React.memo(() => {
     // useEffect(() => {
     //     // Trigger re-render or refetch logic for virtualized table based on updated cart
     // }, [rowClickedID]); // Re-run whenever the cart changes
+
+    const handleCheckboxChange = ({ rowData }) => {
+        console.log(`Check box clicked for row: ${rowData.id}`);
+        testCasesCart.some((testCase) => testCase.id === rowData.id) ||
+        internalSelectionList.includes(rowData.id)
+            ? true
+            : false;
+    };
+
+    const handleSubtestWizard = (event, rowData) => {
+        event.stopPropagation(); // Prevent row click event from firing
+        console.log("Subtest Wizard Clicked", rowData);
+        if (rowData) {
+            console.log("Subtest Wizard Clicked", rowData);
+            setOpenSubtestModal(!openSubtestModal);
+            setRowClickedID(rowData);
+        }
+    };
 
     useEffect(() => {
         if (!loading) {
@@ -204,9 +242,9 @@ const TestCasesListAndSelection = React.memo(() => {
             dispatch(removeFromTestCaseCart(rowObj));
         } else {
             setInternalSelectionList([...internalSelectionList, rowData]);
-            // setInternalSelectionList.push(rowData);
             setRowClickedID(rowData);
             dispatch(addToTestCasesCart(rowObj));
+            console.log(`Row Clicked : ${rowClickedID}`);
         }
         console.log(`Inteeranl Selection List: ${internalSelectionList}`);
     };
@@ -276,6 +314,12 @@ const TestCasesListAndSelection = React.memo(() => {
                         </div>
                     </div>
                 </>
+            )}
+            {openSubtestModal && (
+                <SubTestSelectionComp
+                    setOpen={handleSubtestWizard}
+                    tcRecord={rowClickedID}
+                />
             )}
         </div>
     );

@@ -1,5 +1,4 @@
 {
-  "/_not-found/page": "app/_not-found/page.js",
   "/(test_runner)/testcases/page": "app/(test_runner)/testcases/page.js",
   "/user/login/page": "app/user/login/page.js",
   "/user/dashboard/page": "app/user/dashboard/page.js"

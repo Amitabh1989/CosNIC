@@ -85,35 +85,34 @@ const VenvCRUDForm = ({ venvID, onClose, dialogOpen }) => {
     };
 
     return (
-        <Dialog open={dialogOpen} onClose={onClose} className="h-1/2">
+        <Dialog
+            open={dialogOpen}
+            onClose={onClose}
+            className="h-1/3 w-full flex flex-col rounded-lg"
+        >
             <DialogHeader variant="h4" color="blue-gray">
                 Edit Virtual Environment Details
             </DialogHeader>
-            <DialogBody>
+
+            <DialogBody className="flex-grow overflow-y-auto">
                 {loading ? (
                     <div className="flex justify-center items-center h-full w-full">
                         <Spinner className="h-8 w-8" />
                     </div>
                 ) : (
-                    // <form className="mt-8 mb-2 w-80 max-w-screen-lg sm:w-96 h-full gap-4">
-                    <div>
-                        <form className="flex flex-col h-full gap-4">
-                            {/* <div className="flex flex-col gap-6 mb-10"> */}
-                            <div className="grid grid-rows-2 gap-y-4">
-                                <div>
-                                    <Typography
-                                        variant="h6"
-                                        color="blue-gray"
-                                        className="-mb-3"
-                                    >
+                    <>
+                        <form className="flex flex-col gap-6 h-full">
+                            {/* Flex Row with labels and inputs */}
+                            <div className="flex flex-col md:flex-row gap-4">
+                                {/* VENV Nickname */}
+                                <div className="flex-1">
+                                    <Typography variant="h6" color="blue-gray">
                                         VENV Nickname
                                     </Typography>
-                                </div>
-                                <div>
                                     <Input
                                         size="lg"
                                         placeholder="Enter nickname"
-                                        className="!border-t-blue-gray-600 focus:!border-t-gray-900"
+                                        className="!border-t-blue-gray-600 focus:!border-t-gray-900 w-full"
                                         value={formData?.nickname || ""}
                                         onChange={handleFormChange}
                                         labelProps={{
@@ -122,55 +121,51 @@ const VenvCRUDForm = ({ venvID, onClose, dialogOpen }) => {
                                         }}
                                     />
                                 </div>
-                            </div>
-                            <div className="grid">
-                                <Typography
-                                    variant="h6"
-                                    color="blue-gray"
-                                    className="-mb-3"
-                                >
-                                    Python Version
-                                </Typography>
-                                <Menu
-                                    animate={{
-                                        mount: { y: 0 },
-                                        unmount: { y: 25 },
-                                    }}
-                                >
-                                    <MenuHandler>
-                                        <Button variant="outlined">
-                                            {formData?.python_version ||
-                                                "Select version"}
-                                        </Button>
-                                    </MenuHandler>
-                                    <MenuList
-                                        className="absolute z-[9999]"
-                                        menuProps={{
-                                            className: "z-[9999]",
+                                {/* Python Version */}
+                                <div className="flex-1">
+                                    <Typography variant="h6" color="blue-gray">
+                                        Python Version
+                                    </Typography>
+                                    <Menu
+                                        animate={{
+                                            mount: { y: 0 },
+                                            unmount: { y: 25 },
                                         }}
                                     >
-                                        {pythonVersions.map((version) => (
-                                            <MenuItem
-                                                key={version}
-                                                onClick={() =>
-                                                    setFormData((prevData) => ({
-                                                        ...prevData,
-                                                        python_version: version,
-                                                    }))
-                                                }
+                                        <MenuHandler>
+                                            <Button
+                                                variant="outlined"
+                                                className="w-full"
                                             >
-                                                {version}
-                                            </MenuItem>
-                                        ))}
-                                    </MenuList>
-                                </Menu>
+                                                {formData?.python_version ||
+                                                    "Select version"}
+                                            </Button>
+                                        </MenuHandler>
+                                        <MenuList className="absolute z-[9999]">
+                                            {pythonVersions.map((version) => (
+                                                <MenuItem
+                                                    key={version}
+                                                    onClick={() =>
+                                                        setFormData(
+                                                            (prevData) => ({
+                                                                ...prevData,
+                                                                python_version:
+                                                                    version,
+                                                            })
+                                                        )
+                                                    }
+                                                >
+                                                    {version}
+                                                </MenuItem>
+                                            ))}
+                                        </MenuList>
+                                    </Menu>
+                                </div>
                             </div>
-                            <div className="grid">
-                                <Typography
-                                    variant="h6"
-                                    color="blue-gray"
-                                    className="-mb-3"
-                                >
+
+                            {/* Controller Repo Version */}
+                            <div className="flex-1">
+                                <Typography variant="h6" color="blue-gray">
                                     Controller Repo Version
                                 </Typography>
                                 <Menu
@@ -180,17 +175,15 @@ const VenvCRUDForm = ({ venvID, onClose, dialogOpen }) => {
                                     }}
                                 >
                                     <MenuHandler>
-                                        <Button variant="outlined">
+                                        <Button
+                                            variant="outlined"
+                                            className="w-full"
+                                        >
                                             {formData?.ctrl_package_version ||
                                                 "Select version"}
                                         </Button>
                                     </MenuHandler>
-                                    <MenuList
-                                        className="absolute z-[9999]"
-                                        menuProps={{
-                                            className: "z-[9999]",
-                                        }}
-                                    >
+                                    <MenuList className="absolute z-[9999]">
                                         {ctrlRepoVersions.map((version) => (
                                             <MenuItem
                                                 key={version}
@@ -208,24 +201,19 @@ const VenvCRUDForm = ({ venvID, onClose, dialogOpen }) => {
                                     </MenuList>
                                 </Menu>
                             </div>
-                            <div className="flex gap-4 justify-end items-end">
-                                {hasChanged && (
-                                    <Button className="mt-6" color="blue">
-                                        Prepare
-                                    </Button>
-                                )}
-                                <Button
-                                    className="mt-6"
-                                    color="red"
-                                    onClick={onClose}
-                                >
-                                    Cancel
-                                </Button>
-                            </div>
                         </form>
-                    </div>
+                    </>
                 )}
             </DialogBody>
+
+            <DialogFooter className="sticky bottom-0 bg-white roundedb-lg">
+                <div className="flex gap-4 justify-end items-center w-full">
+                    {hasChanged && <Button color="blue">Prepare</Button>}
+                    <Button color="red" onClick={onClose}>
+                        Cancel
+                    </Button>
+                </div>
+            </DialogFooter>
         </Dialog>
     );
 };

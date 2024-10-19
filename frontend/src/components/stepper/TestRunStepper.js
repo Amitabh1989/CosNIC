@@ -9,8 +9,10 @@ import { FaPython } from "react-icons/fa";
 import { GrDocumentConfig } from "react-icons/gr";
 import { ImList2 } from "react-icons/im";
 import { VscPreview } from "react-icons/vsc";
-import EnvSelection from "../env/EnvSelector";
+// import EnvSelection from "../env/EnvSelector";
+import ConfigFileList from "../tables/ConfigFileList";
 import TestCasesListAndSelection from "../testcases/TestCasesListAndSelection";
+import VenvStatusComponent from "../env/VenvStatus";
 
 export default function TestRunStepper({ step }) {
     const [activeStep, setActiveStep] = React.useState(0);
@@ -20,7 +22,7 @@ export default function TestRunStepper({ step }) {
         {
             step_name: "Env Selection",
             icon: <FaPython />,
-            component: <EnvSelection />,
+            component: <VenvStatusComponent />,
         },
         {
             step_name: "Test Case Selection",
@@ -28,9 +30,9 @@ export default function TestRunStepper({ step }) {
             component: <TestCasesListAndSelection />,
         },
         {
-            step_name: "Env Selection",
+            step_name: "Config File Selection",
             icon: <FaPython />,
-            component: <EnvSelection />,
+            component: <ConfigFileList />,
         },
         // {
         //     step_name: "Config Selection",

@@ -35,7 +35,6 @@ const testCasesCartSlice = createSlice({
     name: "testCasesCart",
     initialState: {
         selectedTestCases: [], // Stores test case data
-        finalizedCart: [],
         loading: false, // Indicates loading state
         error: null, // Holds any errors
     },
@@ -48,13 +47,26 @@ const testCasesCartSlice = createSlice({
             const index = state.selectedTestCases.findIndex(
                 (selectedTestCase) => selectedTestCase.id === testCase.id
             );
-            console.log(`Index of test case is: ${index}`);
-            // if (state.selectedTestCases === null) {
-            //     state.selectedTestCases.push(testCase);
-            // }
+            console.log(`Index of test case in test case cart is : ${index}`);
             if (index === -1 || state.selectedTestCases.length === 0) {
                 console.log("Test case not found in the list, adding it.");
                 state.selectedTestCases.push(testCase);
+            }
+            console.log(`Test case has been set : ${state.selectedTestCases}`);
+        },
+        updateTestCasesCart: (state, action) => {
+            const testCase = action.payload;
+            console.log(
+                `Test case received in update : ${JSON.stringify(testCase)}`
+            );
+
+            // Check if the test case already exists in the selectedTestCases array
+            const index = state.selectedTestCases.findIndex(
+                (selectedTestCase) => selectedTestCase.id === testCase.id
+            );
+            console.log(`Index of test case in test case cart is : ${index}`);
+            if (index !== -1) {
+                state.selectedTestCases[index] = testCase;
             }
             console.log(`Test case has been set : ${state.selectedTestCases}`);
         },
@@ -67,12 +79,33 @@ const testCasesCartSlice = createSlice({
             );
             console.log("Test case found in the list, removed it.");
         },
-        finalizeTestCasesCart: (state) => {
-            // Finalize the test cases cart
-            console.log("Finalizing the test cases cart.");
-            const finalizedTestCases = state.selectedTestCases;
-            state.finalizedCart = finalizedTestCases;
-            console.log(`Finalized test cases cart: ${state.finalizedCart}`);
+        // finalizeTestCasesCart: (state) => {
+        //     // Finalize the test cases cart
+        //     console.log("Finalizing the test cases cart.");
+        //     const finalizedTestCases = state.selectedTestCases;
+        //     state.finalizedCart = finalizedTestCases;
+        //     console.log(`Finalized test cases cart: ${state.finalizedCart}`);
+        // },
+        saveSubTestSelection: (state, action) => {
+            console.log(`Came to subtest update : ${JSON.stringify(action)}`);
+            const { testCaseId, subTestSelection } = action.payload;
+            console.log(
+                `saveSubTestSelection Test case ID is: ${testCaseId}, Subtest selection is: ${subTestSelection}`
+            );
+            // Find the test case in the list
+            const testCaseRecord = state.selectedTestCases.find(
+                (selectedTestCase) => selectedTestCase.id === testCaseId
+            );
+            console.log(
+                `Test case record is: ${JSON.stringify(testCaseRecord)}`
+            );
+            if (testCaseRecord) {
+                // Update the subTests array with the new subTestSelection
+                testCaseRecord.subtests = subTestSelection;
+            }
+            console.log(
+                `Updated test case record is: ${JSON.stringify(testCaseRecord.subtests)}`
+            );
         },
 
         setLoading: (state, action) => {
@@ -95,6 +128,7 @@ export const {
     setError,
     resetTestCasesCart,
     removeFromTestCaseCart,
-    finalizeTestCasesCart,
+    // finalizeTestCasesCart,
+    saveSubTestSelection,
 } = testCasesCartSlice.actions;
 export default testCasesCartSlice.reducer;

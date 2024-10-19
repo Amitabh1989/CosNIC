@@ -30,6 +30,7 @@ const ConfigFileList = ({ configFilesList }) => {
     const [changedRecord, setChangedRecord] = React.useState(null);
     const [debouncedSearchTerm, setDebouncedSearchTerm] = useState(""); // Debounced search term
     const [searchTerm, setSearchTerm] = useState(""); // For handling the search term
+    const [selectedItem, setSelectedItem] = useState(null); // Selected configuration file ID
 
     /**
      * Handles the edit action for a configuration file.
@@ -195,7 +196,7 @@ const ConfigFileList = ({ configFilesList }) => {
                                         size="sm"
                                         onClick={() => handleEdit(id)}
                                     >
-                                        <AiFillEdit className="h-4 w-4 text-gray-900" />
+                                        <AiFillEdit className="h-5 w-5 text-gray-900" />
                                     </IconButton>
                                 </td>
                             </tr>

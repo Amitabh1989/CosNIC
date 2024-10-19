@@ -80,6 +80,7 @@ const TestCasesListAndSelection = React.memo(() => {
     const tableRef = useRef(null); // Create a ref for the table
     const [internalSelectionList, setInternalSelectionList] = useState([]);
     const [openSubtestModal, setOpenSubtestModal] = React.useState(false);
+    const [selectedTCID, setSelectedTCID] = React.useState("");
 
     // const handleOpen = () => setOpenSubtestModal(!open);
 
@@ -89,6 +90,128 @@ const TestCasesListAndSelection = React.memo(() => {
         const selectedIds = testCasesCart.map((testCase) => testCase.id);
         setInternalSelectionList(selectedIds);
     }, [testCasesCart]); // Sync whenever testCasesCart changes
+
+    // useEffect(() => {
+    //     // When the modal is opened, ensure we are getting the latest test case from the Redux store
+    //     const matchingTestCase = testCasesCart.find(
+    //         (testCase) => testCase.id === rowClickedID
+    //     );
+    //     if (matchingTestCase) {
+    //         setTestCaseRecord(matchingTestCase); // Update state with the latest from Redux
+    //         setSubtests(matchingTestCase.subtests); // Update subtests with the latest selection
+    //     }
+    // }, [testCasesCart, testCaseRecord.id]); // Depend on Redux state and testCaseRecord.id
+
+    const handleSubtestWizard = (event, rowData) => {
+        console.log("Event clicked is ", event);
+        event.stopPropagation(); // Prevent row click event from firing
+        console.log("Subtest openSubtestModal : ", openSubtestModal);
+        console.log("Subtest Wizard Clicked", rowData);
+        setSelectedTCID(rowData.id);
+        setOpenSubtestModal((prevState) => {
+            console.log("Subtest openSubtestModal prevState : ", prevState);
+            return !prevState;
+        });
+
+        // if (rowData) {
+        //     console.log("Subtest Wizard Clicked 2", rowData);
+        //     const newData = testCasesCart.map((testCase) => {
+        //         if (testCase.id === rowData.id) {
+        //             return {
+        //                 ...testCase, // Spread current test case data
+        //                 ...rowData, // Override with new rowData (or add additional data)
+        //             };
+        //         }
+        //         return testCase;
+        //     });
+        //     console.log("New data clicked is : ", newData);
+        //     setSelectedTCID(rowClickedID);
+        //     console.log("Event clicked row number is ", rowClickedID);
+        //     console.log("Selected TC ID is : ", selectedTCID);
+
+        //     // setRowClickedID(newData[0]);
+        // }
+    };
+
+    const handleModalOpen = () => {
+        console.log("Modal open state is 1: ", openSubtestModal);
+        setOpenSubtestModal((prevState) => !prevState);
+        console.log("Modal open state is 2: ", openSubtestModal);
+    };
+
+    useEffect(() => {
+        if (!loading) {
+            console.log("Sending dispatch");
+            dispatch(fetchTestCases());
+            console.log("Sending dispatch : ", loading);
+        }
+    }, []);
+
+    const handleRowClick = (rowData) => {
+        console.log(`Row Clicked 1: ${rowData}`);
+        setRowClickedID(rowData);
+        // console.log(`Row Clicked 2: ${JSON.stringify(rowData)}`);
+        const rowObj = testCases.find((row) => row.id === rowData);
+        if (internalSelectionList.find((id) => id === rowData)) {
+            setInternalSelectionList(
+                internalSelectionList.filter((id) => id !== rowData)
+            );
+            dispatch(removeFromTestCaseCart(rowObj));
+        } else {
+            setInternalSelectionList([...internalSelectionList, rowData]);
+            const newData = testCasesCart.find(
+                (testCase) => testCase.id === rowData
+            );
+            // setRowClickedID(rowData);
+            dispatch(addToTestCasesCart(rowObj));
+            console.log(`Row Clicked : ${rowClickedID}`);
+        }
+        console.log(`Inteeranl Selection List: ${internalSelectionList}`);
+    };
+
+    const handleSearch = (e) => {
+        const { name, value } = e.target;
+        console.log(`Search Term is : ${value}`);
+        setSearchTerm(value);
+    };
+
+    // Debounce search term
+    useEffect(() => {
+        const handler = setTimeout(() => {
+            setDebouncedSearchTerm(searchTerm);
+        }, 300);
+        return () => {
+            clearTimeout(handler);
+        };
+    }, [searchTerm]);
+
+    useEffect(() => {
+        // Set combinedTestCases based on search or paginated data
+        if (debouncedSearchTerm === "") {
+            console.log(`Loading is : ${loading}`);
+            setCombinedTestCases(testCases);
+        } else {
+            // If there's a search term, show the filtered test cases
+            const filtered = testCases.filter((record) => {
+                return (
+                    record.title
+                        ?.toLowerCase()
+                        .includes(searchTerm.toLowerCase()) ||
+                    record.suite_name
+                        ?.toLowerCase()
+                        .includes(searchTerm.toLowerCase()) ||
+                    record.stream
+                        ?.toLowerCase()
+                        .includes(searchTerm.toLowerCase()) ||
+                    record.category
+                        ?.toLowerCase()
+                        .includes(searchTerm.toLowerCase())
+                );
+            });
+
+            setCombinedTestCases(filtered);
+        }
+    }, [debouncedSearchTerm, testCases]); // Rerun if searchTerm or testCases change
 
     // Columns for the table
     const columns = useMemo(
@@ -156,98 +279,13 @@ const TestCasesListAndSelection = React.memo(() => {
         [testCasesCart, internalSelectionList]
     );
 
-    // useEffect(() => {
-    //     // Trigger re-render or refetch logic for virtualized table based on updated cart
-    // }, [rowClickedID]); // Re-run whenever the cart changes
-
-    const handleCheckboxChange = ({ rowData }) => {
-        console.log(`Check box clicked for row: ${rowData.id}`);
-        testCasesCart.some((testCase) => testCase.id === rowData.id) ||
-        internalSelectionList.includes(rowData.id)
-            ? true
-            : false;
-    };
-
-    const handleSubtestWizard = (event, rowData) => {
-        event.stopPropagation(); // Prevent row click event from firing
-        console.log("Subtest Wizard Clicked", rowData);
-        if (rowData) {
-            console.log("Subtest Wizard Clicked", rowData);
-            setOpenSubtestModal(!openSubtestModal);
-            setRowClickedID(rowData);
-        }
-    };
-
-    useEffect(() => {
-        if (!loading) {
-            console.log("Sending dispatch");
-            dispatch(fetchTestCases());
-            console.log("Sending dispatch : ", loading);
-        }
-    }, []);
-
-    const handleSearch = (e) => {
-        const { name, value } = e.target;
-        console.log(`Search Term is : ${value}`);
-        setSearchTerm(value);
-    };
-
-    // Debounce search term
-    useEffect(() => {
-        const handler = setTimeout(() => {
-            setDebouncedSearchTerm(searchTerm);
-        }, 300);
-        return () => {
-            clearTimeout(handler);
-        };
-    }, [searchTerm]);
-
-    useEffect(() => {
-        // Set combinedTestCases based on search or paginated data
-        if (debouncedSearchTerm === "") {
-            console.log(`Loading is : ${loading}`);
-            setCombinedTestCases(testCases);
-        } else {
-            // If there's a search term, show the filtered test cases
-            const filtered = testCases.filter((record) => {
-                return (
-                    record.title
-                        ?.toLowerCase()
-                        .includes(searchTerm.toLowerCase()) ||
-                    record.suite_name
-                        ?.toLowerCase()
-                        .includes(searchTerm.toLowerCase()) ||
-                    record.stream
-                        ?.toLowerCase()
-                        .includes(searchTerm.toLowerCase()) ||
-                    record.category
-                        ?.toLowerCase()
-                        .includes(searchTerm.toLowerCase())
-                );
-            });
-
-            setCombinedTestCases(filtered);
-        }
-    }, [debouncedSearchTerm, testCases]); // Rerun if searchTerm or testCases change
-
-    const handleRowClick = (rowData) => {
-        console.log(`Row Clicked 1: ${rowData}`);
-        // console.log(`Row Clicked 2: ${JSON.stringify(rowData)}`);
-        const rowObj = testCases.find((row) => row.id === rowData);
-        if (internalSelectionList.find((id) => id === rowData)) {
-            setInternalSelectionList(
-                internalSelectionList.filter((id) => id !== rowData)
-            );
-            setRowClickedID(null);
-            dispatch(removeFromTestCaseCart(rowObj));
-        } else {
-            setInternalSelectionList([...internalSelectionList, rowData]);
-            setRowClickedID(rowData);
-            dispatch(addToTestCasesCart(rowObj));
-            console.log(`Row Clicked : ${rowClickedID}`);
-        }
-        console.log(`Inteeranl Selection List: ${internalSelectionList}`);
-    };
+    // const handleCheckboxChange = ({ rowData }) => {
+    //     console.log(`Check box clicked for row: ${rowData.id}`);
+    //     testCasesCart.some((testCase) => testCase.id === rowData.id) ||
+    //     internalSelectionList.includes(rowData.id)
+    //         ? true
+    //         : false;
+    // };
 
     return (
         <div>
@@ -297,7 +335,6 @@ const TestCasesListAndSelection = React.memo(() => {
                                             rows={combinedTestCases}
                                             columns={columns}
                                             value={rowClickedID}
-                                            // onRowClick={setRowClickedID}
                                             onRowClick={(e) =>
                                                 handleRowClick(e)
                                             }
@@ -317,8 +354,8 @@ const TestCasesListAndSelection = React.memo(() => {
             )}
             {openSubtestModal && (
                 <SubTestSelectionComp
-                    setOpen={handleSubtestWizard}
-                    tcRecord={rowClickedID}
+                    setOpen={handleModalOpen}
+                    tcRecord={selectedTCID}
                 />
             )}
         </div>

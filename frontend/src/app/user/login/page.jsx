@@ -6,8 +6,11 @@ import UserLoginForm from "../../../components/login/UserLogin";
 const UserLogin = () => {
     return (
         <>
-            <div>User Login</div>;
-            <UserLoginForm />
+            <div className="w-full h-full overflow-hidden">
+                User Login
+                <UserLoginForm />
+            </div>
+            ;
         </>
     );
 };

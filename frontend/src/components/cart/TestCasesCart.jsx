@@ -10,21 +10,17 @@ import {
     Chip,
     Badge,
 } from "@material-tailwind/react";
-import { TestCasesContext } from "@/contexts/TestCasesContext";
 import { useSelector, useDispatch } from "react-redux";
-import {
-    resetTestCasesCart,
-    finalizeTestCasesCart,
-} from "@/reduxToolkit/selectedTestCaseCartSlice";
+import { resetTestCasesCart } from "@/reduxToolkit/selectedTestCaseCartSlice";
 
 const TestCasesCart = () => {
     const dispatch = useDispatch();
-    const testCasesCart = useSelector(
+    const testCaseCart = useSelector((state) => state.testCasesCart);
+    const internalTestCasesCart = useSelector(
         (state) => state.testCasesCart.selectedTestCases
     );
 
-    // Log the selected test cases to the console
-    console.log("Selected Test Cases:", testCasesCart);
+    useEffect(() => {});
 
     return (
         <Card className="mt-48 w-full h-1/2 relative">
@@ -32,7 +28,9 @@ const TestCasesCart = () => {
                 color="red"
                 className="absolute top-4 right-4 transform translate-x-1/2 -translate-y-1/2 font-bold"
                 content={
-                    testCasesCart.length === 0 ? "0" : testCasesCart.length
+                    internalTestCasesCart.length === 0
+                        ? "0"
+                        : internalTestCasesCart.length
                 }
             >
                 <CardHeader
@@ -45,9 +43,28 @@ const TestCasesCart = () => {
                 </CardHeader>
             </Badge>
             <CardBody className="w-full overflow-y-auto">
-                <table className="w-full">
+                <table className="w-full text-left">
+                    {/* <table className="w-full min-w-max table-auto text-left"> */}
+                    <thead>
+                        <tr>
+                            {["#", "ID", "Subtests", "Suite"].map((head) => (
+                                <th
+                                    key={head}
+                                    className="border-b border-blue-gray-100 bg-blue-gray-50 p-2"
+                                >
+                                    <Typography
+                                        variant="small"
+                                        color="blue-gray"
+                                        className="font-normal leading-none opacity-70"
+                                    >
+                                        {head}
+                                    </Typography>
+                                </th>
+                            ))}
+                        </tr>
+                    </thead>
                     <tbody>
-                        {testCasesCart.map((testCase, index) => {
+                        {internalTestCasesCart.map((testCase, index) => {
                             const isEven = index % 2 === 0;
                             const classes = `${isEven ? "bg-white" : "bg-gray-100"}`;
 
@@ -57,10 +74,9 @@ const TestCasesCart = () => {
                                         <Typography
                                             variant="small"
                                             color="blue-gray"
-                                            className="font-normal"
+                                            className="text-sm font-bold pl-2"
                                         >
                                             {index}
-                                            {" : "}
                                         </Typography>
                                     </td>
                                     <td className="p-2">
@@ -71,6 +87,43 @@ const TestCasesCart = () => {
                                         >
                                             {testCase.title}
                                         </Typography>
+                                    </td>
+                                    <td className="p-2 ">
+                                        <div className="flex items-center w-12 gap-3">
+                                            <Chip
+                                                variant="ghost"
+                                                className="font-bold"
+                                                value={(() => {
+                                                    // Ensure each subtest has a `selected` property
+                                                    const updatedSubtests =
+                                                        testCase.subtests.map(
+                                                            (subtest) => {
+                                                                if (
+                                                                    typeof subtest.selected ===
+                                                                    "undefined"
+                                                                ) {
+                                                                    // Add `selected: true` if it's missing
+                                                                    return {
+                                                                        ...subtest,
+                                                                        selected: true,
+                                                                    };
+                                                                }
+                                                                return subtest;
+                                                            }
+                                                        );
+
+                                                    // Count the number of selected subtests
+                                                    const selectedCount =
+                                                        updatedSubtests.filter(
+                                                            (subtest) =>
+                                                                subtest.selected
+                                                        ).length;
+
+                                                    // Return the formatted result `selectedCount / totalSubtests`
+                                                    return `${selectedCount} / ${updatedSubtests.length}`;
+                                                })()}
+                                            />
+                                        </div>
                                     </td>
                                     <td className="p-2">
                                         <Typography
@@ -90,11 +143,8 @@ const TestCasesCart = () => {
             <CardFooter className="pt-0">
                 <div className="grid grid-cols-4">
                     <div className="col-start-3 p-2">
-                        <Button
-                            onClick={() => dispatch(finalizeTestCasesCart())}
-                        >
-                            Confirm
-                        </Button>
+                        {/* <Button onClick={() => dispatch(addToTestCasesCart())}> */}
+                        <Button>Confirm</Button>
                     </div>
                     <div className="col-start-4 p-2">
                         <Button onClick={() => dispatch(resetTestCasesCart())}>
@@ -108,46 +158,3 @@ const TestCasesCart = () => {
 };
 
 export default TestCasesCart;
-
-// import React from "react";
-// import {
-//     Card,
-//     CardBody,
-//     CardFooter,
-//     Typography,
-//     Button,
-// } from "@material-tailwind/react";
-// import { useSelector } from "react-redux"; // Import useSelector
-// import { TestCasesContext } from "@/contexts/TestCasesContext";
-// import { selectTestCasesData } from "@/reduxToolkit/testCasesSlice"; // Adjust this import path
-
-// const TestCasesCart = () => {
-//     const { selectedTestCases } = React.useContext(TestCasesContext);
-//     const testCases = useSelector(selectTestCasesData); // Access your full test cases data
-
-//     return (
-//         <Card className="mt-6 w-96">
-//             <CardBody>
-//                 <Typography variant="h5" color="blue-gray" className="mb-2">
-//                     Test Case Cart
-//                 </Typography>
-//                 <Typography>Test Case Cart details</Typography>
-//                 <ul>
-//                     {selectedTestCases.map((testCaseId) => {
-//                         const testCase = testCases.find((tc) => tc.id === testCaseId); // Find the test case object
-//                         return (
-//                             <li key={testCaseId}>
-//                                 {testCase ? testCase.name : "Test Case Not Found"}
-//                             </li>
-//                         );
-//                     })}
-//                 </ul>
-//             </CardBody>
-//             <CardFooter className="pt-0">
-//                 <Button>Read More</Button>
-//             </CardFooter>
-//         </Card>
-//     );
-// };
-
-// export default TestCasesCart;

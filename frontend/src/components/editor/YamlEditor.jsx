@@ -93,6 +93,7 @@ export default function YamlEditor({
 
     // Function to handle input changes
     const handleInputChange = (event) => {
+        console.log("Event:", event);
         const { name, value } = event.target;
         console.log(`Name: ${name}, Value: ${value}`);
         if (name === "name" && value != originalContent.name) {
@@ -255,7 +256,7 @@ export default function YamlEditor({
                                 placeholder="Get Creative!"
                                 name="name"
                                 value={name}
-                                onChange={handleInputChange}
+                                onChange={(e) => handleInputChange(e)}
                             />
                         </div>
                         <div className="p-4 mb-4">
@@ -266,16 +267,23 @@ export default function YamlEditor({
                                 placeholder="SUT-Client IP should be good!"
                                 name="description"
                                 value={description}
-                                onChange={handleInputChange}
+                                onChange={(e) => handleInputChange(e)}
                             />
                         </div>
-                        <div className="p-4 mb-4 rounded-sm shadow-sm bg-blue-gray-400">
+                        <div className="p-4">
                             <AceEditor
                                 mode="yaml"
                                 theme="monokai"
-                                // onChange={handleYamlChange} // Use the updated handleYamlChange function
-                                onChange={handleInputChange}
                                 name="content"
+                                onChange={(content) => {
+                                    const mockEvent = {
+                                        target: {
+                                            name: "content",
+                                            value: content,
+                                        },
+                                    };
+                                    handleInputChange(mockEvent);
+                                }}
                                 value={yamlEditedContent} // Use yamlEditedContent to reflect user changes
                                 editorProps={{ $blockScrolling: true }}
                                 setOptions={{

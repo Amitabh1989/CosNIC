@@ -153,13 +153,13 @@ const ConfigFileList = ({ configFilesList }) => {
                     />
                 </div>
             </CardHeader>
-            <table className="w-full min-w-max table-auto text-left">
+            <table className="w-full min-w-max table-auto text-left ml-4 mr-4 p-4">
                 <thead>
                     <tr>
                         {TABLE_HEAD.map((head) => (
                             <th
                                 key={head}
-                                className="border-b border-gray-300 p-4"
+                                className="border-b border-gray-300 p-4 bg-blue-gray-50"
                             >
                                 <div className="flex items-center gap-1">
                                     <Typography
@@ -182,7 +182,9 @@ const ConfigFileList = ({ configFilesList }) => {
                                     {id}
                                 </td>
                                 <td className="p-4 border-b border-gray-300">
-                                    {name}
+                                    <Typography className="font-bold">
+                                        {name}
+                                    </Typography>
                                 </td>
                                 <td className="p-4 border-b border-gray-300">
                                     {description}

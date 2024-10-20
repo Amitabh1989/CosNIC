@@ -44,7 +44,7 @@ const SUTClientConfigFile = () => {
     }, []);
 
     return (
-        <div>
+        <div className="rounded-lg overflow-hidden">
             {configFilesList ? (
                 <div>
                     <ConfigFileList configFilesList={configFilesList} />

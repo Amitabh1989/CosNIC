@@ -4,6 +4,9 @@ import {
     MagnifyingGlassIcon,
     ChevronUpDownIcon,
 } from "@heroicons/react/24/outline";
+import { WiCloudRefresh } from "react-icons/wi";
+import { IoRefresh } from "react-icons/io5";
+
 import { PencilIcon, UserPlusIcon } from "@heroicons/react/24/solid";
 import { MdModeEditOutline } from "react-icons/md";
 import { IoEyeOutline } from "react-icons/io5";
@@ -94,23 +97,17 @@ export const SortableTable = ({
     }, [nextLink, prevLink, currentPage]);
 
     return (
-        <div className="container w-5/6 ml-10 p-5">
-            <Card className="h-full w-full">
+        <div className="w-full p-4 m-4">
+            <Card className="h-full w-full overflow-y-auto">
                 <CardHeader
                     floated={false}
                     shadow={false}
                     className="rounded-none"
                 >
-                    <div className="mb-8 flex items-center justify-between gap-8">
+                    <div className="flex items-center justify-between gap-8">
                         <div>
                             <Typography variant="h5" color="blue-gray">
-                                Members list
-                            </Typography>
-                            <Typography
-                                color="gray"
-                                className="mt-1 font-normal"
-                            >
-                                See information about all members
+                                My Virtual Environment list
                             </Typography>
                         </div>
                         <div className="flex shrink-0 flex-col gap-2 sm:flex-row">
@@ -121,17 +118,17 @@ export const SortableTable = ({
                                 className="flex items-center gap-3"
                                 size="sm"
                             >
-                                <UserPlusIcon
+                                <IoRefresh
                                     strokeWidth={2}
-                                    className="h-4 w-4"
+                                    className="h-5 w-5"
                                 />{" "}
-                                Add member
+                                Refresh
                             </Button>
                         </div>
                     </div>
                 </CardHeader>
                 <CardBody className="overflow-scroll px-0">
-                    <table className="mt-4 w-full min-w-max table-auto text-left">
+                    <table className="mt-2 w-full min-w-max table-auto text-left">
                         <thead>
                             <tr>
                                 {columns.map((head, index) => (

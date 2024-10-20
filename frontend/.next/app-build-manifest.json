@@ -1,17 +1,5 @@
 {
   "pages": {
-    "/(test_runner)/testcases/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/css/app/(test_runner)/testcases/page.css",
-      "static/chunks/app/(test_runner)/testcases/page.js"
-    ],
-    "/layout": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/css/app/layout.css",
-      "static/chunks/app/layout.js"
-    ],
     "/user/login/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
@@ -22,21 +10,33 @@
       "static/chunks/main-app.js",
       "static/chunks/app/user/layout.js"
     ],
-    "/user/dashboard/page": [
+    "/layout": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/user/dashboard/page.js"
-    ],
-    "/config/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/config/page.js"
+      "static/css/app/layout.css",
+      "static/chunks/app/layout.js"
     ],
     "/(test_runner)/test/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
       "static/css/app/(test_runner)/test/page.css",
       "static/chunks/app/(test_runner)/test/page.js"
+    ],
+    "/user/dashboard/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/user/dashboard/page.js"
+    ],
+    "/(test_runner)/testcases/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/css/app/(test_runner)/testcases/page.css",
+      "static/chunks/app/(test_runner)/testcases/page.js"
+    ],
+    "/config/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/config/page.js"
     ]
   }
 }

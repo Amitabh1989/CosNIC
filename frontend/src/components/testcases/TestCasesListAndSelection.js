@@ -325,7 +325,8 @@ const TestCasesListAndSelection = React.memo(() => {
                                         ref={tableRef} // Attach ref to the table wrapper
                                         style={{
                                             width: "100%",
-                                            height: "70vh",
+                                            height: "60vh",
+                                            fontSize: "16px",
                                             fontFamily: "'Poppins', sans-serif", // Apply font here
                                         }}
                                         className="p-4 shadow-lg"
@@ -339,7 +340,7 @@ const TestCasesListAndSelection = React.memo(() => {
                                                 handleRowClick(e)
                                             }
                                             className="font-poppins"
-                                            rowHeight={30}
+                                            rowHeight={35}
                                             style={STYLE}
                                         />
                                     </div>

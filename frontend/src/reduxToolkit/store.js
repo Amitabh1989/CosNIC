@@ -1,43 +1,3 @@
-// import { configureStore } from "@reduxjs/toolkit";
-// import { persistStore, persistReducer } from "redux-persist";
-// import { combineReducers } from "redux";
-// // import venvReducer, { testCasesReducer } from "./slice";
-// import thunk from "redux-thunk";
-// import venvReducer from "./slice";
-// import testCasesReducer from "./testCasesSlice";
-// // import { createIndexedDBStorage } from "redux-persist-indexeddb-storage"; // For IndexedDB
-// import storage from "redux-persist-indexeddb-storage";
-
-// // Step 1: Set up IndexedDB storage for redux-persist
-// const persistConfig = {
-//     key: "root",
-//     // storage: createIndexedDBStorage("CosNICReduxDB"), // Use IndexedDB instead of localStorage
-//     storage: storage("CosNICReduxDB"), // Use IndexedDB instead of localStorage
-//     whitelist: ["venv", "testCases"], // Only persist venv slice for now, extend as needed
-// };
-
-// // Combine your reducers
-// export const rootReducer = combineReducers({
-//     venv: venvReducer,
-//     testCases: testCasesReducer,
-// });
-
-// // Wrap your rootReducer with persistReducer
-// export const persistedReducer = persistReducer(persistConfig, rootReducer);
-
-// // Step 3: Set up the store with the persisted reducer
-// export const store = configureStore({
-//     reducer: persistedReducer,
-//     middleware: (getDefaultMiddleware) =>
-//         getDefaultMiddleware({
-//             serializableCheck: false,
-//         }).concat(thunk), // Add thunk middleware,
-//     devTools: process.env.NODE_ENV !== "production", // Enable Redux DevTools in development
-// });
-
-// // Step 4: Set up the persistor
-// export const persistor = persistStore(store);
-
 import { configureStore } from "@reduxjs/toolkit";
 import { persistStore, persistReducer } from "redux-persist";
 import { combineReducers } from "redux";
@@ -46,6 +6,7 @@ import logger from "redux-logger"; // Import logger middleware
 import venvReducer from "./venvSlice";
 import testCasesReducer from "./testCasesSlice";
 import testCasesCartReducer from "./selectedTestCaseCartSlice";
+import stepperReducer from "./stepperSlice";
 import storage from "redux-persist/lib/storage"; // defaults to localStorage for web
 
 // Define a noop storage for SSR (this part is fine)
@@ -80,7 +41,7 @@ const storageToUse =
 const persistConfig = {
     key: "root",
     storage: storageToUse, // Use the appropriate storage
-    whitelist: ["venv", "testCasesCart"], // Only persist these reducers
+    whitelist: ["venv", "testCasesCart", "stepper"], // Only persist these reducers
 };
 
 // Combine reducers
@@ -88,6 +49,7 @@ const rootReducer = combineReducers({
     venv: venvReducer,
     testCases: testCasesReducer, // Add your testCases reducer here
     testCasesCart: testCasesCartReducer, // Add your testCases reducer here
+    stepper: stepperReducer,
 });
 
 // Conditionally wrap rootReducer with persistReducer for CSR

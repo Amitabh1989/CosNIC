@@ -16,7 +16,14 @@ import moment from "moment";
 import YamlEditor from "../editor/YamlEditor";
 
 // Table headers
-const TABLE_HEAD = ["ID", "Name", "Description", "Modified At", "Actions"];
+const TABLE_HEAD = [
+    "Pick",
+    "ID",
+    "Name",
+    "Description",
+    "Modified At",
+    "Actions",
+];
 
 /**
  * ConfigFileList component displays a list of configuration files and allows editing them.
@@ -153,13 +160,14 @@ const ConfigFileList = ({ configFilesList }) => {
                     />
                 </div>
             </CardHeader>
-            <table className="w-full min-w-max table-auto text-left ml-4 mr-4 p-4">
+            {/* <table className="w-full min-w-max table-auto text-left ml-4 mr-4 p-2"> */}
+            <table className="w-full min-w-max table-auto text-left ml-4 mr-4 pl-2 pr-2">
                 <thead>
                     <tr>
                         {TABLE_HEAD.map((head) => (
                             <th
                                 key={head}
-                                className="border-b border-gray-300 p-4 bg-blue-gray-50"
+                                className="border-b border-gray-300 p-2 bg-blue-gray-50"
                             >
                                 <div className="flex items-center gap-1">
                                     <Typography
@@ -176,43 +184,64 @@ const ConfigFileList = ({ configFilesList }) => {
                 </thead>
                 <tbody>
                     {configFiles?.map(
-                        ({ id, name, description, modifiedAt }) => (
-                            <tr key={id} onClick={() => handleRowClick(id)}>
-                                <td className="p-4 border-b border-gray-300">
-                                    {id}
-                                </td>
-                                <td className="p-4 border-b border-gray-300">
-                                    <Typography className="font-bold">
-                                        {name}
-                                    </Typography>
-                                </td>
-                                <td className="p-4 border-b border-gray-300">
-                                    {description}
-                                </td>
-                                <td className="p-4 border-b border-gray-300">
-                                    {moment(modifiedAt).format("LLL")}
-                                </td>
-                                <td className="p-4 border-b border-gray-300">
-                                    <IconButton
-                                        variant="text"
-                                        size="sm"
-                                        onClick={() => handleEdit(id)}
-                                    >
-                                        <AiFillEdit className="h-5 w-5 text-gray-900" />
-                                    </IconButton>
-                                </td>
-                            </tr>
-                        )
+                        ({ id, name, description, modifiedAt }, index) => {
+                            const isEven = index % 2 === 0;
+                            const classes = `${isEven ? "bg-white" : "bg-gray-100"} ${selectedItem === id ? "bg-blue-gray-200" : ""}`;
+                            // const isSelected = selectedItem === id;
+                            return (
+                                <tr
+                                    key={id}
+                                    onClick={() => handleRowClick(id)}
+                                    className={classes}
+                                >
+                                    <td className="p-2 ml-2 border-b border-gray-300">
+                                        <Radio
+                                            name="vertical-list"
+                                            id={id}
+                                            ripple={true}
+                                            color="blue"
+                                            className="hover:before:opacity-0"
+                                            containerProps={{
+                                                className: "p-0",
+                                            }}
+                                        />
+                                    </td>
+                                    <td className="p-2 border-b border-gray-300">
+                                        {id}
+                                    </td>
+                                    <td className="p-2 border-b border-gray-300">
+                                        <Typography className="font-bold">
+                                            {name}
+                                        </Typography>
+                                    </td>
+                                    <td className="p-2 border-b border-gray-300">
+                                        {description}
+                                    </td>
+                                    <td className="p-2 border-b border-gray-300">
+                                        {moment(modifiedAt).format("LLL")}
+                                    </td>
+                                    <td className="p-2 border-b border-gray-300">
+                                        <IconButton
+                                            variant="text"
+                                            size="sm"
+                                            onClick={() => handleEdit(id)}
+                                        >
+                                            <AiFillEdit className="h-5 w-5 text-gray-900" />
+                                        </IconButton>
+                                    </td>
+                                </tr>
+                            );
+                        }
                     )}
                 </tbody>
             </table>
-            {isEditorOpen && (
+            {/* {isEditorOpen && (
                 <YamlEditor
                     yamlRecord={yamlRecord}
                     closeEditor={closeEditor} // Pass a callback to close the editor
                     setConfigFiles={updateConfigFiles}
                 />
-            )}
+            )} */}
         </Card>
     );
 };

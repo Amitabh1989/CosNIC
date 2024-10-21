@@ -26,11 +26,13 @@ import {
     TabsHeader,
     Tab,
     Avatar,
+    Radio,
     IconButton,
     Tooltip,
 } from "@material-tailwind/react";
 import { useSelector, useDispatch } from "react-redux";
 import { setVenvs } from "@/reduxToolkit/venvSlice";
+import { setStepperSelectedVenv } from "@/reduxToolkit/stepperSlice";
 
 export const SortableTable = ({
     columns,
@@ -40,19 +42,47 @@ export const SortableTable = ({
     prevLink,
     onNext,
     onPrevious,
+    refreshData,
 }) => {
     // Combine columns with Actions
-    columns = [...columns, "Actions"];
+    columns = ["Pick", ...columns, "Actions"];
     console.log("Columns:", columns);
-    // const dispatch = useDispatch();
+    const dispatch = useDispatch();
 
     // Local state for current page, dialog, and selected venv
     const [currentPage, setCurrentPage] = useState(1);
     const [totalPages, setTotalPages] = useState(0);
     const [selectedVenvId, setSelectedVenvId] = useState(null);
     const [dialogOpen, setDialogOpen] = useState(true);
+    const [venvData, setVenvData] = useState(data);
+    const [sortConfig, setSortConfig] = useState({
+        key: null,
+        direction: "asc",
+    });
 
     const venvsStore = useSelector((state) => state.venv);
+    const stepper = useSelector((state) => state.stepper);
+
+    // Function to handle sorting by column
+    const sortData = (key) => {
+        let direction = "asc";
+        if (sortConfig.key === key && sortConfig.direction === "asc") {
+            direction = "desc";
+        }
+
+        const sortedData = [...venvData].sort((a, b) => {
+            const valA = a[key] ? a[key].toString().toLowerCase() : "";
+            const valB = b[key] ? b[key].toString().toLowerCase() : "";
+
+            if (valA < valB) return direction === "asc" ? -1 : 1;
+            if (valA > valB) return direction === "asc" ? 1 : -1;
+            return 0;
+        });
+
+        setSortConfig({ key, direction });
+        setVenvData(sortedData);
+        console.log(`Sorted data is : ${sortedData}`);
+    };
 
     // Update totalPages when count or data changes
     useEffect(() => {
@@ -61,8 +91,15 @@ export const SortableTable = ({
     }, [count]);
 
     // CRUD Dialog Handlers
-    const handleCRUDClick = (venvId) => {
-        setSelectedVenvId(venvId);
+    const handleCRUDClick = async (venvId) => {
+        await dispatch(setStepperSelectedVenv(venvId));
+        console.log(
+            "Selected Venv ID:",
+            venvId,
+            "  stepper step :",
+            stepper.currentVenv
+        );
+        setSelectedVenvId(stepper.currentVenv);
         setDialogOpen(true);
     };
 
@@ -88,12 +125,20 @@ export const SortableTable = ({
         }
     };
 
+    // Sync venvData with data prop
+    useEffect(() => {
+        if (data && data.length) {
+            setVenvData(data);
+        }
+    }, [data]);
+
     // useEffect to log the updated current page
     useEffect(() => {
         console.log("Updated currentPage:", currentPage);
         console.log("Next Link in useEffect :", nextLink);
         console.log("Previous Link in useEffect :", prevLink);
         console.log("Data is :", data);
+        // setVenvData(data);
     }, [nextLink, prevLink, currentPage]);
 
     return (
@@ -117,6 +162,7 @@ export const SortableTable = ({
                             <Button
                                 className="flex items-center gap-3"
                                 size="sm"
+                                onClick={refreshData}
                             >
                                 <IoRefresh
                                     strokeWidth={2}
@@ -135,6 +181,17 @@ export const SortableTable = ({
                                     <th
                                         key={head}
                                         className="cursor-pointer border-y border-blue-gray-100 bg-blue-gray-50/50 p-4 transition-colors hover:bg-blue-gray-50"
+                                        onClick={() => {
+                                            if (
+                                                head !== "Pick" &&
+                                                head !== "Actions"
+                                            ) {
+                                                const key = head
+                                                    .toLowerCase()
+                                                    .replace(/ /g, "_");
+                                                sortData(key);
+                                            }
+                                        }}
                                     >
                                         <Typography
                                             variant="small"
@@ -154,14 +211,37 @@ export const SortableTable = ({
                             </tr>
                         </thead>
                         <tbody>
-                            {data.map((item, index) => {
-                                const isLast = index === data.length - 1;
-                                const classes = isLast
-                                    ? "p-1"
-                                    : "p-1 border-b border-blue-gray-50";
+                            {venvData.map((item, index) => {
+                                const isEven = index % 2 === 0;
+                                const classes = `${isEven ? "bg-white" : "bg-gray-100"}`;
 
                                 return (
                                     <tr key={item.id}>
+                                        <td
+                                            className={`pl-8 pr-4 items-center ${classes}`}
+                                        >
+                                            <Radio
+                                                name="vertical-list"
+                                                id={item.id}
+                                                ripple={true}
+                                                color="blue"
+                                                checked={
+                                                    item.id ===
+                                                    stepper.currentVenv
+                                                }
+                                                onChange={() =>
+                                                    dispatch(
+                                                        setStepperSelectedVenv(
+                                                            item.id
+                                                        )
+                                                    )
+                                                }
+                                                className="hover:before:opacity-0"
+                                                containerProps={{
+                                                    className: "p-0",
+                                                }}
+                                            />
+                                        </td>
                                         <td className={classes}>
                                             <div className="flex items-center gap-1">
                                                 <div className="flex flex-col ml-4">
@@ -181,7 +261,7 @@ export const SortableTable = ({
                                                 <Typography
                                                     variant="small"
                                                     color="blue-gray"
-                                                    className="font-normal"
+                                                    className="font-bold"
                                                 >
                                                     {item.nickname}
                                                 </Typography>
@@ -200,13 +280,6 @@ export const SortableTable = ({
                                         </td>
                                         <td className={classes}>
                                             <div className="flex flex-col">
-                                                {/* <Typography
-                                                    variant="small"
-                                                    color="blue-gray"
-                                                    className="font-normal"
-                                                >
-                                                    {status}
-                                                </Typography> */}
                                                 <Chip
                                                     size="sm"
                                                     variant="ghost"
@@ -360,61 +433,321 @@ export const CustomTable = ({ columns, data }) => {
     );
 };
 
-// export default CustomTable;
+export default CustomTable;
 
-// const handleNext = async () => {
-//     if (currentPage < totalPages) {
-//         const pageKey = currentPage + 1;
+const handleNext = async () => {
+    if (currentPage < totalPages) {
+        const pageKey = currentPage + 1;
 
-//         // Check if next page data exists in Redux
-//         const cachedPage = venvsStore.pages[pageKey];
-//         if (cachedPage) {
-//             setRowData(cachedPage); // Serve cached data
-//             setCurrentPage(pageKey); // Update page
-//         } else {
-//             // Fetch next page data
-//             const data = await onNext(nextLink, "next");
-//             console.log("Next pages data is : ", data, totalPages);
-//             // dispatch(
-//             //     setVenvs({
-//             //         newVenvs: data.results,
-//             //         next: data.next,
-//             //         previous: data.previous,
-//             //         count: data.count,
-//             //         pageKey: pageKey, // Store data with page key
-//             //     })
-//             // );
-//             setCurrentPage(pageKey); // Update page
+        // Check if next page data exists in Redux
+        const cachedPage = venvsStore.pages[pageKey];
+        if (cachedPage) {
+            setRowData(cachedPage); // Serve cached data
+            setCurrentPage(pageKey); // Update page
+        } else {
+            // Fetch next page data
+            const data = await onNext(nextLink, "next");
+            console.log("Next pages data is : ", data, totalPages);
+            // dispatch(
+            //     setVenvs({
+            //         newVenvs: data.results,
+            //         next: data.next,
+            //         previous: data.previous,
+            //         count: data.count,
+            //         pageKey: pageKey, // Store data with page key
+            //     })
+            // );
+            setCurrentPage(pageKey); // Update page
+        }
+    } else {
+        console.log("No more next pages available.");
+    }
+};
+
+const handlePrevious = async () => {
+    if (currentPage > 1) {
+        const pageKey = currentPage - 1;
+
+        // Check if previous page data exists in Redux
+        const cachedPage = venvsStore.pages[pageKey];
+        if (cachedPage) {
+            setRowData(cachedPage); // Serve cached data
+            setCurrentPage(pageKey); // Update page
+        } else {
+            // Fetch previous page data
+            const data = await onPrevious(prevLink, "prev");
+            dispatch(
+                setVenvs({
+                    newVenvs: data.results,
+                    next: data.next,
+                    previous: data.previous,
+                    count: data.count,
+                    pageKey: pageKey, // Store data with page key
+                })
+            );
+            setCurrentPage(pageKey); // Update page
+        }
+    } else {
+        console.log("No more previous pages available.");
+    }
+};
+
+// export const SortableTable = ({
+//     columns,
+//     data,
+//     count,
+//     nextLink,
+//     prevLink,
+//     onNext,
+//     onPrevious,
+//     refreshData,
+// }) => {
+//     const modifiedColumns = ["Pick", ...columns, "Actions"];
+//     const dispatch = useDispatch();
+
+//     const [currentPage, setCurrentPage] = useState(1);
+//     const [totalPages, setTotalPages] = useState(0);
+//     const [selectedVenvId, setSelectedVenvId] = useState(null);
+//     const [dialogOpen, setDialogOpen] = useState(false);
+//     const [venvData, setVenvData] = useState(data);
+//     const [sortConfig, setSortConfig] = useState({
+//         key: null,
+//         direction: "asc",
+//     });
+
+//     const sortData = (key) => {
+//         let direction = "asc";
+//         if (sortConfig.key === key && sortConfig.direction === "asc") {
+//             direction = "desc";
 //         }
-//     } else {
-//         console.log("No more next pages available.");
-//     }
-// };
 
-// const handlePrevious = async () => {
-//     if (currentPage > 1) {
-//         const pageKey = currentPage - 1;
+//         const sortedData = [...venvData].sort((a, b) => {
+//             const valA = a[key] ? a[key].toString().toLowerCase() : "";
+//             const valB = b[key] ? b[key].toString().toLowerCase() : "";
 
-//         // Check if previous page data exists in Redux
-//         const cachedPage = venvsStore.pages[pageKey];
-//         if (cachedPage) {
-//             setRowData(cachedPage); // Serve cached data
-//             setCurrentPage(pageKey); // Update page
-//         } else {
-//             // Fetch previous page data
-//             const data = await onPrevious(prevLink, "prev");
-//             dispatch(
-//                 setVenvs({
-//                     newVenvs: data.results,
-//                     next: data.next,
-//                     previous: data.previous,
-//                     count: data.count,
-//                     pageKey: pageKey, // Store data with page key
-//                 })
-//             );
-//             setCurrentPage(pageKey); // Update page
+//             if (valA < valB) return direction === "asc" ? -1 : 1;
+//             if (valA > valB) return direction === "asc" ? 1 : -1;
+//             return 0;
+//         });
+
+//         setSortConfig({ key, direction });
+//         setVenvData(sortedData);
+//     };
+
+//     useEffect(() => {
+//         const calculatedTotalPages = Math.ceil(count / 10);
+//         setTotalPages(calculatedTotalPages);
+//     }, [count]);
+
+//     const handleNext = async () => {
+//         if (nextLink && currentPage < totalPages) {
+//             await onNext();
+//             setCurrentPage((prevPage) => prevPage + 1);
 //         }
-//     } else {
-//         console.log("No more previous pages available.");
-//     }
+//     };
+
+//     const handlePrevious = async () => {
+//         if (prevLink && currentPage > 1) {
+//             await onPrevious();
+//             setCurrentPage((prevPage) => prevPage - 1);
+//         }
+//     };
+
+//     const handleCRUDClick = (venvId) => {
+//         setSelectedVenvId(venvId);
+//         setDialogOpen(true);
+//     };
+
+//     const handleClose = () => {
+//         setDialogOpen(false);
+//     };
+
+//     return (
+//         <div className="w-full p-4 m-4">
+//             <Card className="h-full w-full overflow-y-auto">
+//                 <CardHeader
+//                     floated={false}
+//                     shadow={false}
+//                     className="rounded-none"
+//                 >
+//                     <div className="flex items-center justify-between gap-8">
+//                         <Typography variant="h5" color="blue-gray">
+//                             My Virtual Environment List
+//                         </Typography>
+//                         <div className="flex flex-row gap-2">
+//                             <Button variant="outlined" size="sm">
+//                                 View All
+//                             </Button>
+//                             <Button
+//                                 className="flex items-center gap-3"
+//                                 size="sm"
+//                                 onClick={refreshData}
+//                             >
+//                                 <IoRefresh
+//                                     strokeWidth={2}
+//                                     className="h-5 w-5"
+//                                 />{" "}
+//                                 Refresh
+//                             </Button>
+//                         </div>
+//                     </div>
+//                 </CardHeader>
+
+//                 <CardBody className="overflow-scroll px-0">
+//                     <table className="w-full min-w-max table-auto text-left">
+//                         <thead>
+//                             <tr>
+//                                 {modifiedColumns.map((head, index) => (
+//                                     <th
+//                                         key={head}
+//                                         className="cursor-pointer border-y border-blue-gray-100 bg-blue-gray-50 p-4 transition-colors hover:bg-blue-gray-100"
+//                                         onClick={() => {
+//                                             if (
+//                                                 head !== "Pick" &&
+//                                                 head !== "Actions"
+//                                             ) {
+//                                                 const key = head
+//                                                     .toLowerCase()
+//                                                     .replace(/ /g, "_");
+//                                                 sortData(key);
+//                                             }
+//                                         }}
+//                                     >
+//                                         <Typography
+//                                             variant="small"
+//                                             color="blue-gray"
+//                                             className="flex items-center justify-between gap-2 font-normal leading-none"
+//                                         >
+//                                             {head}{" "}
+//                                             {index !==
+//                                                 modifiedColumns.length - 1 &&
+//                                                 head !== "Pick" && (
+//                                                     <ChevronUpDownIcon
+//                                                         strokeWidth={2}
+//                                                         className="h-4 w-4"
+//                                                     />
+//                                                 )}
+//                                         </Typography>
+//                                     </th>
+//                                 ))}
+//                             </tr>
+//                         </thead>
+
+//                         <tbody>
+//                             {venvData.map((item, index) => {
+//                                 const isEven = index % 2 === 0;
+//                                 const rowClasses = `${isEven ? "bg-white" : "bg-gray-100"}`;
+
+//                                 return (
+//                                     <tr key={item.id}>
+//                                         <td
+//                                             className={`pl-12 pr-4 ${rowClasses}`}
+//                                         >
+//                                             <Radio
+//                                                 name="vertical-list"
+//                                                 id={item.id}
+//                                                 ripple={true}
+//                                                 color="blue"
+//                                                 containerProps={{
+//                                                     className: "p-0",
+//                                                 }}
+//                                             />
+//                                         </td>
+
+//                                         <td className={rowClasses}>
+//                                             {item.name} @ Py_
+//                                             {item.python_version}
+//                                         </td>
+//                                         <td className={rowClasses}>
+//                                             {item.name}
+//                                         </td>
+//                                         <td className={rowClasses}>
+//                                             {item.ctrl_package_version || "NA"}
+//                                         </td>
+//                                         <td className={rowClasses}>
+//                                             <Chip
+//                                                 size="sm"
+//                                                 variant="ghost"
+//                                                 value={item.status}
+//                                                 color={
+//                                                     item.status === "free"
+//                                                         ? "green"
+//                                                         : item.status ===
+//                                                             "running"
+//                                                           ? "amber"
+//                                                           : "red"
+//                                                 }
+//                                             />
+//                                         </td>
+//                                         <td className={rowClasses}>
+//                                             {item.nickname}
+//                                         </td>
+//                                         <td className={rowClasses}>
+//                                             {moment(item.modified_at).format(
+//                                                 "MMM DD/YY, hh:MM A"
+//                                             )}
+//                                         </td>
+
+//                                         <td className={rowClasses}>
+//                                             <div className="flex space-x-2">
+//                                                 <Tooltip content="Edit Venv">
+//                                                     <IconButton variant="text">
+//                                                         <MdModeEditOutline
+//                                                             className="h-5 w-5"
+//                                                             onClick={() =>
+//                                                                 handleCRUDClick(
+//                                                                     item.id
+//                                                                 )
+//                                                             }
+//                                                         />
+//                                                     </IconButton>
+//                                                 </Tooltip>
+//                                                 <Tooltip content="Delete Venv">
+//                                                     <IconButton variant="text">
+//                                                         <MdDeleteForever className="h-5 w-5" />
+//                                                     </IconButton>
+//                                                 </Tooltip>
+//                                             </div>
+//                                         </td>
+//                                     </tr>
+//                                 );
+//                             })}
+//                         </tbody>
+//                     </table>
+//                 </CardBody>
+
+//                 <CardFooter className="flex items-center justify-between p-4">
+//                     <Typography variant="small" color="blue-gray">
+//                         Page {currentPage} of {totalPages}
+//                     </Typography>
+//                     <div className="flex gap-2">
+//                         <Button
+//                             variant="outlined"
+//                             size="sm"
+//                             disabled={currentPage === 1 || !prevLink}
+//                             onClick={handlePrevious}
+//                         >
+//                             Previous
+//                         </Button>
+//                         <Button
+//                             variant="outlined"
+//                             size="sm"
+//                             disabled={currentPage >= totalPages || !nextLink}
+//                             onClick={handleNext}
+//                         >
+//                             Next
+//                         </Button>
+//                     </div>
+//                 </CardFooter>
+//             </Card>
+
+//             {selectedVenvId && (
+//                 <VenvCRUDForm
+//                     venvID={selectedVenvId}
+//                     onClose={handleClose}
+//                     dialogOpen={dialogOpen}
+//                 />
+//             )}
+//         </div>
+//     );
 // };

@@ -47,7 +47,7 @@ const VenvStatusComponent = () => {
 
                 // Dispatch the thunk to fetch data
                 const resultAction = await dispatch(
-                    fetchVenvs({ pageKey, url })
+                    fetchVenvs({ pageKey, url, hardRefresh: forceUpdate })
                 );
                 console.log("Result action from fetchVenvs:", resultAction);
 
@@ -153,11 +153,12 @@ const VenvStatusComponent = () => {
                 prevLink={prevLink}
                 onNext={() => handlePagination(nextLink, "next")}
                 onPrevious={() => handlePagination(prevLink, "prev")}
+                refreshData={() => fetchData(null, true)}
             />
 
-            <Button color="blue" onClick={() => fetchData(null, true)}>
+            {/* <Button color="blue" onClick={() => fetchData(null, true)}>
                 Refresh from backend
-            </Button>
+            </Button> */}
         </div>
     );
 };

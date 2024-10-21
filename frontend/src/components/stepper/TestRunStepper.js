@@ -14,122 +14,13 @@ import { FaFlagCheckered } from "react-icons/fa";
 import SUTClientConfigFile from "../configfile/SUTClientConfigFile";
 import TestCasesListAndSelection from "../testcases/TestCasesListAndSelection";
 import VenvStatusComponent from "../env/VenvStatus";
+import ReviewSelections from "./ReviewSelections";
 import { useDispatch, useSelector } from "react-redux";
 import {
     setStepperStep,
     setCulminativeData,
 } from "@/reduxToolkit/stepperSlice";
-
-// export default function TestRunStepper({ step }) {
-//     const dispatch = useDispatch();
-//     const stepperStep = useSelector((state) => state.stepper);
-//     const [activeStep, setActiveStep] = React.useState(0);
-//     const [isLastStep, setIsLastStep] = React.useState(false);
-//     const [isFirstStep, setIsFirstStep] = React.useState(false);
-//     const steps = [
-//         {
-//             step_name: "Env Selection",
-//             icon: <IoHardwareChipOutline className="h-7 w-7" />,
-//             component: <VenvStatusComponent />,
-//         },
-//         {
-//             step_name: "Test Case Selection",
-//             icon: <GrTest className="h-6 w-6" />,
-//             component: <TestCasesListAndSelection />,
-//         },
-//         {
-//             step_name: "Config File Selection",
-//             icon: <GrConfigure className="h-6 w-6" />,
-//             component: <SUTClientConfigFile />,
-//         },
-//         {
-//             step_name: "Review and Submit",
-//             icon: <FaFlagCheckered className="h-6 w-6" />,
-//             component: <SUTClientConfigFile />,
-//         },
-//     ];
-//     useEffect(() => {
-//         dispatch(setStepperStep(activeStep));
-//         setActiveStep(stepperStep.currentView);
-//         console.log(
-//             "Stepper active step is : ",
-//             stepperStep.currentView,
-//             "  :  inlocal : ",
-//             activeStep
-//         );
-//         setIsLastStep(activeStep === steps.length - 1);
-//         setIsFirstStep(activeStep === 0);
-//     }, [activeStep, steps.length]);
-
-//     // useEffect(() => {
-//     //     setActiveStep(stepperStep.currentView);
-//     // }, [stepperStep.currentView]);
-
-//     const handleNext = () => !isLastStep && setActiveStep((cur) => cur + 1);
-//     const handlePrev = () => !isFirstStep && setActiveStep((cur) => cur - 1);
-
-//     return (
-//         <div className="w-screen px-24 py-24 bg-blue-gray-300">
-//             {/* Stepper Component */}
-//             <Stepper
-//                 activeStep={activeStep}
-//                 className="w-full h-32 border-red-300"
-//             >
-//                 {steps.map((step, index) => (
-//                     <Step
-//                         key={index}
-//                         onClick={() => {
-//                             setActiveStep(index);
-//                             dispatch(setStepperStep(index));
-//                         }}
-//                     >
-//                         <div className="flex items-center justify-center">
-//                             {step.icon}
-//                             {/* <div className="absolute -bottom-[4.5rem] w-max text-center"> */}
-//                             <div className="absolute -bottom-[6rem] w-max text-center">
-//                                 <Typography
-//                                     variant="h6"
-//                                     color={
-//                                         activeStep === index
-//                                             ? "blue-gray"
-//                                             : "gray"
-//                                     }
-//                                 >
-//                                     Step {index + 1}
-//                                 </Typography>
-//                                 <Typography
-//                                     color={
-//                                         activeStep === index
-//                                             ? "blue-gray"
-//                                             : "gray"
-//                                     }
-//                                     className="font-normal mb-10"
-//                                 >
-//                                     {step.step_name}
-//                                 </Typography>
-//                             </div>
-//                         </div>
-//                     </Step>
-//                 ))}
-//             </Stepper>
-
-//             {/* Render the active component dynamically */}
-//             <div className="mt-8 p-10 w-full h-2/3">
-//                 {steps[activeStep].component}
-//             </div>
-
-//             {/* Navigation Buttons */}
-//             <div className="flex justify-between">
-//                 <Button onClick={handlePrev} disabled={isFirstStep}>
-//                     Prev
-//                 </Button>
-//                 <Button onClick={handleNext} disabled={isLastStep}>
-//                     Next
-//                 </Button>
-//             </div>
-//         </div>
-//     );
-// }
+import GrandPrixButton from "./GrandPrixComp";
 
 export default function TestRunStepper() {
     const dispatch = useDispatch();
@@ -137,7 +28,7 @@ export default function TestRunStepper() {
     const [activeStep, setActiveStep] = useState(stepperStep); // Initialize with Redux state
     const [isLastStep, setIsLastStep] = useState(false);
     const [isFirstStep, setIsFirstStep] = useState(false);
-    const [showAlert, setShowAlert] = React.useState(false); // State to manage alert visibility
+    // const [showAlert, setShowAlert] = React.useState(false); // State to manage alert visibility
 
     const steps = [
         {
@@ -158,7 +49,12 @@ export default function TestRunStepper() {
         {
             step_name: "Review and Submit",
             icon: <FaFlagCheckered className="h-6 w-6" />,
-            component: <SUTClientConfigFile />,
+            component: (
+                <>
+                    <ReviewSelections />
+                    <GrandPrixButton />
+                </>
+            ),
         },
     ];
 
@@ -169,7 +65,7 @@ export default function TestRunStepper() {
             // Alert or log the resumption step
             console.log(`Resumed from step ${stepperStep + 1}`);
             // Show alert only if we're resuming from a step other than 0
-            setShowAlert(true);
+            // setShowAlert(true);
         }
         setActiveStep(stepperStep);
         setIsLastStep(stepperStep === steps.length - 1);
@@ -256,7 +152,7 @@ export default function TestRunStepper() {
                 </Button>
             </div>
             {/* Alert to inform user about resuming from the last step */}
-            {showAlert && (
+            {/* {showAlert && (
                 <Alert
                     variant="outlined"
                     onClose={() => setShowAlert(false)} // Make it dismissible
@@ -264,7 +160,7 @@ export default function TestRunStepper() {
                 >
                     Resumed from where you left off.
                 </Alert>
-            )}
+            )} */}
         </div>
     );
 }

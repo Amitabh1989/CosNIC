@@ -18,42 +18,44 @@ const initialState = {
 
 export const fetchVenvs = createAsyncThunk(
     "venvs/fetchVenvs",
-    async ({ pageKey, url }, { getState, dispatch, rejectWithValue }) => {
+    async (
+        { pageKey, url, hardRefresh = false },
+        { getState, dispatch, rejectWithValue }
+    ) => {
         try {
-            // Get the current state
-            console.log(`Page key si ${pageKey} and URL is ${url}`);
-            const state = getState();
-            const venvsStore = state.venv;
-            // const { venvs, pages } = venvsStor;
-            // const pages = venvsStore.pages;
-            console.log("Current state in fetchVenvs:", venvsStore);
-            console.log(
-                ">> Current state in fetchVenvs venvsStore and pages : ",
-                venvsStore,
-                "  :  "
-                // pages
-            );
-
-            // Check if page data is already in Redux store
-            if (venvsStore && venvsStore.pages[pageKey]) {
+            if (!hardRefresh) {
+                // Get the current state
+                console.log(`Page key si ${pageKey} and URL is ${url}`);
+                const state = getState();
+                const venvsStore = state.venv;
+                console.log("Current state in fetchVenvs:", venvsStore);
                 console.log(
-                    "Data already exists in Redux for pageKey:",
+                    ">> Current state in fetchVenvs venvsStore and pages : ",
+                    venvsStore,
+                    "  :  "
+                );
+
+                // Check if page data is already in Redux store
+                if (venvsStore && venvsStore.pages[pageKey]) {
+                    console.log(
+                        "Data already exists in Redux for pageKey:",
+                        pageKey
+                    );
+                    return { data: venvsStore.pages[pageKey], fromStore: true }; // Return from store
+                }
+
+                // Fetch from API if data is not in Redux
+                console.log(
+                    "No data in Redux, Fetching from API for pageKey:",
                     pageKey
                 );
-                return { data: venvsStore.pages[pageKey], fromStore: true }; // Return from store
+
+                // Fetch from API if data is not in Redux
+                console.log(
+                    "No data in Redux, Fetching from API for pageKey:",
+                    pageKey
+                );
             }
-
-            // Fetch from API if data is not in Redux
-            console.log(
-                "No data in Redux, Fetching from API for pageKey:",
-                pageKey
-            );
-
-            // Fetch from API if data is not in Redux
-            console.log(
-                "No data in Redux, Fetching from API for pageKey:",
-                pageKey
-            );
             const response = await getVenvStatusAPI_v2(null, url);
             console.log(
                 `Response from API for pageKey ${pageKey} is:`,

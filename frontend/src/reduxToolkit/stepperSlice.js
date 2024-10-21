@@ -4,6 +4,8 @@ import { getVenvStatusAPI_v2 } from "@/api/venv_apis";
 
 const initialState = {
     currentView: 0,
+    currentConfigFile: {},
+    currentVenv: 0,
     culminativeData: {},
 };
 
@@ -15,11 +17,22 @@ const stepperSlice = createSlice({
             state.currentView = action.payload;
             console.log("Stepper step is : ", state.currentView);
         },
-        setCulminativeData: (state, action) => {
+        setStepperCulminativeData: (state, action) => {
             state.culminativeData = action.payload;
+        },
+        setStepperSelectedConfigFile: (state, action) => {
+            state.currentConfigFile = action.payload;
+        },
+        setStepperSelectedVenv: (state, action) => {
+            state.currentVenv = action.payload;
         },
     },
 });
 
-export const { setStepperStep, setCulminativeData } = stepperSlice.actions;
+export const {
+    setStepperStep,
+    setStepperCulminativeData,
+    setStepperSelectedVenv,
+    setStepperSelectedConfigFile,
+} = stepperSlice.actions;
 export default stepperSlice.reducer;

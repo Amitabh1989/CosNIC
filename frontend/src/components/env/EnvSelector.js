@@ -7,7 +7,7 @@ export default function EnvSelection() {
         <>
             {/* <TestRunStepper step={1} /> */}
             {/* <EnvSelector /> */}
-            Hey buddy
+            {/* Hey buddy */}
         </>
     );
 }

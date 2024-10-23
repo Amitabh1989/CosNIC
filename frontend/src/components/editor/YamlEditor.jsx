@@ -93,6 +93,7 @@ export default function YamlEditor({
 
     // Function to handle input changes
     const handleInputChange = (event) => {
+        console.log("Event:", event);
         const { name, value } = event.target;
         console.log(`Name: ${name}, Value: ${value}`);
         if (name === "name" && value != originalContent.name) {
@@ -213,6 +214,7 @@ export default function YamlEditor({
         <>
             <form onSubmit={handleSave}>
                 <Dialog
+                    className="rounded-lg"
                     open={true}
                     onClose={closeEditor}
                     size={sizes[sizeIndex]} // Dynamically set the modal size
@@ -222,7 +224,7 @@ export default function YamlEditor({
                         unmount: { scale: 0.9, y: -100 },
                     }}
                 >
-                    <DialogHeader className="modal-header">
+                    <DialogHeader className="modal-header bg-blue-gray-100 rounded-t-lg">
                         <div className="flex justify-between items-center w-full">
                             <div className="text-left">Edit YAML File</div>
                             <p className="font-sans font-light text-sm">
@@ -248,17 +250,17 @@ export default function YamlEditor({
                         </div>
                     </DialogHeader>
                     <DialogBody className="h-full overflow-scroll">
-                        <div className="p-4 mb-4">
+                        <div className="p-4">
                             <Input
                                 variant="outlined"
                                 label="Any noteworthy name"
                                 placeholder="Get Creative!"
                                 name="name"
                                 value={name}
-                                onChange={handleInputChange}
+                                onChange={(e) => handleInputChange(e)}
                             />
                         </div>
-                        <div className="p-4 mb-4">
+                        <div className="p-4">
                             {/* <label>Description:</label> */}
                             <Input
                                 variant="outlined"
@@ -266,30 +268,51 @@ export default function YamlEditor({
                                 placeholder="SUT-Client IP should be good!"
                                 name="description"
                                 value={description}
-                                onChange={handleInputChange}
+                                onChange={(e) => handleInputChange(e)}
                             />
                         </div>
-                        <div className="p-4 mb-4 rounded-sm shadow-sm bg-blue-gray-400">
+                        <div className="p-4">
                             <AceEditor
                                 mode="yaml"
                                 theme="monokai"
-                                // onChange={handleYamlChange} // Use the updated handleYamlChange function
-                                onChange={handleInputChange}
                                 name="content"
+                                onChange={(content) => {
+                                    const mockEvent = {
+                                        target: {
+                                            name: "content",
+                                            value: content,
+                                        },
+                                    };
+                                    handleInputChange(mockEvent);
+                                }}
                                 value={yamlEditedContent} // Use yamlEditedContent to reflect user changes
                                 editorProps={{ $blockScrolling: true }}
                                 setOptions={{
                                     enableBasicAutocompletion: true,
                                     enableLiveAutocompletion: true,
+                                    navigateWithinSoftTabs: true,
                                     enableSnippets: true,
                                     showLineNumbers: true,
                                     tabSize: 8,
                                     fontSize: 16,
+                                    setPadding: {
+                                        top: 10,
+                                        right: 10,
+                                        bottom: 10,
+                                        left: 10,
+                                    },
                                 }}
                                 style={{
                                     width: "100%",
                                     height: editorHeight, // Dynamically adjust height
                                     fontSize: "14px",
+                                    padding: "10px",
+                                }}
+                                className="rounded-lg border border-gray-300"
+                                // If mouse misbehaves or anything, remove this below line
+                                onLoad={function (editor) {
+                                    editor.renderer.setPadding(10);
+                                    editor.renderer.setScrollMargin(10);
                                 }}
                             />
                         </div>

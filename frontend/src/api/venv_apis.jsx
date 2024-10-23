@@ -38,7 +38,10 @@ export const getVenvStatusAPI_v2 = async (venvId = null, url = null) => {
             // const response = await baseBackendApi.get(
             //     `testops/user/venvs/${venvId}/`
             // );
-            const response = await apiEndpoints.get(getUserVenvs, venvId);
+            const response = await baseBackendApi.get(
+                apiEndpoints.getUserVenvs,
+                venvId
+            );
             console.log("Response from venvID logic is:", response);
             return response.data;
         }

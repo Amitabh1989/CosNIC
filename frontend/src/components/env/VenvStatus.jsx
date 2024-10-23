@@ -17,6 +17,22 @@ const VenvStatusComponent = () => {
     // const venvs = useSelector((state) => state.venv.venvs); // venv is the slice name
     const venvsStore = useSelector((state) => state.venv); // Access the Redux store
 
+    {
+        /* 
+        // Selector to get the venv state
+    const selectVenvState = (state) => state.venv;
+
+    // Memoized selector using reselect
+    const selectVenvsStore = createSelector(
+        [selectVenvState],
+        (venvState) => venvState
+    );
+
+    // Use the memoized selector
+    const venvsStore = useSelector(selectVenvsStore);
+        */
+    }
+
     const columns = useMemo(
         () => [
             "Venv Name",

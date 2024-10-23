@@ -1,8 +1,9 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import {
     Card,
+    Chip,
     Input,
     Button,
     Typography,
@@ -19,8 +20,8 @@ import {
 import { getVenvStatusAPI_v2, getCtrlRepoVersionsAPI } from "@/api/venv_apis";
 import _ from "lodash";
 
-const VenvCRUDForm = ({ venvID, onClose, dialogOpen }) => {
-    const [venvData, setVenvData] = useState({});
+const VenvCRUDForm = ({ venvID, venvData, onClose, dialogOpen }) => {
+    const [internalVenvData, setInternalVenvData] = useState({});
     const [formData, setFormData] = useState(null);
     const [originalData, setOriginalData] = useState(null); // Store original data here
     const [hasChanged, setHasChanged] = useState(false);
@@ -28,13 +29,30 @@ const VenvCRUDForm = ({ venvID, onClose, dialogOpen }) => {
     const [loading, setLoading] = useState(false);
     const [pythonVersions, setPythonVersions] = useState([]);
     const [ctrlRepoVersions, setCtrlRepoVersions] = useState([]);
+    const fileInputRef = useRef(null);
+    const [selectedFile, setSelectedFile] = useState(null);
+
+    const handleFileButtonClick = () => {
+        fileInputRef.current.click();
+    };
+
+    const handleFileChange = (event) => {
+        const file = event.target.files[0];
+        if (file) {
+            setSelectedFile(file.name);
+
+            console.log("Selected file:", file.name);
+            // Handle the file selection (e.g., update state, upload file, etc.)
+        }
+    };
 
     useEffect(() => {
         const fetchData = async () => {
             setLoading(true);
             try {
-                const venvResponse = await getVenvStatusAPI_v2(venvID);
-                setVenvData(venvResponse);
+                // const venvResponse = await getVenvStatusAPI_v2(venvID);
+                let venvResponse = venvData;
+                setInternalVenvData(venvResponse);
                 setFormData(venvResponse); // Initialize formData with backend data
                 setOriginalData(venvResponse); // Keep original values
 
@@ -88,7 +106,7 @@ const VenvCRUDForm = ({ venvID, onClose, dialogOpen }) => {
         <Dialog
             open={dialogOpen}
             onClose={onClose}
-            className="h-1/3 w-full flex flex-col rounded-lg"
+            className="h-2/3 w-full flex flex-col rounded-lg"
         >
             <DialogHeader variant="h4" color="blue-gray">
                 Edit Virtual Environment Details
@@ -113,7 +131,7 @@ const VenvCRUDForm = ({ venvID, onClose, dialogOpen }) => {
                                         size="lg"
                                         placeholder="Enter nickname"
                                         className="!border-t-blue-gray-600 focus:!border-t-gray-900 w-full"
-                                        value={formData?.nickname || ""}
+                                        value={venvData?.nickname || ""}
                                         onChange={handleFormChange}
                                         labelProps={{
                                             className:
@@ -137,7 +155,7 @@ const VenvCRUDForm = ({ venvID, onClose, dialogOpen }) => {
                                                 variant="outlined"
                                                 className="w-full"
                                             >
-                                                {formData?.python_version ||
+                                                {venvData?.python_version ||
                                                     "Select version"}
                                             </Button>
                                         </MenuHandler>
@@ -154,12 +172,76 @@ const VenvCRUDForm = ({ venvID, onClose, dialogOpen }) => {
                                                             })
                                                         )
                                                     }
+                                                    value={version}
                                                 >
                                                     {version}
                                                 </MenuItem>
                                             ))}
                                         </MenuList>
                                     </Menu>
+                                </div>
+                            </div>
+
+                            <div className="flex flex-col md:flex-row gap-4">
+                                <div className="flex-1">
+                                    <Typography variant="h6" color="blue-gray">
+                                        Config File
+                                        <Chip
+                                            value={
+                                                venvData.config_file ||
+                                                "Not selected. Select in Venv step"
+                                            }
+                                            variant="ghost"
+                                            className="font-bold h-8"
+                                        />
+                                    </Typography>
+                                </div>
+                                <div className="flex-1">
+                                    <div className="flex-1">
+                                        <Typography
+                                            variant="h6"
+                                            color="blue-gray"
+                                        >
+                                            Requirements File
+                                        </Typography>
+                                        <div
+                                            style={{
+                                                display: "flex",
+                                                alignItems: "center",
+                                            }}
+                                        >
+                                            <Chip
+                                                label={
+                                                    selectedFile ||
+                                                    "Default applicable"
+                                                }
+                                                variant="ghost"
+                                                className="font-bold h-8"
+                                            />
+                                            <span
+                                                style={{
+                                                    marginLeft: "10px",
+                                                    marginRight: "10px",
+                                                }}
+                                            >
+                                                {venvData.requirements ||
+                                                    "No file selected"}
+                                            </span>
+                                            <Button
+                                                variant="contained"
+                                                color="primary"
+                                                onClick={handleFileButtonClick}
+                                            >
+                                                Select File
+                                            </Button>
+                                            <input
+                                                type="file"
+                                                ref={fileInputRef}
+                                                style={{ display: "none" }}
+                                                onChange={handleFileChange}
+                                            />
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
 
@@ -179,7 +261,7 @@ const VenvCRUDForm = ({ venvID, onClose, dialogOpen }) => {
                                             variant="outlined"
                                             className="w-full"
                                         >
-                                            {formData?.ctrl_package_version ||
+                                            {venvData?.ctrl_package_version ||
                                                 "Select version"}
                                         </Button>
                                     </MenuHandler>
@@ -206,7 +288,7 @@ const VenvCRUDForm = ({ venvID, onClose, dialogOpen }) => {
                 )}
             </DialogBody>
 
-            <DialogFooter className="sticky bottom-0 bg-white roundedb-lg">
+            <DialogFooter className="sticky bottom-0 bg-white rounded-b-lg">
                 <div className="flex gap-4 justify-end items-center w-full">
                     {hasChanged && <Button color="blue">Prepare</Button>}
                     <Button color="red" onClick={onClose}>

@@ -53,6 +53,7 @@ export const SortableTable = ({
     const [currentPage, setCurrentPage] = useState(1);
     const [totalPages, setTotalPages] = useState(0);
     const [selectedVenvId, setSelectedVenvId] = useState(null);
+    const [selectedVenvData, setSelectedVenvData] = useState(null);
     const [dialogOpen, setDialogOpen] = useState(true);
     const [venvData, setVenvData] = useState(data);
     const [sortConfig, setSortConfig] = useState({
@@ -99,6 +100,7 @@ export const SortableTable = ({
             "  stepper step :",
             stepper.currentVenv
         );
+        setSelectedVenvData(venvData.find((item) => item.id === venvId));
         setSelectedVenvId(stepper.currentVenv);
         setDialogOpen(true);
     };
@@ -398,6 +400,7 @@ export const SortableTable = ({
             {selectedVenvId && (
                 <VenvCRUDForm
                     venvID={selectedVenvId}
+                    venvData={selectedVenvData}
                     onClose={handleClose}
                     dialogOpen={dialogOpen}
                 />

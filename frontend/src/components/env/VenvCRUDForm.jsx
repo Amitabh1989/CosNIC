@@ -181,8 +181,65 @@ const VenvCRUDForm = ({ venvID, venvData, onClose, dialogOpen }) => {
                                     </Menu>
                                 </div>
                             </div>
-
                             <div className="flex flex-col md:flex-row gap-4">
+                                <div className="flex-1">
+                                    <Typography variant="h6" color="blue-gray">
+                                        Config File
+                                        <Chip
+                                            value={
+                                                venvData.config_file ||
+                                                "Not selected. Select in Venv step"
+                                            }
+                                            variant="ghost"
+                                            className="font-bold h-8"
+                                        />
+                                    </Typography>
+                                </div>
+
+                                <div className="flex-1">
+                                    <Typography variant="h6" color="blue-gray">
+                                        Requirements File
+                                    </Typography>
+
+                                    {/* Second row with two columns */}
+                                    <div className="flex flex-row gap-4 items-center">
+                                        {/* First column: Chip */}
+                                        <div className="flex-1">
+                                            <Chip
+                                                value={
+                                                    // venvData.requirements ||
+                                                    selectedFile ||
+                                                    "Default applicable"
+                                                }
+                                                variant="ghost"
+                                                className="font-bold h-8"
+                                                className={`${selectedFile ? "text-blue-500" : ""}`}
+                                            />
+                                        </div>
+
+                                        {/* Second column: Select File button */}
+                                        <div className="flex-1">
+                                            <Button
+                                                variant="contained"
+                                                color="primary"
+                                                size="sm"
+                                                className="w-full"
+                                                onClick={handleFileButtonClick}
+                                            >
+                                                Select File
+                                            </Button>
+                                            <input
+                                                type="file"
+                                                ref={fileInputRef}
+                                                style={{ display: "none" }}
+                                                onChange={handleFileChange}
+                                            />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {/* <div className="flex flex-col md:flex-row gap-4">
                                 <div className="flex-1">
                                     <Typography variant="h6" color="blue-gray">
                                         Config File
@@ -204,47 +261,39 @@ const VenvCRUDForm = ({ venvID, venvData, onClose, dialogOpen }) => {
                                         >
                                             Requirements File
                                         </Typography>
-                                        <div
-                                            style={{
-                                                display: "flex",
-                                                alignItems: "center",
-                                            }}
-                                        >
-                                            <Chip
-                                                label={
-                                                    selectedFile ||
-                                                    "Default applicable"
-                                                }
-                                                variant="ghost"
-                                                className="font-bold h-8"
-                                            />
-                                            <span
-                                                style={{
-                                                    marginLeft: "10px",
-                                                    marginRight: "10px",
-                                                }}
-                                            >
-                                                {venvData.requirements ||
-                                                    "No file selected"}
-                                            </span>
-                                            <Button
-                                                variant="contained"
-                                                color="primary"
-                                                onClick={handleFileButtonClick}
-                                            >
-                                                Select File
-                                            </Button>
-                                            <input
-                                                type="file"
-                                                ref={fileInputRef}
-                                                style={{ display: "none" }}
-                                                onChange={handleFileChange}
-                                            />
+                                        <div className="flex flex-col gap-2">
+                                            <div className="flex-1">
+                                                <Chip
+                                                    label={
+                                                        // {venvData.requirements ||
+                                                        venvData.requirements ||
+                                                        "Default applicable"
+                                                    }
+                                                    variant="ghost"
+                                                    className="font-bold h-8"
+                                                />
+                                            </div>
+                                            <div className="flex-1">
+                                                <Button
+                                                    variant="contained"
+                                                    color="primary"
+                                                    onClick={
+                                                        handleFileButtonClick
+                                                    }
+                                                >
+                                                    Select File
+                                                </Button>
+                                                <input
+                                                    type="file"
+                                                    ref={fileInputRef}
+                                                    style={{ display: "none" }}
+                                                    onChange={handleFileChange}
+                                                />
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-
+                            </div> */}
                             {/* Controller Repo Version */}
                             <div className="flex-1">
                                 <Typography variant="h6" color="blue-gray">
